@@ -30,9 +30,9 @@ public class TopPage extends BasePage {
     private List<WebElement> osDistributionImgNameList;
 
     private WebElement getCurrentModal(){
-    	String locator = "div[class='modal fade in']";
-    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locator)));
-    	WebElement currentModal = driver.findElement(By.cssSelector(locator));
+    	String selector = "div[class='modal fade in']";
+    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
+    	WebElement currentModal = driver.findElement(By.cssSelector(selector));
     	return currentModal;
     }
     
