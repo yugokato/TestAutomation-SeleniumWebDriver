@@ -7,9 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 public class TopPage extends BasePage {
 	
@@ -28,13 +27,9 @@ public class TopPage extends BasePage {
     
     @FindBy(css=".col-xs-4.col-sm-3.col-md-2 > img")
     private List<WebElement> osDistributionImgNameList;
-
-    private WebElement getCurrentModal(){
-    	String selector = "div[class='modal fade in']";
-    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
-    	WebElement currentModal = driver.findElement(By.cssSelector(selector));
-    	return currentModal;
-    }
+    
+    @FindBy(css=".flashes")
+    private WebElement flashMessageField;
     
     public List<WebElement> getMachineList(){
         return machineList;
@@ -52,11 +47,25 @@ public class TopPage extends BasePage {
     	return osDistributionImgNameList;
     }
     
-    public Modal openModal(WebElement currentMachine){
-    	currentMachine.click();
-    	WebElement currentModal = getCurrentModal();
+    public WebElement getFlashMessageField(){
+    	return flashMessageField;
+    }
+    
+    private WebElement getCurrentModalElement(){
+    	String selector = "div[class='modal fade in']";
+    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
+    	WebElement currentModal = driver.findElement(By.cssSelector(selector));
+    	return currentModal;
+    }
+    
+    public Modal getCurrentModalInstance(){
+    	return new Modal(getCurrentModalElement());
+    }
+    
+    public void openModal(WebElement element){
+    	element.click();
+    	WebElement currentModal = getCurrentModalElement();
     	wait.until(ExpectedConditions.visibilityOf(currentModal));
-    	return new Modal(currentModal);
     }
     
 

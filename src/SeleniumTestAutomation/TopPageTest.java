@@ -1,4 +1,4 @@
-package tests;
+package SeleniumTestAutomation;
 
 import pages.DeletePage;
 import pages.RegisterPage;
@@ -17,10 +17,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.Assert;
 
-public class SeleniumTest {
+public class TopPageTest {
     private WebDriver driver;
     private JavascriptExecutor jse;
     private TopPage topPage;
@@ -44,12 +44,10 @@ public class SeleniumTest {
         driver.get("http://localhost:5000");
         driver.manage().window().maximize();
         jse.executeScript("scroll(0, 250);");
-        driver.navigate().refresh();
-        Thread.sleep(1000);
     }
 
-    @AfterMethod(alwaysRun=true)
-    public void afterMethod() {
+    @AfterSuite(alwaysRun=true)
+    public void afterSuite() {
         driver.quit();
     }
     
@@ -66,8 +64,9 @@ public class SeleniumTest {
     	Pattern p = Pattern.compile("^(.+)\\s\\(([0-9]+)");
         
         for (int i=0; i<machineList.size(); i++){
-            // Opens modal and gets contents
-        	currentModal = topPage.openModal(machineList.get(i));
+			topPage.openModal(machineList.get(i));
+			currentModal = topPage.getCurrentModalInstance();
+			
             driver.switchTo().activeElement();
             modalContents = currentModal.getModalContents();
             
@@ -128,7 +127,63 @@ public class SeleniumTest {
             currentModal.clickCloseButton();
         }
         
-  }
+    }
+    
+    @Test(description="Verify export JSON file feature")
+    public void verifyExportJsonFile() throws Exception {
+    	List<WebElement> machineList = topPage.getMachineList();
+    	List<WebElement> hostNameList = topPage.getHostNameList();
+    	String hostName, jsonFileName;
+    	
+    	for (int i=0; i<machineList.size(); i++){
+    		hostName = hostNameList.get(i).getText();
+    		jsonFileName = hostName + "_test.json";
+    		topPage.openModal(machineList.get(i));
+    		driver.switchTo().activeElement();    		
+			currentModal = topPage.getCurrentModalInstance();
+    	
+			if (! hostName.equals("#Unknown")){	
+				Assert.assertTrue(currentModal.isExportJsonFileButtonExists());
+	    		currentModal.clickExportJsonFileButton();
+	    		driver.switchTo().activeElement();
+	    		currentModal = topPage.getCurrentModalInstance();
+	    		currentModal.enterJsonFileName(jsonFileName);
+	    		currentModal.clickExportButton();
+	    		
+	    		String flashMessage = topPage.getFlashMessageField().getText();
+	    		Assert.assertTrue(flashMessage.contains(jsonFileName));
+	    		Assert.assertTrue(flashMessage.contains("successfully saved"));
+    		}
+			else{
+				Assert.assertTrue(! currentModal.isExportJsonFileButtonExists());
+				currentModal.clickCloseButton();
+			}
+    	}
+    }
+    
+    @Test(description="Verify SSH access via Butterfly module")
+    public void verifyOpenSSHButterfly() throws Exception {
+    	List<WebElement> machineList = topPage.getMachineList();
+    	List<WebElement> hostNameList = topPage.getHostNameList();
+    	String hostName;
+    	
+    	for (int i=0; i<machineList.size(); i++){
+    		hostName = hostNameList.get(i).getText();
+    		topPage.openModal(machineList.get(i));
+    		driver.switchTo().activeElement();    		
+			currentModal = topPage.getCurrentModalInstance();
+    	
+			if (! hostName.equals("#Unknown")){	
+				Assert.assertTrue(currentModal.isOpenSSHButtonExists());
+				currentModal.clickOpenSSHButton();
+				Assert.assertTrue(currentModal.isButterflyRunning());
+			}
+			else{
+				Assert.assertTrue(! currentModal.isOpenSSHButtonExists());
+				currentModal.clickCloseButton();
+			}
+		}
+    }
     
 
 

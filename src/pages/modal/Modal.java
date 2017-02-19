@@ -1,17 +1,21 @@
 package pages.modal;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import pages.BasePage;
 
 public class Modal extends BasePage {
-	private WebElement currentModal;
+	private final WebElement currentModal;
 	
 	public Modal(WebElement currentModal){
 		this.currentModal = currentModal;
@@ -93,6 +97,18 @@ public class Modal extends BasePage {
 		return diskUsage;
 	}
 	
+	private WebElement getOpenSSHButton(){
+		String selector = "div.modal-body  form > button";
+    	WebElement openSSHButton = currentModal.findElement(By.cssSelector(selector));
+    	return openSSHButton;
+	}
+	
+	private WebElement getExportJsonFileButton(){
+		String selector = "div.modal-footer > a";
+		WebElement exportJsonFileButton = currentModal.findElement(By.cssSelector(selector));
+		return exportJsonFileButton;
+	}
+	
 	public Map<String, String> getModalContents(){
 		Map<String, String> modalContents = new HashMap<>();
 		modalContents.put("LAST_UPDATED", getLastUpdated());
@@ -111,11 +127,81 @@ public class Modal extends BasePage {
 		return modalContents;
 	}
 	
-    public void clickCloseButton() throws Exception{
+	public WebElement getJsonFileNameField(){
+		String selector = "input.form-control";
+		WebElement jsonFileNameField = currentModal.findElement(By.cssSelector(selector));
+		return jsonFileNameField;
+	}
+	
+    public void clickCloseButton(){
     	String selector = "div.modal-footer > button";
     	WebElement closeButton = currentModal.findElement(By.cssSelector(selector));
     	closeButton.click();
-    	Thread.sleep(300);
+    	try{
+    		Thread.sleep(300);
+    	}catch(InterruptedException e){}
+    }
+    
+    public void clickExportJsonFileButton(){
+		getExportJsonFileButton().click();
+    	try{
+    		Thread.sleep(300);
+    	}catch(InterruptedException e){}
+    }
+    
+    public void enterJsonFileName(String filename){
+    	getJsonFileNameField().clear();
+    	getJsonFileNameField().sendKeys(filename);
+    }
+    
+    public void clickExportButton(){
+    	String selector = "div.modal-body > form > button";
+    	WebElement exportButton = currentModal.findElement(By.cssSelector(selector));
+    	exportButton.click();
+    	try{
+    		Thread.sleep(300);
+    	}catch(InterruptedException e){}
+    }
+
+    public void clickOpenSSHButton(){
+    	getOpenSSHButton().click();
+    }
+    
+    public boolean isExportJsonFileButtonExists(){
+    	try{
+    		getExportJsonFileButton();
+    		return true;
+    	}catch(NoSuchElementException e){
+    		return false;
+    	}
+    }
+    
+    public boolean isOpenSSHButtonExists(){
+    	try{
+    		getOpenSSHButton();
+    		return true;
+    	}catch(NoSuchElementException e){
+    		return false;
+    	}
+    }
+    
+    public boolean isButterflyRunning(){
+	    String[] cmd = { "/bin/sh", "-c", "ps aux | grep butterfly" };
+	    String line;
+	    try{
+		    Process proc = Runtime.getRuntime().exec(cmd);
+		    BufferedReader is = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		    while ((line = is.readLine()) != null) {
+		    	if (line.contains("butterfly.server.py")){
+		    		return true;
+		    	}
+		    }
+		    return false;
+	    }
+	    catch(IOException e){
+	    	System.out.println(e);
+	    	return false;
+	    }
     }
 }
 
