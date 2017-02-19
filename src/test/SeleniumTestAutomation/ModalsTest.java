@@ -1,7 +1,4 @@
-package SeleniumTestAutomation;
-
-import pages.TopPage;
-import pages.modal.Modal;
+package test.SeleniumTestAutomation;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +10,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
+
+import framework.pages.TopPage;
+import framework.pages.modal.Modal;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.AfterSuite;

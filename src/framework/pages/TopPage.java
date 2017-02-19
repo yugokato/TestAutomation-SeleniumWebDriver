@@ -1,6 +1,4 @@
-package pages;
-import pages.modal.Modal;
-
+package framework.pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -8,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import framework.pages.modal.Modal;
 
 
 public class TopPage extends BasePage {

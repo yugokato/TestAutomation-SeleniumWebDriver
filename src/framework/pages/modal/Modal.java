@@ -1,4 +1,4 @@
-package pages.modal;
+package framework.pages.modal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import pages.BasePage;
+import framework.pages.BasePage;
 
 public class Modal extends BasePage {
 	private final WebElement currentModal;
@@ -204,5 +204,4 @@ public class Modal extends BasePage {
 	    }
     }
 }
-
 
