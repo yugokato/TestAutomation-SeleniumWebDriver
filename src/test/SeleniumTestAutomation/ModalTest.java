@@ -19,7 +19,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.AfterSuite;
 import org.testng.Assert;
 
-public class ModalsTest {
+public class ModalTest {
     private WebDriver driver;
     private JavascriptExecutor jse;
     private TopPage topPage;

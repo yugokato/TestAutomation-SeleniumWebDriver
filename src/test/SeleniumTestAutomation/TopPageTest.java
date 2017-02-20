@@ -1,9 +1,11 @@
 package test.SeleniumTestAutomation;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -11,10 +13,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
 
-import framework.pages.DeletePage;
-import framework.pages.RegisterPage;
+import com.spotify.docker.client.DefaultDockerClient;
+import com.spotify.docker.client.DockerClient;
+import com.spotify.docker.client.messages.Version;
+
 import framework.pages.TopPage;
-import framework.pages.modal.Modal;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -25,10 +28,6 @@ public class TopPageTest {
     private WebDriver driver;
     private JavascriptExecutor jse;
     private TopPage topPage;
-    private RegisterPage registerPage;
-    private DeletePage deletePage;
-    private Modal currentModal;
-
 
     @BeforeSuite(alwaysRun=true)
     public void beforeSuite() throws Exception {
@@ -36,8 +35,6 @@ public class TopPageTest {
     	driver = new FirefoxDriver();
         topPage = new TopPage(driver);
         jse = (JavascriptExecutor)driver;
-//        registerPage = new RegisterPage(driver);
-//        deletePage = new DeletePage(driver);
     }
     
     @BeforeMethod
@@ -52,140 +49,66 @@ public class TopPageTest {
         driver.quit();
     }
     
-    @Test(description="Verify modal contents in the top page are valid based on machine's status")
-    public void verifyModalContents() throws Exception {
+    @Test(description="")
+    public void verifyTopPage() throws Exception {
+    	Map<String, String[]> testData = new HashMap();
+    	testData.put("vm01", new String[] {"172.30.0.1", "ubuntu"});
+    	testData.put("vm02", new String[] {"172.30.0.2", "ubuntu"});
+    	testData.put("vm03", new String[] {"172.30.0.3", "centos"});
+    	testData.put("vm04", new String[] {"172.30.0.4", "debian"});
+    	testData.put("vm05", new String[] {"172.30.0.5", "centos"});
+    	testData.put("vm06", new String[] {"172.30.0.6", "ubuntu"});
+    	testData.put("vm07", new String[] {"172.30.0.7", "debian"});
+    	testData.put("vm08", new String[] {"172.30.0.8", "ubuntu"});
+    	testData.put("vm09", new String[] {"172.30.0.9", "ubuntu"});
+    	testData.put("vm10", new String[] {"172.30.0.10", "centos"});
+    	testData.put("#Unknown", new String[] {"", "other"});
+ 
+    	
         List<WebElement> machineList = topPage.getMachineList();
         List<WebElement> hostNameList = topPage.getHostNameList();
         List<WebElement> ipAddressList = topPage.getIpAddressList();
         List<WebElement> osDistributionImgNameList = topPage.getOSDistributionImgNameList();
-    	String lastUpdated, hostName, ipAddress, status, statusImgName, osDistribution; 
-    	String release, macAddress, uptime, cpuLoadAvg, memoryUsage, diskUsage;
-    	Map<String, String> modalContents;
-    	
-    	Pattern p = Pattern.compile("^(.+)\\s\\(([0-9]+)");
-        
+
+        String hostName, ipAddr, osDistImgName;
         for (int i=0; i<machineList.size(); i++){
-			topPage.openModal(machineList.get(i));
-			currentModal = topPage.getCurrentModalInstance();
-			
-            driver.switchTo().activeElement();
-            modalContents = currentModal.getModalContents();
-            
-            lastUpdated = modalContents.get("LAST_UPDATED");
-            hostName = modalContents.get("HOST_NAME");
-            ipAddress = modalContents.get("IP_ADDRESS");
-            status = modalContents.get("STATUS");
-            statusImgName = modalContents.get("STATUS_IMG_NAME");
-            osDistribution = modalContents.get("OS_DISTRIBUTION");
-            release = modalContents.get("RELEASE");
-            macAddress = modalContents.get("MAC_ADDRESS");
-            uptime = modalContents.get("UPTIME");
-            cpuLoadAvg = modalContents.get("CPU_LOAD_AVG");
-            memoryUsage = modalContents.get("MEMORY_USAGE");
-            diskUsage = modalContents.get("DISK_USAGE");
-
-            Matcher m = p.matcher(lastUpdated);
-            if(m.find()){
-            	lastUpdated = m.group(2);
-            }
-            
-            if (hostName.equals("#Unknown")){
-            	Assert.assertTrue(hostNameList.get(i).getText().equals(hostName));
-            	Assert.assertTrue(ipAddressList.get(i).getText().equals(ipAddress));
-            	if (status.contains("Unreachable")){
-            		Assert.assertTrue(statusImgName.equals("status_unreachable.png"));
-            	}
-            	else if (modalContents.get("STATUS").contains("Unknown")){
-            		Assert.assertTrue(statusImgName.equals("status_unknown.png"));
-            	}
-            	Assert.assertTrue(osDistribution.equals("N.A"));
-            	Assert.assertTrue(osDistributionImgNameList.get(i).getAttribute("src").contains("other"));
-            	Assert.assertTrue(release.equals("N.A"));
-            	Assert.assertTrue(macAddress.equals("N.A"));
-            	Assert.assertTrue(uptime.equals("N.A"));
-            	Assert.assertTrue(cpuLoadAvg.equals("N.A"));
-            	Assert.assertTrue(memoryUsage.equals("N.A"));
-            	Assert.assertTrue(diskUsage.equals("N.A"));
-            	Assert.assertTrue(Integer.parseInt(lastUpdated) > 0);
-            }
-            
-            else {
-            	Assert.assertTrue(Integer.parseInt(lastUpdated) < 90);
-            	Assert.assertTrue(hostNameList.get(i).getText().equals(hostName));
-            	Assert.assertTrue(ipAddressList.get(i).getText().equals(ipAddress));
-            	Assert.assertTrue(status.contains("OK"));
-            	Assert.assertTrue(statusImgName.equals("status_ok.png"));
-            	Assert.assertTrue(osDistributionImgNameList.get(i).getAttribute("src").contains(osDistribution.toLowerCase()));
-            	Assert.assertTrue(! release.equals("N.A"));
-            	Assert.assertTrue(! macAddress.equals("N.A"));
-            	Assert.assertTrue(! uptime.equals("N.A"));
-            	Assert.assertTrue(! cpuLoadAvg.equals("N.A"));
-            	Assert.assertTrue(! memoryUsage.equals("N.A"));
-            	Assert.assertTrue(! diskUsage.equals("N.A"));
-            }
-            
-            // Close modal
-            currentModal.clickCloseButton();
+        	hostName = hostNameList.get(i).getText();
+        	ipAddr = ipAddressList.get(i).getText();
+        	osDistImgName = osDistributionImgNameList.get(i).getAttribute("src");
+        	if (! hostName.equals("#Unknown")){
+	        	Assert.assertTrue(ipAddr.equals(testData.get(hostName)[0]));
+        	}
+        	Assert.assertTrue(osDistImgName.contains(testData.get(hostName)[1]));
         }
-        
     }
+
     
-    @Test(description="Verify export JSON file feature")
-    public void verifyExportJsonFile() throws Exception {
-    	List<WebElement> machineList = topPage.getMachineList();
-    	List<WebElement> hostNameList = topPage.getHostNameList();
-    	String hostName, jsonFileName;
+    @Test(description="")
+    public void verifyTopPageWhenUnreahable() throws Exception {
+    	//final DockerClient docker = DefaultDockerClient.fromEnv().build();
+    	//final DockerClient docker = new DefaultDockerClient("tcp://192.168.99.100:2376");
+    	//docker.killContainer("vm02");
     	
-    	for (int i=0; i<machineList.size(); i++){
-    		hostName = hostNameList.get(i).getText();
-    		jsonFileName = hostName + "_test.json";
-    		topPage.openModal(machineList.get(i));
-    		driver.switchTo().activeElement();    		
-			currentModal = topPage.getCurrentModalInstance();
+    	//docker.close();
     	
-			if (! hostName.equals("#Unknown")){	
-				Assert.assertTrue(currentModal.isExportJsonFileButtonExists());
-	    		currentModal.clickExportJsonFileButton();
-	    		driver.switchTo().activeElement();
-	    		currentModal = topPage.getCurrentModalInstance();
-	    		currentModal.enterJsonFileName(jsonFileName);
-	    		currentModal.clickExportButton();
-	    		
-	    		String flashMessage = topPage.getFlashMessageField().getText();
-	    		Assert.assertTrue(flashMessage.contains(jsonFileName));
-	    		Assert.assertTrue(flashMessage.contains("successfully saved"));
-    		}
-			else{
-				Assert.assertTrue(! currentModal.isExportJsonFileButtonExists());
-				currentModal.clickCloseButton();
-			}
-    	}
-    }
-    
-    @Test(description="Verify SSH access via Butterfly module")
-    public void verifyOpenSSHButterfly() throws Exception {
-    	List<WebElement> machineList = topPage.getMachineList();
-    	List<WebElement> hostNameList = topPage.getHostNameList();
-    	String hostName;
-    	
-    	for (int i=0; i<machineList.size(); i++){
-    		hostName = hostNameList.get(i).getText();
-    		topPage.openModal(machineList.get(i));
-    		driver.switchTo().activeElement();    		
-			currentModal = topPage.getCurrentModalInstance();
-    	
-			if (! hostName.equals("#Unknown")){	
-				Assert.assertTrue(currentModal.isOpenSSHButtonExists());
-				currentModal.clickOpenSSHButton();
-				Assert.assertTrue(currentModal.isButterflyRunning());
-			}
-			else{
-				Assert.assertTrue(! currentModal.isOpenSSHButtonExists());
-				currentModal.clickCloseButton();
-			}
-		}
-    }
-    
+    	// docker stop vm01
+    	//String[] cmd = { "/bin/sh", "-c", "docker --host=tcp://192.168.99.100:2376 stop vm01" };
+    	String cmd = "docker --host=tcp://192.168.99.100:2376 stop vm01";
+	    String line;
+	    try{
+		    Process proc = Runtime.getRuntime().exec(cmd);
+		    		    BufferedReader is = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		    while ((line = is.readLine()) != null) {
+		    	System.out.println(line);
+		    }
+	    }
+	    catch(IOException e){
+	    	System.out.println(e);
+	    	
+	    }
 
 
+ 
+    }
+ 
 }

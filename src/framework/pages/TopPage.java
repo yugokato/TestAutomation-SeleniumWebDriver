@@ -28,8 +28,11 @@ public class TopPage extends BasePage {
     @FindBy(css=".col-xs-4.col-sm-3.col-md-2 > img")
     private List<WebElement> osDistributionImgNameList;
     
-    @FindBy(css=".flashes")
+    @FindBy(css=".col-md-12-flash p.flashes")
     private WebElement flashMessageField;
+    
+	@FindBy(css=".col-md-12 > a[class='btn btn-info']")
+	private WebElement registerMachinesButton;
     
     public List<WebElement> getMachineList(){
         return machineList;
@@ -51,6 +54,10 @@ public class TopPage extends BasePage {
     	return flashMessageField;
     }
     
+	public WebElement getRegisterMachinesButton(){
+		return registerMachinesButton;
+	}
+    
     private WebElement getCurrentModalElement(){
     	String selector = "div[class='modal fade in']";
     	wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
@@ -68,6 +75,13 @@ public class TopPage extends BasePage {
     	wait.until(ExpectedConditions.visibilityOf(currentModal));
     }
     
+    public RegisterPage clickRegisterMachinesButton(){
+    	getRegisterMachinesButton().click();
+    	RegisterPage registerPage = new RegisterPage(driver);
+    	wait.until(ExpectedConditions.textToBePresentInElement(registerPage.getPageHeading(), "Register A New Machine"));
+    	return registerPage;
+    	
+    }
 
 
 }

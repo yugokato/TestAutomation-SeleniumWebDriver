@@ -110,7 +110,7 @@ public class Modal extends BasePage {
 	}
 	
 	public Map<String, String> getModalContents(){
-		Map<String, String> modalContents = new HashMap<>();
+		Map<String, String> modalContents = new HashMap();
 		modalContents.put("LAST_UPDATED", getLastUpdated());
 		modalContents.put("HOST_NAME", getHostName());
 		modalContents.put("IP_ADDRESS", getIpAddress());
