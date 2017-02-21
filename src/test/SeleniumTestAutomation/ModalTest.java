@@ -5,49 +5,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
-
-import framework.pages.TopPage;
-import framework.pages.modal.Modal;
-
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.AfterSuite;
 import org.testng.Assert;
+import test.SeleniumTestAutomation.base.BaseTest;
 
-public class ModalTest {
-    private WebDriver driver;
-    private JavascriptExecutor jse;
-    private TopPage topPage;
-    private Modal currentModal;
-
-
-    @BeforeSuite(alwaysRun=true)
-    public void beforeSuite() throws Exception {
-    	System.setProperty("webdriver.firefox.marionette","lib");
-    	driver = new FirefoxDriver();
-        topPage = new TopPage(driver);
-        jse = (JavascriptExecutor)driver;
-    }
-    
-    @BeforeMethod
-    public void beforeMethod() throws Exception {
-        driver.get("http://localhost:5000");
-        driver.manage().window().maximize();
-        jse.executeScript("scroll(0, 250);");
-    }
-
-    @AfterSuite(alwaysRun=true)
-    public void afterSuite() {
-        driver.quit();
-    }
+public class ModalTest extends BaseTest{
     
     @Test(description="Verify modal contents in the top page are valid based on machine's status")
-    public void verifyModalContents() throws Exception {
+    public void verifyModalContents() {
         List<WebElement> machineList = topPage.getMachineList();
         List<WebElement> hostNameList = topPage.getHostNameList();
         List<WebElement> ipAddressList = topPage.getIpAddressList();
@@ -125,7 +91,7 @@ public class ModalTest {
     }
     
     @Test(description="Verify export JSON file feature")
-    public void verifyExportJsonFile() throws Exception {
+    public void verifyExportJsonFile() {
     	List<WebElement> machineList = topPage.getMachineList();
     	List<WebElement> hostNameList = topPage.getHostNameList();
     	String hostName, jsonFileName;
@@ -157,7 +123,7 @@ public class ModalTest {
     }
     
     @Test(description="Verify SSH access via Butterfly module")
-    public void verifyOpenSSHButterfly() throws Exception {
+    public void verifyOpenSSHButterfly() {
     	List<WebElement> machineList = topPage.getMachineList();
     	List<WebElement> hostNameList = topPage.getHostNameList();
     	String hostName;
@@ -179,7 +145,5 @@ public class ModalTest {
 			}
 		}
     }
-    
-
 
 }

@@ -1,57 +1,22 @@
 package test.SeleniumTestAutomation;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
 
-import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.messages.Version;
+import test.SeleniumTestAutomation.base.BaseTest;
 
-import framework.pages.TopPage;
-
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.AfterSuite;
 import org.testng.Assert;
 
-public class TopPageTest {
-    private WebDriver driver;
-    private JavascriptExecutor jse;
-    private TopPage topPage;
+public class TopPageTest extends BaseTest {
 
-    @BeforeSuite(alwaysRun=true)
-    public void beforeSuite() throws Exception {
-    	System.setProperty("webdriver.firefox.marionette","lib");
-    	driver = new FirefoxDriver();
-        topPage = new TopPage(driver);
-        jse = (JavascriptExecutor)driver;
-    }
-    
-    @BeforeMethod
-    public void beforeMethod() throws Exception {
-        driver.get("http://localhost:5000");
-        driver.manage().window().maximize();
-        jse.executeScript("scroll(0, 250);");
-    }
-
-    @AfterSuite(alwaysRun=true)
-    public void afterSuite() {
-        driver.quit();
-    }
-    
     @Test(description="")
-    public void verifyTopPage() throws Exception {
-    	Map<String, String[]> testData = new HashMap();
+    public void verifyTopPage() {
+    	Map<String, String[]> testData = new HashMap<String, String[]>();
     	testData.put("vm01", new String[] {"172.30.0.1", "ubuntu"});
     	testData.put("vm02", new String[] {"172.30.0.2", "ubuntu"});
     	testData.put("vm03", new String[] {"172.30.0.3", "centos"});
@@ -82,17 +47,9 @@ public class TopPageTest {
         }
     }
 
-    
+    /*
     @Test(description="")
     public void verifyTopPageWhenUnreahable() throws Exception {
-    	//final DockerClient docker = DefaultDockerClient.fromEnv().build();
-    	//final DockerClient docker = new DefaultDockerClient("tcp://192.168.99.100:2376");
-    	//docker.killContainer("vm02");
-    	
-    	//docker.close();
-    	
-    	// docker stop vm01
-    	//String[] cmd = { "/bin/sh", "-c", "docker --host=tcp://192.168.99.100:2376 stop vm01" };
     	String cmd = "docker --host=tcp://192.168.99.100:2376 stop vm01";
 	    String line;
 	    try{
@@ -106,9 +63,7 @@ public class TopPageTest {
 	    	System.out.println(e);
 	    	
 	    }
-
-
- 
     }
+    */
  
 }

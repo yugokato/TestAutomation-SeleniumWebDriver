@@ -2,48 +2,26 @@ package test.SeleniumTestAutomation;
 
 import java.util.List;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import framework.api.RestAPI;
-import framework.pages.TopPage;
 import framework.pages.RegisterPage;
+import test.SeleniumTestAutomation.base.BaseTest;
 
 
-public class RegisterNewMachinesTest {
-    private WebDriver driver;
-    private JavascriptExecutor jse;
-    private RestAPI restAPI; 
-    private TopPage topPage;
-    private RegisterPage registerPage;
+public class RegisterMachinesPageTest extends BaseTest{
+	RegisterPage registerPage;
     private List<String> errorsList;
     private final String VALID_TEST_IP = "1.1.1.1";
     private final String VALID_TEST_USERNAME = "test_user";
     private final String VALID_TEST_PASSWORD = "test_password";
-
-    @BeforeSuite(alwaysRun=true)
-    public void beforeSuite() throws Exception {
-    	System.setProperty("webdriver.firefox.marionette","lib");
-    	driver = new FirefoxDriver();
-    	restAPI = new RestAPI();
-        topPage = new TopPage(driver);
-        registerPage = new RegisterPage(driver);
-        jse = (JavascriptExecutor)driver;
-    }
     
     @BeforeMethod
-    public void beforeMethod() throws Exception {
-        driver.get("http://localhost:5000");
-        driver.manage().window().maximize();
-        jse.executeScript("scroll(0, 250);");
-        
+    public void beforeMethod() {
+    	registerPage = new RegisterPage(driver);
+    	
         // Delete all machines whose hostname is #Unknown
         String deleteIPs = "";
         List<WebElement> hostNameList = topPage.getHostNameList();
@@ -62,13 +40,8 @@ public class RegisterNewMachinesTest {
         }   
     }
 
-    @AfterSuite(alwaysRun=true)
-    public void afterSuite() {
-        driver.quit();
-    }
-    
     @Test(description="Verify register a new machine page")
-	public void verifyRegisterMachinesSuccess() throws Exception {
+	public void verifyRegisterMachinesSuccess() {
     	String topPageFlashMessage;
     	
     	registerPage = topPage.clickRegisterMachinesButton();
@@ -105,7 +78,7 @@ public class RegisterNewMachinesTest {
     }
     
     @Test(description="Verify register a new machine page - IP duplication")
-	public void verifyRegisterMachinesIPDuplicated() throws Exception {
+	public void verifyRegisterMachinesIPDuplicated() {
     	restAPI.addMachine(VALID_TEST_IP, VALID_TEST_PASSWORD);
     	
     	registerPage = topPage.clickRegisterMachinesButton();
@@ -175,7 +148,7 @@ public class RegisterNewMachinesTest {
     }
     
     @Test(description="Verify register a new machine page - Invalid username")
-	public void verifyRegisterMachinesInvalidUsername() throws Exception {
+	public void verifyRegisterMachinesInvalidUsername() {
     	registerPage = topPage.clickRegisterMachinesButton();
     	
     	// test-1
@@ -204,7 +177,7 @@ public class RegisterNewMachinesTest {
     }
     
     @Test(description="Verify register a new machine page - Invalid password")
-	public void verifyRegisterMachinesInvalidPassword() throws Exception {
+	public void verifyRegisterMachinesInvalidPassword() {
     	registerPage = topPage.clickRegisterMachinesButton();
     	
     	// test-1
@@ -222,7 +195,7 @@ public class RegisterNewMachinesTest {
     }
     
     @Test(description="Verify register a new machine page - Multiple invalid fields")
-	public void verifyRegisterMachinesMultiInvalidFields() throws Exception {
+	public void verifyRegisterMachinesMultiInvalidFields() {
     	registerPage = topPage.clickRegisterMachinesButton();
     	
     	// test-1
