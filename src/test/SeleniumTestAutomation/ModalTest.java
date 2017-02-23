@@ -6,11 +6,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import test.SeleniumTestAutomation.base.BaseTest;
 
 public class ModalTest extends BaseTest{
+    private final String TEST_IP = "1.1.1.1";
+    private final String TEST_USERNAME = "test_user";
+    
+    @BeforeMethod
+    public void beforeMethod() {
+    	restAPI.deleteAllUnknownMachines();
+    	restAPI.addMachine(TEST_IP, TEST_USERNAME);
+    }
     
     @Test(description="Verify modal contents in the top page are valid based on machine's status")
     public void verifyModalContents() {

@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import framework.api.RestAPI;
+import framework.pages.BasePage;
 import framework.pages.RegisterPage;
 import framework.pages.TopPage;
 import framework.pages.modal.Modal;
@@ -30,8 +31,8 @@ public class BaseTest {
     public void beforeClassBase() {
     	System.setProperty("webdriver.firefox.marionette","lib");
     	driver = new FirefoxDriver();
-    	restAPI = new RestAPI();
         topPage = new TopPage(driver);
+        restAPI = new RestAPI(driver);
         jse = (JavascriptExecutor)driver;
     }
     

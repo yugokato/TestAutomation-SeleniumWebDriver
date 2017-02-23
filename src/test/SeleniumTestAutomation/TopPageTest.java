@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import test.SeleniumTestAutomation.base.BaseTest;
@@ -13,9 +14,26 @@ import test.SeleniumTestAutomation.base.BaseTest;
 import org.testng.Assert;
 
 public class TopPageTest extends BaseTest {
-
-    @Test(description="")
-    public void verifyTopPage() {
+    private final String TEST_IP = "172.30.0.11";
+    private final String TEST_USERNAME = "ubuntu";
+    private final String TEST_PASSWORD = "ubuntu";
+    private final String TEST_HOSTNAME = "vm11";
+    private final String TEST_OS_DIST = "ubuntu";
+    List<WebElement> machineList;
+    List<WebElement> hostNameList;
+    List<WebElement> ipAddressList;
+    List<WebElement> osDistributionImgNameList;
+    
+    @BeforeMethod
+    public void beforeMethod() {
+    	restAPI.deleteAllUnknownMachines();
+    	restAPI.deleteMachine(TEST_IP);
+    }
+    
+    @Test(description="Verify initial state of the top page")
+    public void verifyTopPageBasic() {
+    	restAPI.addMachine(TEST_IP, TEST_USERNAME);
+    	
     	Map<String, String[]> testData = new HashMap<String, String[]>();
     	testData.put("vm01", new String[] {"172.30.0.1", "ubuntu"});
     	testData.put("vm02", new String[] {"172.30.0.2", "ubuntu"});
@@ -30,10 +48,10 @@ public class TopPageTest extends BaseTest {
     	testData.put("#Unknown", new String[] {"", "other"});
  
     	
-        List<WebElement> machineList = topPage.getMachineList();
-        List<WebElement> hostNameList = topPage.getHostNameList();
-        List<WebElement> ipAddressList = topPage.getIpAddressList();
-        List<WebElement> osDistributionImgNameList = topPage.getOSDistributionImgNameList();
+        machineList = topPage.getMachineList();
+        hostNameList = topPage.getHostNameList();
+        ipAddressList = topPage.getIpAddressList();
+        osDistributionImgNameList = topPage.getOSDistributionImgNameList();
 
         String hostName, ipAddr, osDistImgName;
         for (int i=0; i<machineList.size(); i++){
@@ -46,6 +64,42 @@ public class TopPageTest extends BaseTest {
         	Assert.assertTrue(osDistImgName.contains(testData.get(hostName)[1]));
         }
     }
+    
+    @Test(description="Verify state changes after reachable")
+    public void verifyTopPageAfterReachable() {
+    	int numOfMachines;
+    	String addedHostName, addedIpAddress, osDistributionImgName;
+    	
+    	restAPI.addMachine(TEST_IP, TEST_USERNAME, TEST_PASSWORD);
+    	
+    	// Check the initial #Unknown status
+    	driver.navigate().refresh();
+    	numOfMachines = topPage.getMachineList().size();
+    	addedHostName = topPage.getHostNameList().get(0).getText();
+    	addedIpAddress = topPage.getIpAddressList().get(0).getText();
+    	osDistributionImgName = topPage.getOSDistributionImgNameList().get(0).getAttribute("src");
+    	
+    	Assert.assertTrue(addedHostName.equals("#Unknown"), addedHostName);
+    	Assert.assertTrue(addedIpAddress.equals(TEST_IP), addedIpAddress);
+    	Assert.assertTrue(osDistributionImgName.contains("other"), osDistributionImgName);
+    
+    	// Wait for 40 seconds until SSH access starts
+    	try{
+    		Thread.sleep(40000);
+    	}catch(InterruptedException e){}
+    	
+    	
+    	// Check the new status after reachable 
+    	driver.navigate().refresh();
+    	addedHostName = topPage.getHostNameList().get(numOfMachines-1).getText();
+    	addedIpAddress = topPage.getIpAddressList().get(numOfMachines-1).getText();
+    	osDistributionImgName = topPage.getOSDistributionImgNameList().get(numOfMachines-1).getAttribute("src");
+    	Assert.assertTrue(addedHostName.equals(TEST_HOSTNAME), addedHostName);
+    	Assert.assertTrue(addedIpAddress.equals(TEST_IP), addedIpAddress);
+    	Assert.assertTrue(osDistributionImgName.contains(TEST_OS_DIST));
+    }
+    
+    
 
     /*
     @Test(description="")

@@ -2,7 +2,6 @@ package test.SeleniumTestAutomation;
 
 import java.util.List;
 
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -12,7 +11,7 @@ import test.SeleniumTestAutomation.base.BaseTest;
 
 
 public class RegisterMachinesPageTest extends BaseTest{
-	RegisterPage registerPage;
+	private RegisterPage registerPage;
     private List<String> errorsList;
     private final String VALID_TEST_IP = "1.1.1.1";
     private final String VALID_TEST_USERNAME = "test_user";
@@ -21,23 +20,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     @BeforeMethod
     public void beforeMethod() {
     	registerPage = new RegisterPage(driver);
-    	
-        // Delete all machines whose hostname is #Unknown
-        String deleteIPs = "";
-        List<WebElement> hostNameList = topPage.getHostNameList();
-        List<WebElement> ipAddrList = topPage.getIpAddressList();
-        
-        boolean hasUnknown = false;
-        for (int i=0; i<hostNameList.size(); i++){
-        	if (hostNameList.get(i).getText().contains("#Unknown")){
-        		hasUnknown = true;
-        		deleteIPs += ipAddrList.get(i).getText() + ",";
-        	}
-        }
-        
-        if (hasUnknown){
-        	restAPI.deleteMachine(deleteIPs.substring(0, deleteIPs.length()-1));
-        }   
+    	restAPI.deleteAllUnknownMachines();
     }
 
     @Test(description="Verify register a new machine page")

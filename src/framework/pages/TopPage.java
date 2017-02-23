@@ -11,9 +11,13 @@ import framework.pages.modal.Modal;
 
 
 public class TopPage extends BasePage {
+	private WebDriver driver;
 	
+	public TopPage(){}
+
 	public TopPage(WebDriver driver){
 		super(driver);
+		this.driver = driver;
 	}
 	
     @FindBy(css=".col-xs-4.col-sm-3.col-md-2")
@@ -82,6 +86,5 @@ public class TopPage extends BasePage {
     	return registerPage;
     	
     }
-
 
 }

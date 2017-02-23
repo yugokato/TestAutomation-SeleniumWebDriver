@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class RegisterPage extends BasePage {
 	private WebDriver driver;
-	
+
 	public RegisterPage(WebDriver driver){
 		super(driver);
 		this.driver = driver;
