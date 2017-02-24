@@ -18,7 +18,7 @@ public class RestAPI {
 	}
 	
 	public String addMachine(String ipaddr, String username){
-		String url = "curl -X 'POST' http://localhost:5000/add/" + ipaddr + ":" + username;
+		String url = "curl -H 'Content-Type: application/json' -X 'POST' http://localhost:5000/api/machines/add/" + ipaddr + ":" + username;
 		StringBuffer output = new StringBuffer();
 		
 	    String[] cmd = { "/bin/sh", "-c", url };
@@ -36,12 +36,13 @@ public class RestAPI {
 	    }
 	    
 	    //System.out.printf("Added a machine(%s) via RESUful API: " + output.toString() + "\n", ipaddr);
+	    driver.navigate().refresh();
 	    return output.toString();
    
 	}
 	
 	public String addMachine(String ipaddr, String username, String password){
-		String url = "curl -X 'POST' http://localhost:5000/add/" + ipaddr + ":" + username + ":" + password;
+		String url = "curl -H 'Content-Type: application/json' -X 'POST' http://localhost:5000/api/machines/add/" + ipaddr + ":" + username + ":" + password;
 		StringBuffer output = new StringBuffer();
 		
 	    String[] cmd = { "/bin/sh", "-c", url };
@@ -59,12 +60,13 @@ public class RestAPI {
 	    }
 	    
 	    //System.out.printf("Added a machine(%s) via RESUful API: " + output.toString() + "\n", ipaddr);
+	    driver.navigate().refresh();
 	    return output.toString();
    
 	}
 	
 	public String deleteMachine(String ipaddr){
-		String url = "curl -X 'DELETE' http://localhost:5000/delete/" + ipaddr;
+		String url = "curl -H 'Content-Type: application/json' -X 'DELETE' http://localhost:5000/api/machines/delete/" + ipaddr;
 		StringBuffer output = new StringBuffer();
 		
 	    String[] cmd = { "/bin/sh", "-c", url };
@@ -82,6 +84,7 @@ public class RestAPI {
 	    }
 	    
 	    //System.out.printf("Deleted machines(%s) via RESUful API: " + output.toString() + "\n", ipaddr);
+	    driver.navigate().refresh();
 	    return output.toString();
    
 	}
@@ -103,6 +106,7 @@ public class RestAPI {
         
         if (hasUnknown){
         	deleteMachine(deleteIPs.substring(0, deleteIPs.length()-1));
-        }   
+        }
+        driver.navigate().refresh();
 	}
 }

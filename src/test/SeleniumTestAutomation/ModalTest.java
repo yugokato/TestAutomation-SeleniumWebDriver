@@ -14,6 +14,10 @@ import test.SeleniumTestAutomation.base.BaseTest;
 public class ModalTest extends BaseTest{
     private final String TEST_IP = "1.1.1.1";
     private final String TEST_USERNAME = "test_user";
+    List<WebElement> machineList;
+    List<WebElement> hostNameList;
+    List<WebElement> ipAddressList;
+    List<WebElement> osDistributionImgNameList;
     
     @BeforeMethod
     public void beforeMethod() {
@@ -23,10 +27,10 @@ public class ModalTest extends BaseTest{
     
     @Test(description="Verify modal contents in the top page are valid based on machine's status")
     public void verifyModalContents() {
-        List<WebElement> machineList = topPage.getMachineList();
-        List<WebElement> hostNameList = topPage.getHostNameList();
-        List<WebElement> ipAddressList = topPage.getIpAddressList();
-        List<WebElement> osDistributionImgNameList = topPage.getOSDistributionImgNameList();
+    	machineList = topPage.getMachineList();
+        hostNameList = topPage.getHostNameList();
+        ipAddressList = topPage.getIpAddressList();
+        osDistributionImgNameList = topPage.getOSDistributionImgNameList();
     	String lastUpdated, hostName, ipAddress, status, statusImgName, osDistribution; 
     	String release, macAddress, uptime, cpuLoadAvg, memoryUsage, diskUsage;
     	Map<String, String> modalContents;
@@ -75,7 +79,7 @@ public class ModalTest extends BaseTest{
             	Assert.assertTrue(cpuLoadAvg.equals("N.A"));
             	Assert.assertTrue(memoryUsage.equals("N.A"));
             	Assert.assertTrue(diskUsage.equals("N.A"));
-            	Assert.assertTrue(Integer.parseInt(lastUpdated) > 0);
+            	Assert.assertTrue(Integer.parseInt(lastUpdated) >= 0);
             }
             
             else {
@@ -101,8 +105,8 @@ public class ModalTest extends BaseTest{
     
     @Test(description="Verify export JSON file feature")
     public void verifyExportJsonFile() {
-    	List<WebElement> machineList = topPage.getMachineList();
-    	List<WebElement> hostNameList = topPage.getHostNameList();
+    	machineList = topPage.getMachineList();
+    	hostNameList = topPage.getHostNameList();
     	String hostName, jsonFileName;
     	
     	for (int i=0; i<machineList.size(); i++){
@@ -133,8 +137,8 @@ public class ModalTest extends BaseTest{
     
     @Test(description="Verify SSH access via Butterfly module")
     public void verifyOpenSSHButterfly() {
-    	List<WebElement> machineList = topPage.getMachineList();
-    	List<WebElement> hostNameList = topPage.getHostNameList();
+    	machineList = topPage.getMachineList();
+    	hostNameList = topPage.getHostNameList();
     	String hostName;
     	
     	for (int i=0; i<machineList.size(); i++){
