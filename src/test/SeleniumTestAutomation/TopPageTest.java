@@ -19,10 +19,10 @@ public class TopPageTest extends BaseTest {
     private final String TEST_PASSWORD = "ubuntu";
     private final String TEST_HOSTNAME = "vm11";
     private final String TEST_OS_DIST = "ubuntu";
-    List<WebElement> machineList;
-    List<WebElement> hostNameList;
-    List<WebElement> ipAddressList;
-    List<WebElement> osDistributionImgNameList;
+    private List<WebElement> machineList;
+    private List<WebElement> hostNameList;
+    private List<WebElement> ipAddressList;
+    private List<WebElement> osDistributionImgNameList;
     
     @BeforeMethod
     public void beforeMethod() {
