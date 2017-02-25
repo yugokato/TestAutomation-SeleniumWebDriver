@@ -6,7 +6,7 @@
 		<class name="test.SeleniumTestAutomation.TopPageTest" />
 		<class name="test.SeleniumTestAutomation.ModalTest" />
 		<class name="test.SeleniumTestAutomation.RegisterMachinesPageTest" />
-
+		<class name="test.SeleniumTestAutomation.DeleteMachinesPageTest" />
 	</classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

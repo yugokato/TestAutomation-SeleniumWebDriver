@@ -23,7 +23,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     	restAPI.deleteAllUnknownMachines();
     }
 
-    @Test(description="Verify register a new machine page")
+    @Test(description="Verify register a new machine page - success")
 	public void verifyRegisterMachinesSuccess() {
     	String topPageFlashMessage;
     	

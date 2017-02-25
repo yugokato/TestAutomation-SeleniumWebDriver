@@ -38,6 +38,9 @@ public class TopPage extends BasePage {
 	@FindBy(css=".col-md-12 > a[class='btn btn-info']")
 	private WebElement registerMachinesButton;
     
+	@FindBy(css=".col-md-12 > a[class='btn btn-danger']")
+	private WebElement deleteMachinesButton;
+	
     public List<WebElement> getMachineList(){
         return machineList;
     }
@@ -60,6 +63,10 @@ public class TopPage extends BasePage {
     
 	public WebElement getRegisterMachinesButton(){
 		return registerMachinesButton;
+	}
+	
+	public WebElement getDeleteMachinesButton(){
+		return deleteMachinesButton;
 	}
     
     private WebElement getCurrentModalElement(){
@@ -85,6 +92,13 @@ public class TopPage extends BasePage {
     	wait.until(ExpectedConditions.textToBePresentInElement(registerPage.getPageHeading(), "Register A New Machine"));
     	return registerPage;
     	
+    }
+    
+    public DeletePage clickDeleteMachinesButton(){
+    	getDeleteMachinesButton().click();
+    	DeletePage deletePage = new DeletePage(driver);
+    	wait.until(ExpectedConditions.textToBePresentInElement(deletePage.getPageHeading(), "Delete Machines"));
+    	return deletePage;
     }
 
 }
