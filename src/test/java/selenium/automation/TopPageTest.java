@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.Assert;
@@ -26,6 +27,11 @@ public class TopPageTest extends BaseTest {
     @BeforeMethod
     public void beforeMethod() {
     	restAPI.deleteAllUnknownMachines();
+    	restAPI.deleteMachine(TEST_IP);
+    }
+    
+    @AfterMethod
+    public void afterMethod() {
     	restAPI.deleteMachine(TEST_IP);
     }
     
@@ -96,6 +102,8 @@ public class TopPageTest extends BaseTest {
     	Assert.assertTrue(addedHostName.equals(TEST_HOSTNAME), addedHostName);
     	Assert.assertTrue(addedIpAddress.equals(TEST_IP), addedIpAddress);
     	Assert.assertTrue(osDistributionImgName.contains(TEST_OS_DIST));
+    	
+    	
     }
     
     
