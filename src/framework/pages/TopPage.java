@@ -2,7 +2,6 @@ package framework.pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,15 +10,7 @@ import framework.pages.modal.Modal;
 
 
 public class TopPage extends BasePage {
-	private WebDriver driver;
-	
-	public TopPage(){}
 
-	public TopPage(WebDriver driver){
-		super(driver);
-		this.driver = driver;
-	}
-	
     @FindBy(css=".col-xs-4.col-sm-3.col-md-2")
     private List<WebElement> machineList;
 
@@ -88,7 +79,7 @@ public class TopPage extends BasePage {
     
     public RegisterPage clickRegisterMachinesButton(){
     	getRegisterMachinesButton().click();
-    	RegisterPage registerPage = new RegisterPage(driver);
+    	RegisterPage registerPage = new RegisterPage();
     	wait.until(ExpectedConditions.textToBePresentInElement(registerPage.getPageHeading(), "Register A New Machine"));
     	return registerPage;
     	
@@ -96,7 +87,7 @@ public class TopPage extends BasePage {
     
     public DeletePage clickDeleteMachinesButton(){
     	getDeleteMachinesButton().click();
-    	DeletePage deletePage = new DeletePage(driver);
+    	DeletePage deletePage = new DeletePage();
     	wait.until(ExpectedConditions.textToBePresentInElement(deletePage.getPageHeading(), "Delete Machines"));
     	return deletePage;
     }

@@ -2,16 +2,11 @@ package framework.pages;
 
 import java.util.List;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+
 public class DeletePage extends BasePage {
-	
-	public DeletePage(WebDriver driver){
-		super(driver);
-		this.driver = driver;
-	}
 	
 	@FindBy(css=".col-md-12 > h2")
 	private WebElement pageHeading;

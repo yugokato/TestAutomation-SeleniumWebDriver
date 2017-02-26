@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import framework.api.RestAPI;
-import framework.pages.BasePage;
+import framework.driver.DriverInit;
 import framework.pages.RegisterPage;
 import framework.pages.TopPage;
 import framework.pages.modal.Modal;
@@ -21,24 +21,25 @@ public class BaseTest {
     protected Modal currentModal;
     protected RegisterPage registerPage;
     
-    @BeforeMethod(alwaysRun=true)
-    public void beforeMethodBase() {
-    	driver.get("http://localhost:5000");
-    	driver.manage().window().maximize();
-    }
-    
     @BeforeClass(alwaysRun=true)
     public void beforeClassBase() {
     	System.setProperty("webdriver.firefox.marionette","lib");
     	driver = new FirefoxDriver();
-        topPage = new TopPage(driver);
-        restAPI = new RestAPI(driver);
+    	DriverInit.setDriver(driver);
+        topPage = new TopPage();
+        restAPI = new RestAPI();
         jse = (JavascriptExecutor)driver;
     }
     
     @AfterClass(alwaysRun=true)
     public void afterClassBase() {
         driver.quit();
+    }
+    
+    @BeforeMethod(alwaysRun=true)
+    public void beforeMethodBase() {
+    	driver.get("http://localhost:5000");
+    	driver.manage().window().maximize();
     }
 
 }

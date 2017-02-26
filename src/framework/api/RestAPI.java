@@ -8,13 +8,14 @@ import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import framework.driver.DriverInit;
 import framework.pages.TopPage;
 
 public class RestAPI {
 	private WebDriver driver;
 	
-	public RestAPI(WebDriver driver){
-		this.driver = driver;
+	public RestAPI(){
+		this.driver = DriverInit.getDriver();
 	}
 	
 	public String addMachine(String ipaddr, String username){
@@ -91,7 +92,7 @@ public class RestAPI {
 	
 	public void deleteAllUnknownMachines(){
 		// Delete all machines whose hostname is #Unknown
-		TopPage topPage = new TopPage(driver);
+		TopPage topPage = new TopPage();
         String deleteIPs = "";
         List<WebElement> hostNameList = topPage.getHostNameList();
         List<WebElement> ipAddrList = topPage.getIpAddressList();

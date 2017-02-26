@@ -3,7 +3,6 @@ package test.SeleniumTestAutomation;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -17,10 +16,7 @@ public class DeleteMachinesPageTest extends BaseTest {
     private final String TEST_IP2 = "2.2.2.2";
     private final String TEST_USERNAME = "test_user";
     private final String TEST_PASSWORD = "test_password";
-    private List<WebElement> machineList;
-    private List<WebElement> hostNameList;
     private List<WebElement> ipAddressList;
-    private List<WebElement> osDistributionImgNameList;
     
     @BeforeMethod
     public void beforeMethod() {
@@ -43,7 +39,13 @@ public class DeleteMachinesPageTest extends BaseTest {
     	
     	deletePage.getDeleteButton().submit();
     	String topPageFlashMessage = topPage.getFlashMessageField().getText();
-    	Assert.assertTrue(topPageFlashMessage.contains("Deleted") && topPageFlashMessage.contains(TEST_IP1) && topPageFlashMessage.contains(TEST_IP2), topPageFlashMessage);    	
+    	Assert.assertTrue(topPageFlashMessage.contains("Deleted") && topPageFlashMessage.contains(TEST_IP1) && topPageFlashMessage.contains(TEST_IP2), topPageFlashMessage);
+    	
+    	ipAddressList = topPage.getIpAddressList();
+    	for (WebElement ip: ipAddressList){
+    		Assert.assertTrue(! ip.getText().equals(TEST_IP1));
+    		Assert.assertTrue(! ip.getText().equals(TEST_IP2));
+    	}
     }
     	
     @Test(description="Verify delete machines page - success")

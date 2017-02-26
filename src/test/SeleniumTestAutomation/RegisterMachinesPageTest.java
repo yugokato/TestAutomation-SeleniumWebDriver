@@ -19,7 +19,6 @@ public class RegisterMachinesPageTest extends BaseTest{
     
     @BeforeMethod
     public void beforeMethod() {
-    	registerPage = new RegisterPage(driver);
     	restAPI.deleteAllUnknownMachines();
     }
 
