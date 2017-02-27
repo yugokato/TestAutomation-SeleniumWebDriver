@@ -8,6 +8,14 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.spotify.docker.client.messages.AttachedNetwork;
+import com.spotify.docker.client.messages.ContainerConfig;
+import com.spotify.docker.client.messages.ContainerCreation;
+import com.spotify.docker.client.messages.ContainerInfo;
+
+import framework.pages.modal.Modal;
+
 import org.testng.Assert;
 
 import selenium.automation.base.BaseTest;
@@ -17,8 +25,11 @@ public class TopPageTest extends BaseTest {
     private final String TEST_IP = "172.30.0.11";
     private final String TEST_USERNAME = "ubuntu";
     private final String TEST_PASSWORD = "ubuntu";
-    private final String TEST_HOSTNAME = "vm11";
     private final String TEST_OS_DIST = "ubuntu";
+    private final String TEST_HOSTNAME = "vm99_test";
+    private final String TEST_CONTAINER_NAME = "vm99_test";
+    private final String TEST_CONTAINER_TO_DELETE = "vm01";
+    private final String TEST_DOCKER_NETWORK = "mgmtappforlinuxmachines_mynetwork";
     private List<WebElement> machineList;
     private List<WebElement> hostNameList;
     private List<WebElement> ipAddressList;
@@ -37,8 +48,10 @@ public class TopPageTest extends BaseTest {
     
     @Test(description="Verify initial state of the top page")
     public void verifyTopPageBasic() {
+    	// register a new machine whose status is #Unknown
     	restAPI.addMachine(TEST_IP, TEST_USERNAME);
     	
+    	// hard-coded test data
     	Map<String, String[]> testData = new HashMap<String, String[]>();
     	testData.put("vm01", new String[] {"172.30.0.1", "ubuntu"});
     	testData.put("vm02", new String[] {"172.30.0.2", "ubuntu"});
@@ -70,14 +83,29 @@ public class TopPageTest extends BaseTest {
         }
     }
     
-    @Test(description="Verify state changes after reachable")
-    public void verifyTopPageAfterReachable() {
+    @Test(description="Verify state changes after new machine becomes reachable")
+    public void verifyTopPageUnknownBecomesReachable() throws Exception {
     	int numOfMachines;
     	String addedHostName, addedIpAddress, osDistributionImgName;
     	
-    	restAPI.addMachine(TEST_IP, TEST_USERNAME, TEST_PASSWORD);
+    	// Create a new container for test
+    	ContainerConfig config = ContainerConfig.builder()
+    		    .image("yugokato/ubuntu_template")
+    		    .hostname(TEST_HOSTNAME)
+    		    .openStdin(true)
+    		    .tty(true)
+    		    .build();
+    	ContainerCreation testContainer = docker.createContainer(config, TEST_CONTAINER_NAME);
+    	docker.connectToNetwork(testContainer.id(), TEST_DOCKER_NETWORK);
+    	docker.startContainer(testContainer.id());
+    	ContainerInfo containerInfo = docker.inspectContainer(testContainer.id());
+    	AttachedNetwork attachedNetwork = containerInfo.networkSettings().networks().get(TEST_DOCKER_NETWORK);
+    	String testContainerIP = attachedNetwork.ipAddress();
+    
+    	// Register the new container for test
+    	restAPI.addMachine(testContainerIP, TEST_USERNAME, TEST_PASSWORD);
     	
-    	// Check the initial #Unknown status
+    	// Check the initial #Unknown status after registration
     	driver.navigate().refresh();
     	numOfMachines = topPage.getMachineList().size();
     	addedHostName = topPage.getHostNameList().get(0).getText();
@@ -85,10 +113,10 @@ public class TopPageTest extends BaseTest {
     	osDistributionImgName = topPage.getOSDistributionImgNameList().get(0).getAttribute("src");
     	
     	Assert.assertTrue(addedHostName.equals("#Unknown"), addedHostName);
-    	Assert.assertTrue(addedIpAddress.equals(TEST_IP), addedIpAddress);
+    	Assert.assertTrue(addedIpAddress.equals(testContainerIP), addedIpAddress);
     	Assert.assertTrue(osDistributionImgName.contains("other"), osDistributionImgName);
     
-    	// Wait for 40 seconds until SSH access starts
+    	// Wait for 40 seconds until SSH access starts and status changes reachable
     	try{
     		Thread.sleep(40000);
     	}catch(InterruptedException e){}
@@ -100,31 +128,64 @@ public class TopPageTest extends BaseTest {
     	addedIpAddress = topPage.getIpAddressList().get(numOfMachines-1).getText();
     	osDistributionImgName = topPage.getOSDistributionImgNameList().get(numOfMachines-1).getAttribute("src");
     	Assert.assertTrue(addedHostName.equals(TEST_HOSTNAME), addedHostName);
-    	Assert.assertTrue(addedIpAddress.equals(TEST_IP), addedIpAddress);
+    	Assert.assertTrue(addedIpAddress.equals(testContainerIP), addedIpAddress);
     	Assert.assertTrue(osDistributionImgName.contains(TEST_OS_DIST));
     	
+    	// Clean the test container
+    	docker.killContainer(testContainer.id());
+    	docker.removeContainer(testContainer.id());
+    	restAPI.deleteMachine(testContainerIP);
     	
     }
     
-    
 
-    /*
-    @Test(description="")
-    public void verifyTopPageWhenUnreahable() throws Exception {
-    	String cmd = "docker --host=tcp://192.168.99.100:2376 stop vm01";
-	    String line;
-	    try{
-		    Process proc = Runtime.getRuntime().exec(cmd);
-		    		    BufferedReader is = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		    while ((line = is.readLine()) != null) {
-		    	System.out.println(line);
-		    }
-	    }
-	    catch(IOException e){
-	    	System.out.println(e);
-	    	
-	    }
+    @Test(description="Verify top page status changes when the existing machine becomes unreachable")
+    public void verifyTopPageOkBecomesUnreahable() throws Exception{
+    	
+    	// stop one of the existing containers 
+    	docker.killContainer(TEST_CONTAINER_TO_DELETE);  // vm01
+    	
+    	// Wait for 90 seconds
+    	Thread.sleep(90000);
+        driver.navigate().refresh();
+        
+        // check status icon
+        machineList = topPage.getMachineList();
+        hostNameList = topPage.getHostNameList();
+        osDistributionImgNameList = topPage.getOSDistributionImgNameList();
+
+        String hostName, osDistImgName;
+        Map<String, String> modalContents;
+        for (int i=0; i<machineList.size(); i++){
+        	hostName = hostNameList.get(i).getText();
+        	if (hostName.equals(TEST_CONTAINER_TO_DELETE)){
+        		osDistImgName = osDistributionImgNameList.get(i).getAttribute("src");
+        		Assert.assertTrue(osDistImgName.contains("unreachable"));
+        		
+        		// check modal contents
+        		topPage.openModal(machineList.get(i));
+        		Modal currentModal = topPage.getCurrentModalInstance();
+        		modalContents = currentModal.getModalContents();
+        		Assert.assertTrue(modalContents.get("STATUS").contains("Unreachable"));
+        		Assert.assertTrue(modalContents.get("STATUS_IMG_NAME").equals("status_unreachable.png"));
+        		currentModal.clickCloseButton();
+        		break;
+        	}
+        }
+        
+        // re-start the container
+        docker.startContainer(TEST_CONTAINER_TO_DELETE);
+        
+    	// Wait for 40 seconds
+    	Thread.sleep(40000);
+        driver.navigate().refresh();
+        
+        // Check all machines' status = ok
+        osDistributionImgNameList = topPage.getOSDistributionImgNameList();
+        for (int i=0; i<osDistributionImgNameList.size(); i++){
+        	Assert.assertTrue(! osDistributionImgNameList.get(i).getAttribute("src").contains("unreachable"));
+        }
+	    
     }
-    */
- 
+
 }

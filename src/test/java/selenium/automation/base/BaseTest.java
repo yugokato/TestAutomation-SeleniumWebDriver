@@ -7,6 +7,10 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
+import com.spotify.docker.client.DefaultDockerClient;
+import com.spotify.docker.client.DockerClient;
+import com.spotify.docker.client.exceptions.DockerCertificateException;
+
 import framework.api.RestAPI;
 import framework.driver.DriverInit;
 import framework.pages.RegisterPage;
@@ -20,6 +24,7 @@ public class BaseTest {
     protected TopPage topPage;
     protected Modal currentModal;
     protected RegisterPage registerPage;
+    protected DockerClient docker;
     
     @BeforeClass(alwaysRun=true)
     public void beforeClassBase() {
@@ -29,6 +34,11 @@ public class BaseTest {
         topPage = new TopPage();
         restAPI = new RestAPI();
         jse = (JavascriptExecutor)driver;
+        try{
+        	docker = DefaultDockerClient.fromEnv().build();
+        }catch(DockerCertificateException e){
+        	e.printStackTrace();
+        }
     }
     
     @AfterClass(alwaysRun=true)

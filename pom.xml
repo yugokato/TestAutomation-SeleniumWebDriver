@@ -33,5 +33,10 @@
             <version>6.9.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.spotify</groupId>
+            <artifactId>docker-client</artifactId>
+            <version>8.0.0</version>
+        </dependency>
     </dependencies>
 </project>
