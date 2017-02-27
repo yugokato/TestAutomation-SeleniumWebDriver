@@ -11,11 +11,17 @@ import org.openqa.selenium.WebElement;
 import framework.driver.DriverInit;
 import framework.pages.TopPage;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 public class RestAPI {
 	private WebDriver driver;
+	private static final Logger logger = Logger.getLogger(RestAPI.class);
+	
 	
 	public RestAPI(){
 		this.driver = DriverInit.getDriver();
+		logger.setLevel(Level.ALL);
 	}
 	
 	public String addMachine(String ipaddr, String username){
@@ -36,7 +42,8 @@ public class RestAPI {
 	    	System.out.println(e);
 	    }
 	    
-	    //System.out.printf("Added a machine(%s) via RESUful API: " + output.toString() + "\n", ipaddr);
+	    logger.info(String.format("Added a machine(%s) via RESUful API: " + output.toString(), ipaddr));
+
 	    driver.navigate().refresh();
 	    return output.toString();
    
@@ -60,7 +67,8 @@ public class RestAPI {
 	    	System.out.println(e);
 	    }
 	    
-	    //System.out.printf("Added a machine(%s) via RESUful API: " + output.toString() + "\n", ipaddr);
+	    logger.info(String.format("Added a machine(%s) via RESUful API: " + output.toString(), ipaddr));
+	    
 	    driver.navigate().refresh();
 	    return output.toString();
    
@@ -84,7 +92,8 @@ public class RestAPI {
 	    	System.out.println(e);
 	    }
 	    
-	    //System.out.printf("Deleted machines(%s) via RESUful API: " + output.toString() + "\n", ipaddr);
+	    logger.info(String.format("Deleted machines(%s) via RESUful API: " + output.toString(), ipaddr));
+
 	    driver.navigate().refresh();
 	    return output.toString();
    
