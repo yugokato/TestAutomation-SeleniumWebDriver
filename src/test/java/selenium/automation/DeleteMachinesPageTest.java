@@ -49,7 +49,7 @@ public class DeleteMachinesPageTest extends BaseTest {
     	}
     }
     	
-    @Test(description="Verify delete machines page - success")
+    @Test(description="Verify delete machines page - No machine selected")
     public void verifyDeleteMachinesNoSelection() {
     	deletePage = topPage.clickDeleteMachinesButton();
     	deletePage.getDeleteButton().submit();
