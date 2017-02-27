@@ -70,7 +70,7 @@ public class BaseTest {
     	driver.manage().window().maximize();
     }
 
-    public void startTestContainers() throws Exception{
+    private void startTestContainers() throws Exception{
     	List<Container> containers = docker.listContainers(ListContainersParam.allContainers());
         for(Container container : containers) {
         	for( String name : container.names()){
