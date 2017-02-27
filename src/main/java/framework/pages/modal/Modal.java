@@ -152,6 +152,9 @@ public class Modal extends BasePage {
     public void enterJsonFileName(String filename){
     	getJsonFileNameField().clear();
     	getJsonFileNameField().sendKeys(filename);
+    	try{
+    		Thread.sleep(300);
+    	}catch(InterruptedException e){}
     }
     
     public void clickExportButton(){
