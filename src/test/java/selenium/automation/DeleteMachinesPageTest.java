@@ -32,7 +32,6 @@ public class DeleteMachinesPageTest extends BaseTest {
     	
     	List<WebElement> checkBoxes = deletePage.getCurrentMachineCheckBoxes();
     	for (WebElement checkBox: checkBoxes){
-    		System.out.println(checkBox.getText());
     		if (checkBox.getAttribute("value").contains(TEST_IP1) || checkBox.getAttribute("value").contains(TEST_IP2)){
     			checkBox.click();
     		}
