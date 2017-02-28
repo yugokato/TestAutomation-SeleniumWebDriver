@@ -2,11 +2,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite">
   <test name="Test">
-  	<classes>
-		<class name="selenium.automation.TopPageTest" />
-		<class name="selenium.automation.ModalTest" />
-		<class name="selenium.automation.RegisterMachinesPageTest" />
-		<class name="selenium.automation.DeleteMachinesPageTest" />
-	</classes>
+    <classes>
+      <class name="selenium.automation.RegisterMachinesPageTest"/>
+      <class name="selenium.automation.TopPageTest"/>
+      <class name="selenium.automation.DeleteMachinesPageTest"/>
+      <class name="selenium.automation.ModalTest"/>
+    </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -60,6 +60,7 @@ public class BaseTest {
     
     @AfterClass(alwaysRun=true)
     public void afterClassBase() {
+    	restAPI.deleteAllUnknownMachines();
         driver.quit();
     }
     
