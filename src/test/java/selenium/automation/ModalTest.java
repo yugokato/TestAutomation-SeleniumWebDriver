@@ -9,11 +9,13 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import framework.pages.modal.Modal;
 import selenium.automation.base.BaseTest;
 
 import org.testng.Assert;
 
 public class ModalTest extends BaseTest{
+	private Modal currentModal;
     private final String TEST_IP = "1.1.1.1";
     private final String TEST_USERNAME = "test_user";
     List<WebElement> machineList;
