@@ -9,11 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.spotify.docker.client.messages.AttachedNetwork;
-import com.spotify.docker.client.messages.ContainerConfig;
-import com.spotify.docker.client.messages.ContainerCreation;
-import com.spotify.docker.client.messages.ContainerInfo;
-
+import framework.docker.DockerManager;
 import framework.pages.modal.Modal;
 
 import org.testng.Assert;
@@ -22,6 +18,7 @@ import selenium.automation.base.BaseTest;
 
 
 public class TopPageTest extends BaseTest {
+	private Modal currentModal;
     private final String TEST_IP = "172.30.0.11";
     private final String TEST_USERNAME = "ubuntu";
     private final String TEST_PASSWORD = "ubuntu";
@@ -87,20 +84,18 @@ public class TopPageTest extends BaseTest {
     public void verifyTopPageUnknownBecomesReachable() throws Exception {
     	int numOfMachines;
     	String addedHostName, addedIpAddress, osDistributionImgName;
+    	String testContainerID, testContainerIP;
     	
     	// Create a new container for test
-    	ContainerConfig config = ContainerConfig.builder()
-    		    .image("yugokato/ubuntu_template")
-    		    .hostname(TEST_HOSTNAME)
-    		    .openStdin(true)
-    		    .tty(true)
-    		    .build();
-    	ContainerCreation testContainer = docker.createContainer(config, TEST_CONTAINER_NAME);
-    	docker.connectToNetwork(testContainer.id(), TEST_DOCKER_NETWORK);
-    	docker.startContainer(testContainer.id());
-    	ContainerInfo containerInfo = docker.inspectContainer(testContainer.id());
-    	AttachedNetwork attachedNetwork = containerInfo.networkSettings().networks().get(TEST_DOCKER_NETWORK);
-    	String testContainerIP = attachedNetwork.ipAddress();
+    	Map<String, String> testConfigMap = new HashMap<>();
+    	testConfigMap.put("IMAGE", "yugokato/ubuntu_template");
+    	testConfigMap.put("HOSTNAME", TEST_HOSTNAME);
+    	testConfigMap.put("CONTAINER_NAME", TEST_CONTAINER_NAME);
+    	testConfigMap.put("NETWORK_NAME", TEST_DOCKER_NETWORK);
+    	
+    	Map<String, String> testContainerInfo = DockerManager.createAndStartContainer(testConfigMap);
+    	testContainerID = testContainerInfo.get("ID");
+    	testContainerIP = testContainerInfo.get("IP_ADDRESS");
     
     	// Register the new container for test
     	restAPI.addMachine(testContainerIP, TEST_USERNAME, TEST_PASSWORD);
@@ -132,10 +127,8 @@ public class TopPageTest extends BaseTest {
     	Assert.assertTrue(osDistributionImgName.contains(TEST_OS_DIST));
     	
     	// Clean the test container
-    	docker.killContainer(testContainer.id());
-    	docker.removeContainer(testContainer.id());
-    	restAPI.deleteMachine(testContainerIP);
-    	
+    	docker.killContainer(testContainerID);
+    	docker.removeContainer(testContainerID);   	
     }
     
 
@@ -164,7 +157,7 @@ public class TopPageTest extends BaseTest {
         		
         		// check modal contents
         		topPage.openModal(machineList.get(i));
-        		Modal currentModal = topPage.getCurrentModalInstance();
+        		currentModal = topPage.getCurrentModalInstance();
         		modalContents = currentModal.getModalContents();
         		Assert.assertTrue(modalContents.get("STATUS").contains("Unreachable"));
         		Assert.assertTrue(modalContents.get("STATUS_IMG_NAME").equals("status_unreachable.png"));
