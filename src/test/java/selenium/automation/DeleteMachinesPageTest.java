@@ -25,7 +25,7 @@ public class DeleteMachinesPageTest extends BaseTest {
     }
     
     @Test(description="Verify delete machines page - success")
-    public void verifyDeleteMachines() {
+    public void verifyDeleteMachines() throws Exception {
     	restAPI.addMachine(TEST_IP1, TEST_USERNAME, TEST_PASSWORD);
     	restAPI.addMachine(TEST_IP2, TEST_USERNAME, TEST_PASSWORD);
     	deletePage = topPage.clickDeleteMachinesButton();
@@ -49,7 +49,7 @@ public class DeleteMachinesPageTest extends BaseTest {
     }
     	
     @Test(description="Verify delete machines page - No machine selected")
-    public void verifyDeleteMachinesNoSelection() {
+    public void verifyDeleteMachinesNoSelection() throws Exception {
     	deletePage = topPage.clickDeleteMachinesButton();
     	deletePage.getDeleteButton().submit();
     	String flashMessage = deletePage.getFlashMessageField().getText();

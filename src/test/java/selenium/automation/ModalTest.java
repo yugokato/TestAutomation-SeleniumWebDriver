@@ -30,7 +30,7 @@ public class ModalTest extends BaseTest{
     }
     
     @Test(description="Verify modal contents in the top page are valid based on machine's status")
-    public void verifyModalContents() {
+    public void verifyModalContents() throws Exception {
     	machineList = topPage.getMachineList();
         hostNameList = topPage.getHostNameList();
         ipAddressList = topPage.getIpAddressList();
@@ -108,7 +108,7 @@ public class ModalTest extends BaseTest{
     }
     
     @Test(description="Verify export JSON file feature")
-    public void verifyExportJsonFile() {
+    public void verifyExportJsonFile() throws Exception {
     	machineList = topPage.getMachineList();
     	hostNameList = topPage.getHostNameList();
     	String hostName, jsonFileName;
@@ -140,7 +140,7 @@ public class ModalTest extends BaseTest{
     }
     
     @Test(description="Verify SSH access via Butterfly module")
-    public void verifyOpenSSHButterfly() {
+    public void verifyOpenSSHButterfly() throws Exception {
     	machineList = topPage.getMachineList();
     	hostNameList = topPage.getHostNameList();
     	String hostName;

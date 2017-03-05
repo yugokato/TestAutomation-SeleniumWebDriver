@@ -23,7 +23,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     }
 
     @Test(description="Verify register a new machine page - success")
-	public void verifyRegisterMachinesSuccess() {
+	public void verifyRegisterMachinesSuccess() throws Exception {
     	String topPageFlashMessage;
     	
     	registerPage = topPage.clickRegisterMachinesButton();
@@ -60,7 +60,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     }
     
     @Test(description="Verify register a new machine page - IP duplication")
-	public void verifyRegisterMachinesIPDuplicated() {
+	public void verifyRegisterMachinesIPDuplicated() throws Exception {
     	restAPI.addMachine(VALID_TEST_IP, VALID_TEST_PASSWORD);
     	
     	registerPage = topPage.clickRegisterMachinesButton();
@@ -130,7 +130,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     }
     
     @Test(description="Verify register a new machine page - Invalid username")
-	public void verifyRegisterMachinesInvalidUsername() {
+	public void verifyRegisterMachinesInvalidUsername() throws Exception {
     	registerPage = topPage.clickRegisterMachinesButton();
     	
     	// test-1
@@ -159,7 +159,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     }
     
     @Test(description="Verify register a new machine page - Invalid password")
-	public void verifyRegisterMachinesInvalidPassword() {
+	public void verifyRegisterMachinesInvalidPassword() throws Exception {
     	registerPage = topPage.clickRegisterMachinesButton();
     	
     	// test-1
@@ -177,7 +177,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     }
     
     @Test(description="Verify register a new machine page - Multiple invalid fields")
-	public void verifyRegisterMachinesMultiInvalidFields() {
+	public void verifyRegisterMachinesMultiInvalidFields() throws Exception {
     	registerPage = topPage.clickRegisterMachinesButton();
     	
     	// test-1

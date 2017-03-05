@@ -44,7 +44,7 @@ public class TopPageTest extends BaseTest {
     }
     
     @Test(description="Verify initial state of the top page")
-    public void verifyTopPageBasic() {
+    public void verifyTopPageBasic() throws Exception {
     	// register a new machine whose status is #Unknown
     	restAPI.addMachine(TEST_IP, TEST_USERNAME);
     	
