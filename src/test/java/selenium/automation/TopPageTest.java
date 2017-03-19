@@ -3,6 +3,8 @@ package selenium.automation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterMethod;
@@ -46,7 +48,7 @@ public class TopPageTest extends BaseTest {
     @Test(description="Verify initial state of the top page")
     public void verifyTopPageBasic() throws Exception {
     	// register a new machine whose status is #Unknown
-    	restAPI.addMachine(TEST_IP, TEST_USERNAME);
+    	restAPI.registerMachine(TEST_IP, TEST_USERNAME);
     	
     	// hard-coded test data
     	Map<String, String[]> testData = new HashMap<String, String[]>();
@@ -98,7 +100,7 @@ public class TopPageTest extends BaseTest {
     	testContainerIP = testContainerInfo.get("IP_ADDRESS");
     
     	// Register the new container for test
-    	restAPI.addMachine(testContainerIP, TEST_USERNAME, TEST_PASSWORD);
+    	restAPI.registerMachine(testContainerIP, TEST_USERNAME, TEST_PASSWORD);
     	
     	// Check the initial #Unknown status after registration
     	driver.navigate().refresh();

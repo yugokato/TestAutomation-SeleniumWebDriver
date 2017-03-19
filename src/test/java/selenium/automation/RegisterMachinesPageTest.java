@@ -61,7 +61,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     
     @Test(description="Verify register a new machine page - IP duplication")
 	public void verifyRegisterMachinesIPDuplicated() throws Exception {
-    	restAPI.addMachine(VALID_TEST_IP, VALID_TEST_PASSWORD);
+    	restAPI.registerMachine(VALID_TEST_IP, VALID_TEST_PASSWORD);
     	
     	registerPage = topPage.clickRegisterMachinesButton();
     	registerPage.enterIpAddress(VALID_TEST_IP);

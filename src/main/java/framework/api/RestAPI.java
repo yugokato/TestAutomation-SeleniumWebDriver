@@ -1,8 +1,5 @@
 package framework.api;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,56 +16,60 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class RestAPI {
+public class RestAPI extends RestClient {
 	private WebDriver driver;
 	private static final Logger logger = Logger.getLogger(RestAPI.class);
-	
+	private static final String BASE_URL = "http://localhost:5000/api/machines";
 	
 	public RestAPI(){
 		this.driver = DriverInit.getDriver();
 		logger.setLevel(Level.ALL);
 	}
 	
-	public String addMachine(String ipaddr, String username){
-		String url = "curl -H 'Content-Type: application/json' -X 'POST' http://localhost:5000/api/machines/add/" + ipaddr + ":" + username;
-		String result = requestJson(url);
+	public String registerMachine(String ipaddr, String username){
+		String url = BASE_URL + "/add/" + ipaddr + ":" + username;
+		String result = requestPOST(url, null);
 	    logger.info(String.format("Added a machine(%s) via RESUful API - result: " + result, ipaddr));
-	    
-	    return result;
-   
-	}
-	
-	public String addMachine(String ipaddr, String username, String password){
-		String url = "curl -H 'Content-Type: application/json' -X 'POST' http://localhost:5000/api/machines/add/" + ipaddr + ":" + username + ":" + password;
-		String result = requestJson(url);
-	    logger.info(String.format("Added a machine(%s) via RESUful API - result: " + result, ipaddr));
-   
+	    driver.navigate().refresh();
+
 	    return result;
 	}
 	
-	public String addMachines(List<HashMap<String, String>> credentialsMapList){
+	public String registerMachine(String ipaddr, String username, String password){
+		String url = BASE_URL + "/add/" + ipaddr + ":" + username + ":" + password;
+		String result = requestPOST(url, null);
+	    logger.info(String.format("Added a machine(%s) via RESUful API - result: " + result, ipaddr));
+	    driver.navigate().refresh();
+
+	    return result;
+	}
+	
+	public String registerMachines(List<HashMap<String, String>> credentialsMapList){
 		List<JSONObject> jsonObjList = new ArrayList<JSONObject>();
 		ArrayList<String> addIPList = new ArrayList<>();
 		
 		for(HashMap<String, String> machine : credentialsMapList) {
-			addIPList.add(machine.get("IP Address"));
 		    JSONObject obj = new JSONObject(machine);
 		    jsonObjList.add(obj);
+		    addIPList.add(machine.get("IP Address"));
 		}
 
 		JSONArray jsonData = new JSONArray(jsonObjList);
+		String jsonDataStr = jsonData.toString();
 		
-		String url = "curl -H 'Content-Type: application/json' -X 'POST' http://localhost:5000/api/machines/add -d " + "'" + jsonData.toString() + "'";
-		String result = requestJson(url);
+		String url = BASE_URL + "/add";
+		String result = requestPOST(url, jsonDataStr);
 	    logger.info(String.format("Added machines(%s) via RESUful API - result: " + result, addIPList.toString()));
-
+	    driver.navigate().refresh();
+	    
 	    return result;
 	}
 	
 	public String deleteMachine(String ipaddr){
-		String url = "curl -H 'Content-Type: application/json' -X 'DELETE' http://localhost:5000/api/machines/delete/" + ipaddr;
-		String result = requestJson(url);
+		String url = BASE_URL + "/delete/" + ipaddr;
+		String result = requestDELETE(url, null);
 	    logger.info(String.format("Deleted machines(%s) via RESUful API - result: " + result, ipaddr));
+	    driver.navigate().refresh();
    
 	    return result;
 	}
@@ -78,10 +79,12 @@ public class RestAPI {
 	    data.put("IP Address", deleteIPList);
 	    
 	    JSONObject jsonData = new JSONObject(data);
+	    String jsonDataStr = jsonData.toString();
 		
-		String url = "curl -H 'Content-Type: application/json' -X 'DELETE' http://localhost:5000/api/machines/delete -d " + "'" + jsonData.toString() + "'";
-		String result = requestJson(url);
+		String url = BASE_URL + "/delete";
+		String result = requestDELETE(url, jsonDataStr);
 	    logger.info(String.format("Deleted a machine(%s) via RESUful API - result: " + result, deleteIPList.toString()));
+	    driver.navigate().refresh();
 
 	    return result;
 	}
@@ -104,25 +107,7 @@ public class RestAPI {
         if (hasUnknown){
         	deleteMachine(deleteIPs.substring(0, deleteIPs.length()-1));
         }
-        driver.navigate().refresh();
 	}
 	
-	private String requestJson (String url){
-		StringBuffer output = new StringBuffer();
-	    String[] cmd = { "/bin/sh", "-c", url };
-	    String line;
-	    try{
-		    Process proc = Runtime.getRuntime().exec(cmd);
-		    BufferedReader is = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		    while ((line = is.readLine()) != null) {
-		    	output.append(line.trim());
-		    }
-	    }
-	    catch(IOException e){
-	    	System.out.println(e);
-	    }
-	    
-	    driver.navigate().refresh();
-	    return output.toString();
-	}
+
 }

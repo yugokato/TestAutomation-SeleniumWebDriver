@@ -26,7 +26,7 @@ public class ModalTest extends BaseTest{
     @BeforeMethod
     public void beforeMethod() {
     	restAPI.deleteAllUnknownMachines();
-    	restAPI.addMachine(TEST_IP, TEST_USERNAME);
+    	restAPI.registerMachine(TEST_IP, TEST_USERNAME);
     }
     
     @Test(description="Verify modal contents in the top page are valid based on machine's status")

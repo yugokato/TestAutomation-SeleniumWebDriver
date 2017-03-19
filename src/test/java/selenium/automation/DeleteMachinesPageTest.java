@@ -26,8 +26,8 @@ public class DeleteMachinesPageTest extends BaseTest {
     
     @Test(description="Verify delete machines page - success")
     public void verifyDeleteMachines() throws Exception {
-    	restAPI.addMachine(TEST_IP1, TEST_USERNAME, TEST_PASSWORD);
-    	restAPI.addMachine(TEST_IP2, TEST_USERNAME, TEST_PASSWORD);
+    	restAPI.registerMachine(TEST_IP1, TEST_USERNAME, TEST_PASSWORD);
+    	restAPI.registerMachine(TEST_IP2, TEST_USERNAME, TEST_PASSWORD);
     	deletePage = topPage.clickDeleteMachinesButton();
     	
     	List<WebElement> checkBoxes = deletePage.getCurrentMachineCheckBoxes();

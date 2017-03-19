@@ -31,11 +31,11 @@ public class RestAPITest extends BaseTest {
 	    	String result;
 	    	
 	    	// test-1
-	    	result = restAPI.addMachine(VALID_IP_1, VALID_USERNAME, VALID_PASSWORD);
+	    	result = restAPI.registerMachine(VALID_IP_1, VALID_USERNAME, VALID_PASSWORD);
 	    	Assert.assertTrue(result.contains("true"));	
 	    	
 	    	// test-2(no password)
-	    	result = restAPI.addMachine(VALID_IP_2, VALID_USERNAME);
+	    	result = restAPI.registerMachine(VALID_IP_2, VALID_USERNAME);
 	    	Assert.assertTrue(result.contains("\"success\": true"));	
 	    }
 	    
@@ -60,7 +60,7 @@ public class RestAPITest extends BaseTest {
 			credentialsMapList.add(machine2);
 			credentialsMapList.add(machine3);
 			
-	    	String result = restAPI.addMachines(credentialsMapList);
+	    	String result = restAPI.registerMachines(credentialsMapList);
 	    	Assert.assertTrue(result.contains("\"success\": true"));
 	    	
 	    }
@@ -70,24 +70,24 @@ public class RestAPITest extends BaseTest {
 	    	String result;
 	    	
 	    	// test-1 (Invalid IP)
-	    	result = restAPI.addMachine(INVALID_IP, VALID_USERNAME, VALID_PASSWORD);
+	    	result = restAPI.registerMachine(INVALID_IP, VALID_USERNAME, VALID_PASSWORD);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains("invalid ip address"));
 	    	
 	    	// test-2 (Invalid username)
-	    	result = restAPI.addMachine(VALID_IP_1, INVALID_USERNAME, VALID_PASSWORD);
+	    	result = restAPI.registerMachine(VALID_IP_1, INVALID_USERNAME, VALID_PASSWORD);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains("invalid username"));
 	    	
 	    	// test-3 (Invalid password)
-	    	result = restAPI.addMachine(VALID_IP_1, VALID_USERNAME, INVALID_PASSWORD);
+	    	result = restAPI.registerMachine(VALID_IP_1, VALID_USERNAME, INVALID_PASSWORD);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains("invalid password"));
 	    	
 	    	// test-4 (Invalid all parameters)
-	    	result = restAPI.addMachine(INVALID_IP, INVALID_USERNAME, INVALID_PASSWORD);
+	    	result = restAPI.registerMachine(INVALID_IP, INVALID_USERNAME, INVALID_PASSWORD);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains("\"invalid ip address\",\"invalid username\",\"invalid password\""));
 	    	
 	    	// test-5 (Duplicate IP)
-	    	restAPI.addMachine(VALID_IP_1, VALID_USERNAME, VALID_PASSWORD);
-	    	result = restAPI.addMachine(VALID_IP_1, VALID_USERNAME, VALID_PASSWORD);
+	    	restAPI.registerMachine(VALID_IP_1, VALID_USERNAME, VALID_PASSWORD);
+	    	result = restAPI.registerMachine(VALID_IP_1, VALID_USERNAME, VALID_PASSWORD);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains("ip duplicate"));
 	    }
 
@@ -112,7 +112,7 @@ public class RestAPITest extends BaseTest {
 			credentialsMapList.add(machine2);
 			credentialsMapList.add(machine3);
 			
-	    	result = restAPI.addMachines(credentialsMapList);
+	    	result = restAPI.registerMachines(credentialsMapList);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(INVALID_IP) && result.contains("invalid ip address"));
 	    	
 	    	// test-2 (Invalid username)
@@ -129,7 +129,7 @@ public class RestAPITest extends BaseTest {
 			credentialsMapList.add(machine2);
 			credentialsMapList.add(machine3);
 			
-	    	result = restAPI.addMachines(credentialsMapList);
+	    	result = restAPI.registerMachines(credentialsMapList);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(VALID_IP_1) && result.contains("invalid username"));
 	    	
 	    	// test-3 (Invalid password)
@@ -146,11 +146,11 @@ public class RestAPITest extends BaseTest {
 			credentialsMapList.add(machine2);
 			credentialsMapList.add(machine3);
 			
-	    	result = restAPI.addMachines(credentialsMapList);
+	    	result = restAPI.registerMachines(credentialsMapList);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(VALID_IP_1) && result.contains("invalid password"));
 	    	
 	    	// test-4 (IP duplicate)
-	    	result = restAPI.addMachines(credentialsMapList);
+	    	result = restAPI.registerMachines(credentialsMapList);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(String.format("\"%s\": [\"ip duplicate\"]", VALID_IP_2)));
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(String.format("\"%s\": [\"ip duplicate\"]", VALID_IP_3)));
 	    	
@@ -168,7 +168,7 @@ public class RestAPITest extends BaseTest {
 			credentialsMapList.add(machine2);
 			credentialsMapList.add(machine3);
 			
-	    	result = restAPI.addMachines(credentialsMapList);
+	    	result = restAPI.registerMachines(credentialsMapList);
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(String.format("\"%s\": [\"invalid ip address\",\"invalid username\",\"invalid password\"]", INVALID_IP)));
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(String.format("\"%s\": [\"invalid username\"]", VALID_IP_1)));
 	    	Assert.assertTrue(result.contains("\"success\": false") && result.contains(String.format("\"%s\": [\"invalid username\"]", VALID_IP_2)));
@@ -178,7 +178,7 @@ public class RestAPITest extends BaseTest {
 	    @Test(description = "Verify delete machines feature via RestfulAPI - succeed")
 	    public void verifyDeleteMachinesViaAPIBasic() throws Exception{
 	    	String result;
-	    	restAPI.addMachine(VALID_IP_1, VALID_USERNAME);
+	    	restAPI.registerMachine(VALID_IP_1, VALID_USERNAME);
 	    	
 	    	result = restAPI.deleteMachine(VALID_IP_1);
 	    	Assert.assertTrue(result.contains("\"deleted machines\": 1,\"success\": true"));			
@@ -188,9 +188,9 @@ public class RestAPITest extends BaseTest {
 	    public void verifyBulkDeleteMachinesViaAPIBasic() throws Exception{
 	    	List<String> deleteIPList = new ArrayList<>();
 	    	
-	    	restAPI.addMachine(VALID_IP_1, VALID_USERNAME);
-	    	restAPI.addMachine(VALID_IP_2, VALID_USERNAME);
-	    	restAPI.addMachine(VALID_IP_3, VALID_USERNAME);
+	    	restAPI.registerMachine(VALID_IP_1, VALID_USERNAME);
+	    	restAPI.registerMachine(VALID_IP_2, VALID_USERNAME);
+	    	restAPI.registerMachine(VALID_IP_3, VALID_USERNAME);
 	    	
 	    	deleteIPList.add(VALID_IP_1);
 	    	deleteIPList.add(VALID_IP_2);
@@ -219,8 +219,8 @@ public class RestAPITest extends BaseTest {
 	    	Assert.assertTrue(result.contains("\"deleted machines\": 0,\"success\": false"));
 	    	
 	    	// test-2 (some machines exist)
-	    	restAPI.addMachine(VALID_IP_1, VALID_USERNAME);
-	    	restAPI.addMachine(VALID_IP_2, VALID_USERNAME);
+	    	restAPI.registerMachine(VALID_IP_1, VALID_USERNAME);
+	    	restAPI.registerMachine(VALID_IP_2, VALID_USERNAME);
 	    	result = restAPI.deleteMachines(deleteIPList);
 	    	Assert.assertTrue(result.contains("\"deleted machines\": 2,\"success\": true"));	
 	    }
