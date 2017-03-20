@@ -26,6 +26,13 @@ public class RestAPI extends RestClient {
 		logger.setLevel(Level.ALL);
 	}
 	
+	public String getMachineData(String hostname){
+		String url = BASE_URL + "/" + hostname;
+		String result = requestGET(url);
+		
+		return result;
+	}
+	
 	public String registerMachine(String ipaddr, String username){
 		String url = BASE_URL + "/add/" + ipaddr + ":" + username;
 		String result = requestPOST(url, null);

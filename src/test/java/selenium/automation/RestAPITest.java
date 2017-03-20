@@ -19,6 +19,7 @@ public class RestAPITest extends BaseTest {
 		private final String INVALID_IP = "1.1.1";
 		private final String INVALID_USERNAME = "%@*!";
 		private final String INVALID_PASSWORD = "asdf.asdf";
+		private final String TEST_HOSTNAME = "vm05";
 		
 		
 		@BeforeMethod
@@ -26,6 +27,30 @@ public class RestAPITest extends BaseTest {
 	    	restAPI.deleteAllUnknownMachines();
 	    }
 
+		@Test(description = "Verify getting machine data via RestfulAPI")
+	    public void verifyGetMachineDataViaAPI() throws Exception{
+	    	String result;
+	    	
+	    	// test-1 (a host)
+	    	result = restAPI.getMachineData(TEST_HOSTNAME);
+	    	Assert.assertTrue(result.contains(TEST_HOSTNAME));
+	    	
+	    	// test-2 (All machines except Unknown)
+	    	restAPI.registerMachine(VALID_IP_1, VALID_USERNAME);
+	    	result = restAPI.getMachineData("all");
+	    	Assert.assertTrue(result.contains("vm01"));
+	    	Assert.assertTrue(result.contains("vm02"));
+	    	Assert.assertTrue(result.contains("vm03"));
+	    	Assert.assertTrue(result.contains("vm04"));
+	    	Assert.assertTrue(result.contains("vm05"));
+	    	Assert.assertTrue(result.contains("vm06"));
+	    	Assert.assertTrue(result.contains("vm07"));
+	    	Assert.assertTrue(result.contains("vm08"));
+	    	Assert.assertTrue(result.contains("vm09"));
+	    	Assert.assertTrue(result.contains("vm10"));
+	    	Assert.assertFalse(result.contains("Unknown"));
+	    }
+		
 	    @Test(description = "Verify register machines feature via RestfulAPI - succeed")
 	    public void verifyRegisterMachinesViaAPIBasic() throws Exception{
 	    	String result;

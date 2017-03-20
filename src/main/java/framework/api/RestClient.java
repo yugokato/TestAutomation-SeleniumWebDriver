@@ -18,7 +18,36 @@ public class RestClient {
 	public RestClient(){
 		logger.setLevel(Level.ALL);
 	}
-	
+
+    protected String requestGET(String urlStr){
+        StringBuffer output = new StringBuffer();
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json");
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                output.append(line.trim());
+            }
+            conn.disconnect();
+
+          } catch (MalformedURLException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        
+        logger.info("GET: " + urlStr);
+        logger.info("response: " + output.toString());
+        
+        return output.toString();
+    }
+    
 	protected String requestPOST(String urlStr, String data){
 		StringBuffer output = new StringBuffer();
 		try {
