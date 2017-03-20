@@ -88,10 +88,10 @@ public class RestClient {
 		  }
 		
 		if (data != null){
-			logger.info("POST: " + urlStr + " with data " + data);
+			logger.info("DELETE: " + urlStr + " with data " + data);
 		}
 		else{
-			logger.info("POST: " + urlStr);
+			logger.info("DELETE: " + urlStr);
 		}
 		
 		return output.toString();

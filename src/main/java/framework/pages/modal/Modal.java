@@ -153,7 +153,7 @@ public class Modal extends BasePage {
     	getJsonFileNameField().clear();
     	getJsonFileNameField().sendKeys(filename);
     	try{
-    		Thread.sleep(300);
+    		Thread.sleep(1000);
     	}catch(InterruptedException e){}
     }
     
