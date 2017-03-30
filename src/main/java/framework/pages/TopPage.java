@@ -26,70 +26,70 @@ public class TopPage extends BasePage {
     @FindBy(css=".col-md-12-flash p.flashes")
     private WebElement flashMessageField;
     
-	@FindBy(css=".col-md-12 > a[class='btn btn-info']")
-	private WebElement registerMachinesButton;
+    @FindBy(css=".col-md-12 > a[class='btn btn-info']")
+    private WebElement registerMachinesButton;
     
-	@FindBy(css=".col-md-12 > a[class='btn btn-danger']")
-	private WebElement deleteMachinesButton;
-	
+    @FindBy(css=".col-md-12 > a[class='btn btn-danger']")
+    private WebElement deleteMachinesButton;
+    
     public List<WebElement> getMachineList(){
         return machineList;
     }
     
     public List<WebElement> getHostNameList(){
-    	return hostNameList;
+        return hostNameList;
     }
     
     public List<WebElement> getIpAddressList(){
-    	return ipAddressList;
+        return ipAddressList;
     }
     
     public List<WebElement> getOSDistributionImgNameList(){
-    	return osDistributionImgNameList;
+        return osDistributionImgNameList;
     }
     
     public WebElement getFlashMessageField(){
-    	return flashMessageField;
+        return flashMessageField;
     }
     
-	public WebElement getRegisterMachinesButton(){
-		return registerMachinesButton;
-	}
-	
-	public WebElement getDeleteMachinesButton(){
-		return deleteMachinesButton;
-	}
+    public WebElement getRegisterMachinesButton(){
+        return registerMachinesButton;
+    }
+    
+    public WebElement getDeleteMachinesButton(){
+        return deleteMachinesButton;
+    }
     
     private WebElement getCurrentModalElement(){
-    	String selector = "div[class='modal fade in']";
-    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
-    	WebElement currentModal = driver.findElement(By.cssSelector(selector));
-    	return currentModal;
+        String selector = "div[class='modal fade in']";
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
+        WebElement currentModal = driver.findElement(By.cssSelector(selector));
+        return currentModal;
     }
     
     public Modal getCurrentModalInstance(){
-    	return new Modal(getCurrentModalElement());
+        return new Modal(getCurrentModalElement());
     }
     
     public void openModal(WebElement element){
-    	element.click();
-    	WebElement currentModal = getCurrentModalElement();
-    	wait.until(ExpectedConditions.visibilityOf(currentModal));
+        element.click();
+        WebElement currentModal = getCurrentModalElement();
+        wait.until(ExpectedConditions.visibilityOf(currentModal));
     }
     
     public RegisterPage clickRegisterMachinesButton(){
-    	getRegisterMachinesButton().click();
-    	RegisterPage registerPage = new RegisterPage();
-    	wait.until(ExpectedConditions.textToBePresentInElement(registerPage.getPageHeading(), "Register A New Machine"));
-    	return registerPage;
-    	
+        getRegisterMachinesButton().click();
+        RegisterPage registerPage = new RegisterPage();
+        wait.until(ExpectedConditions.textToBePresentInElement(registerPage.getPageHeading(), "Register A New Machine"));
+        return registerPage;
+        
     }
     
     public DeletePage clickDeleteMachinesButton(){
-    	getDeleteMachinesButton().click();
-    	DeletePage deletePage = new DeletePage();
-    	wait.until(ExpectedConditions.textToBePresentInElement(deletePage.getPageHeading(), "Delete Machines"));
-    	return deletePage;
+        getDeleteMachinesButton().click();
+        DeletePage deletePage = new DeletePage();
+        wait.until(ExpectedConditions.textToBePresentInElement(deletePage.getPageHeading(), "Delete Machines"));
+        return deletePage;
     }
 
 }

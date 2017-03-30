@@ -13,11 +13,11 @@ import org.apache.log4j.Logger;
 
 
 public class RestClient {
-	private static final Logger logger = Logger.getLogger(RestClient.class);
-	
-	public RestClient(){
-		logger.setLevel(Level.ALL);
-	}
+    private static final Logger logger = Logger.getLogger(RestClient.class);
+    
+    public RestClient(){
+        logger.setLevel(Level.ALL);
+    }
 
     protected String requestGET(String urlStr){
         StringBuffer output = new StringBuffer();
@@ -48,81 +48,81 @@ public class RestClient {
         return output.toString();
     }
     
-	protected String requestPOST(String urlStr, String data){
-		StringBuffer output = new StringBuffer();
-		try {
-			URL url = new URL(urlStr);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json");
-			
-			if (data != null){
-				OutputStream os = conn.getOutputStream();
-				os.write(data.getBytes());
-				os.flush();
-			}
+    protected String requestPOST(String urlStr, String data){
+        StringBuffer output = new StringBuffer();
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            
+            if (data != null){
+                OutputStream os = conn.getOutputStream();
+                os.write(data.getBytes());
+                os.flush();
+            }
 
-			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-			String line;
-			while ((line = br.readLine()) != null) {
-				output.append(line.trim());
-			}
-			conn.disconnect();
+            String line;
+            while ((line = br.readLine()) != null) {
+                output.append(line.trim());
+            }
+            conn.disconnect();
 
-		  } catch (MalformedURLException e) {
-			e.printStackTrace();
-		  } catch (IOException e) {
-			e.printStackTrace();
-		  }
-		
-		if (data != null){
-			logger.info("POST: " + urlStr + " with data " + data);
-		}
-		else{
-			logger.info("POST: " + urlStr);
-		}
-		
-		return output.toString();
-	}
-	
-	protected String requestDELETE(String urlStr, String data){
-		StringBuffer output = new StringBuffer();
-		try {
-			URL url = new URL(urlStr);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("DELETE");
-			conn.setRequestProperty("Content-Type", "application/json");
-			
-			if (data != null){
-				OutputStream os = conn.getOutputStream();
-				os.write(data.getBytes());
-				os.flush();
-			}
-			
-			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+          } catch (MalformedURLException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        
+        if (data != null){
+            logger.info("POST: " + urlStr + " with data " + data);
+        }
+        else{
+            logger.info("POST: " + urlStr);
+        }
+        
+        return output.toString();
+    }
+    
+    protected String requestDELETE(String urlStr, String data){
+        StringBuffer output = new StringBuffer();
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("Content-Type", "application/json");
+            
+            if (data != null){
+                OutputStream os = conn.getOutputStream();
+                os.write(data.getBytes());
+                os.flush();
+            }
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-			String line;
-			while ((line = br.readLine()) != null) {
-				output.append(line.trim());
-			}
-			conn.disconnect();
+            String line;
+            while ((line = br.readLine()) != null) {
+                output.append(line.trim());
+            }
+            conn.disconnect();
 
-		  } catch (MalformedURLException e) {
-			e.printStackTrace();
-		  } catch (IOException e) {
-			e.printStackTrace();
-		  }
-		
-		if (data != null){
-			logger.info("DELETE: " + urlStr + " with data " + data);
-		}
-		else{
-			logger.info("DELETE: " + urlStr);
-		}
-		
-		return output.toString();
-	}
+          } catch (MalformedURLException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        
+        if (data != null){
+            logger.info("DELETE: " + urlStr + " with data " + data);
+        }
+        else{
+            logger.info("DELETE: " + urlStr);
+        }
+        
+        return output.toString();
+    }
 }
