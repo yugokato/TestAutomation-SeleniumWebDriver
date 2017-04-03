@@ -91,5 +91,10 @@ public class TopPage extends BasePage {
         wait.until(ExpectedConditions.textToBePresentInElement(deletePage.getPageHeading(), "Delete Machines"));
         return deletePage;
     }
+    
+    public void waitForModalToBeClosed(){
+        String selector = ".modal-open";
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(selector)));
+    }
 
 }

@@ -103,6 +103,7 @@ public class ModalTest extends BaseTest{
             
             // Close modal
             currentModal.clickCloseButton();
+            topPage.waitForModalToBeClosed();
         }
         
     }
@@ -123,10 +124,12 @@ public class ModalTest extends BaseTest{
             if (! hostName.equals("#Unknown")){    
                 Assert.assertTrue(currentModal.isExportJsonFileButtonExists());
                 currentModal.clickExportJsonFileButton();
+                topPage.waitForModalToBeClosed();
                 driver.switchTo().activeElement();
                 currentModal = topPage.getCurrentModalInstance();
                 currentModal.enterJsonFileName(jsonFileName);
                 currentModal.clickExportButton();
+                topPage.waitForModalToBeClosed();
                 
                 String flashMessage = topPage.getFlashMessageField().getText();
                 Assert.assertTrue(flashMessage.contains(jsonFileName));
@@ -135,6 +138,7 @@ public class ModalTest extends BaseTest{
             else{
                 Assert.assertTrue(! currentModal.isExportJsonFileButtonExists());
                 currentModal.clickCloseButton();
+                topPage.waitForModalToBeClosed();
             }
         }
     }
@@ -159,6 +163,7 @@ public class ModalTest extends BaseTest{
             else{
                 Assert.assertTrue(! currentModal.isOpenSSHButtonExists());
                 currentModal.clickCloseButton();
+                topPage.waitForModalToBeClosed();
             }
         }
     }

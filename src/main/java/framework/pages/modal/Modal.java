@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import framework.pages.BasePage;
 
@@ -137,33 +138,22 @@ public class Modal extends BasePage {
         String selector = "div.modal-footer > button";
         WebElement closeButton = currentModal.findElement(By.cssSelector(selector));
         closeButton.click();
-        try{
-            Thread.sleep(300);
-        }catch(InterruptedException e){}
     }
     
     public void clickExportJsonFileButton(){
         getExportJsonFileButton().click();
-        try{
-            Thread.sleep(300);
-        }catch(InterruptedException e){}
     }
     
     public void enterJsonFileName(String filename){
         getJsonFileNameField().clear();
         getJsonFileNameField().sendKeys(filename);
-        try{
-            Thread.sleep(1000);
-        }catch(InterruptedException e){}
+        wait.until(ExpectedConditions.attributeToBe(getJsonFileNameField(), "value", filename));
     }
     
     public void clickExportButton(){
         String selector = "div.modal-body > form > button";
         WebElement exportButton = currentModal.findElement(By.cssSelector(selector));
         exportButton.click();
-        try{
-            Thread.sleep(300);
-        }catch(InterruptedException e){}
     }
 
     public void clickOpenSSHButton(){
