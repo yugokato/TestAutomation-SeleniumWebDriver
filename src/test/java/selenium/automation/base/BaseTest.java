@@ -50,6 +50,7 @@ public class BaseTest {
         DockerManager.startTestContainers(INITIAL_CONTAINERS);
         driver.get("http://localhost:5000");
         driver.manage().window().maximize();
+        driver.navigate().refresh();
     }
 
     
