@@ -1,5 +1,6 @@
 package selenium.automation;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -24,7 +25,8 @@ public class ModalTest extends BaseTest{
     List<WebElement> osDistributionImgNameList;
     
     @BeforeMethod
-    public void beforeMethod() {
+    public void beforeMethod(Method method) {
+        System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
     }

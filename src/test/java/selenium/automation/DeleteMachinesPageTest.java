@@ -1,5 +1,6 @@
 package selenium.automation;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
@@ -20,7 +21,8 @@ public class DeleteMachinesPageTest extends BaseTest {
     private List<WebElement> ipAddressList;
     
     @BeforeMethod
-    public void beforeMethod() {
+    public void beforeMethod(Method method) {
+        System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
     }
     

@@ -1,5 +1,6 @@
 package selenium.automation;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.testng.Assert;
@@ -18,7 +19,8 @@ public class RegisterMachinesPageTest extends BaseTest{
     private final String VALID_TEST_PASSWORD = "test_password";
     
     @BeforeMethod
-    public void beforeMethod() {
+    public void beforeMethod(Method method) {
+        System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
     }
 

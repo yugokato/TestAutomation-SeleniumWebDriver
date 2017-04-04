@@ -1,5 +1,6 @@
 package selenium.automation;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,8 @@ public class TopPageTest extends BaseTest {
     private List<WebElement> osDistributionImgNameList;
     
     @BeforeMethod
-    public void beforeMethod() {
+    public void beforeMethod(Method method) {
+        System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
         restAPI.deleteMachine(TEST_IP);
     }
