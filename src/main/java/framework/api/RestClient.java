@@ -1,15 +1,11 @@
 package framework.api;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import static io.restassured.RestAssured.given;
 
 
 public class RestClient {
@@ -19,110 +15,61 @@ public class RestClient {
         logger.setLevel(Level.ALL);
     }
 
-    protected String requestGET(String urlStr){
-        StringBuffer output = new StringBuffer();
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Content-Type", "application/json");
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                output.append(line.trim());
-            }
-            conn.disconnect();
-
-          } catch (MalformedURLException e) {
-            e.printStackTrace();
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
+    protected Response requestGET(String urlStr){
+        Response response;
+        response = given()
+                .contentType(ContentType.JSON)
+                .get(urlStr);
+        logger.info("GET: url = " + urlStr);
+        logger.info("GET: response = " + response.asString().replaceAll("[\\t\\n\\r]+", "").replaceAll("\\s{2,}", ""));
         
-        logger.info("GET: " + urlStr);
-        logger.info("response: " + output.toString());
-        
-        return output.toString();
+        return response;
+
     }
     
-    protected String requestPOST(String urlStr, String data){
-        StringBuffer output = new StringBuffer();
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            
-            if (data != null){
-                OutputStream os = conn.getOutputStream();
-                os.write(data.getBytes());
-                os.flush();
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                output.append(line.trim());
-            }
-            conn.disconnect();
-
-          } catch (MalformedURLException e) {
-            e.printStackTrace();
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-        
-        if (data != null){
-            logger.info("POST: " + urlStr + " with data " + data);
+    protected Response requestPOST(String urlStr, String data){
+        Response response;
+        if (data == null){
+            response = given()
+                    .contentType(ContentType.JSON)
+                    .post(urlStr);
+            logger.info("POST: url = " + urlStr);
+            logger.info("POST: response = " + response.asString().replaceAll("[\\t\\n\\r]+", "").replaceAll("\\s{2,}", ""));
         }
+        
         else{
-            logger.info("POST: " + urlStr);
+            response = given()
+                    .contentType(ContentType.JSON)
+                    .body(data)
+                    .post(urlStr);
+            logger.info("POST: url = " + urlStr + " body = " + data);
+            logger.info("POST: response = " + response.asString().replaceAll("[\\t\\n\\r]+", "").replaceAll("\\s{2,}", ""));
         }
         
-        return output.toString();
+        return response;
+        
     }
     
-    protected String requestDELETE(String urlStr, String data){
-        StringBuffer output = new StringBuffer();
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("DELETE");
-            conn.setRequestProperty("Content-Type", "application/json");
-            
-            if (data != null){
-                OutputStream os = conn.getOutputStream();
-                os.write(data.getBytes());
-                os.flush();
-            }
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                output.append(line.trim());
-            }
-            conn.disconnect();
-
-          } catch (MalformedURLException e) {
-            e.printStackTrace();
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-        
-        if (data != null){
-            logger.info("DELETE: " + urlStr + " with data " + data);
+    protected Response requestDELETE(String urlStr, String data){
+        Response response;
+        if (data == null){
+            response = given()
+                    .contentType(ContentType.JSON)
+                    .delete(urlStr);
+            logger.info("DELETE: url = " + urlStr);
+            logger.info("DELETE: response = " + response.asString().replaceAll("[\\t\\n\\r]+", "").replaceAll("\\s{2,}", ""));
         }
+        
         else{
-            logger.info("DELETE: " + urlStr);
+            response = given()
+                    .contentType(ContentType.JSON)
+                    .body(data)
+                    .delete(urlStr);
+            logger.info("DELETE: url = " + urlStr + " body = " + data);
+            logger.info("DELETE: response = " + response.asString().replaceAll("[\\t\\n\\r]+", "").replaceAll("\\s{2,}", ""));
         }
         
-        return output.toString();
+        return response;
+ 
     }
 }

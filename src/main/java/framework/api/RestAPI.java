@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import framework.driver.DriverInit;
 import framework.pages.TopPage;
+import io.restassured.response.Response;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -26,32 +27,32 @@ public class RestAPI extends RestClient {
         logger.setLevel(Level.ALL);
     }
     
-    public String getMachineData(String hostname){
+    public Response getMachineData(String hostname){
         String url = BASE_URL + "/" + hostname;
-        String result = requestGET(url);
+        Response response = requestGET(url);
         
-        return result;
+        return response;
     }
     
-    public String registerMachine(String ipaddr, String username){
+    public Response registerMachine(String ipaddr, String username){
         String url = BASE_URL + "/add/" + ipaddr + ":" + username;
-        String result = requestPOST(url, null);
-        logger.info(String.format("Added a machine(%s) via RESUful API - result: " + result, ipaddr));
+        Response response = requestPOST(url, null);
+        logger.info(String.format("Added a machine(%s) via RESUful API", ipaddr));
         driver.navigate().refresh();
 
-        return result;
+        return response;
     }
     
-    public String registerMachine(String ipaddr, String username, String password){
+    public Response registerMachine(String ipaddr, String username, String password){
         String url = BASE_URL + "/add/" + ipaddr + ":" + username + ":" + password;
-        String result = requestPOST(url, null);
-        logger.info(String.format("Added a machine(%s) via RESUful API - result: " + result, ipaddr));
+        Response response = requestPOST(url, null);
+        logger.info(String.format("Added a machine(%s) via RESUful API", ipaddr));
         driver.navigate().refresh();
 
-        return result;
+        return response;
     }
     
-    public String registerMachines(List<HashMap<String, String>> credentialsMapList){
+    public Response registerMachines(List<HashMap<String, String>> credentialsMapList){
         List<JSONObject> jsonObjList = new ArrayList<JSONObject>();
         ArrayList<String> addIPList = new ArrayList<>();
         
@@ -65,23 +66,23 @@ public class RestAPI extends RestClient {
         String jsonDataStr = jsonData.toString();
         
         String url = BASE_URL + "/add";
-        String result = requestPOST(url, jsonDataStr);
-        logger.info(String.format("Added machines(%s) via RESUful API - result: " + result, addIPList.toString()));
+        Response response = requestPOST(url, jsonDataStr);
+        logger.info(String.format("Added machines(%s) via RESUful API", addIPList.toString()));
         driver.navigate().refresh();
         
-        return result;
+        return response;
     }
     
-    public String deleteMachine(String ipaddr){
+    public Response deleteMachine(String ipaddr){
         String url = BASE_URL + "/delete/" + ipaddr;
-        String result = requestDELETE(url, null);
-        logger.info(String.format("Deleted machines(%s) via RESUful API - result: " + result, ipaddr));
+        Response response = requestDELETE(url, null);
+        logger.info(String.format("Deleted machines(%s) via RESUful API", ipaddr));
         driver.navigate().refresh();
    
-        return result;
+        return response;
     }
     
-    public String deleteMachines(List<String> deleteIPList){
+    public Response deleteMachines(List<String> deleteIPList){
         Map<String, List<String>> data = new HashMap<>();
         data.put("IP Address", deleteIPList);
         
@@ -89,11 +90,11 @@ public class RestAPI extends RestClient {
         String jsonDataStr = jsonData.toString();
         
         String url = BASE_URL + "/delete";
-        String result = requestDELETE(url, jsonDataStr);
-        logger.info(String.format("Deleted a machine(%s) via RESUful API - result: " + result, deleteIPList.toString()));
+        Response response = requestDELETE(url, jsonDataStr);
+        logger.info(String.format("Deleted a machine(%s) via RESUful API", deleteIPList.toString()));
         driver.navigate().refresh();
 
-        return result;
+        return response;
     }
     
     public void deleteAllUnknownMachines(){
