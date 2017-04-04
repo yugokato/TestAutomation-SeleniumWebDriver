@@ -74,7 +74,7 @@ public class TopPageTest extends BaseTest {
             ipAddr = ipAddressList.get(i).getText();
             osDistImgName = osDistributionImgNameList.get(i).getAttribute("src");
             if (! hostName.equals("#Unknown")){
-                Assert.assertTrue(ipAddr.equals(testData.get(hostName)[0]));
+                Assert.assertEquals(ipAddr, testData.get(hostName)[0]);
             }
             Assert.assertTrue(osDistImgName.contains(testData.get(hostName)[1]));
         }
@@ -107,8 +107,8 @@ public class TopPageTest extends BaseTest {
         addedIpAddress = topPage.getIpAddressList().get(0).getText();
         osDistributionImgName = topPage.getOSDistributionImgNameList().get(0).getAttribute("src");
         
-        Assert.assertTrue(addedHostName.equals("#Unknown"), addedHostName);
-        Assert.assertTrue(addedIpAddress.equals(testContainerIP), addedIpAddress);
+        Assert.assertEquals(addedHostName, "#Unknown", addedHostName);
+        Assert.assertEquals(addedIpAddress, testContainerIP, addedIpAddress);
         Assert.assertTrue(osDistributionImgName.contains("other"), osDistributionImgName);
     
         // Wait for 40 seconds until SSH access starts and status changes reachable
@@ -122,8 +122,8 @@ public class TopPageTest extends BaseTest {
         addedHostName = topPage.getHostNameList().get(numOfMachines-1).getText();
         addedIpAddress = topPage.getIpAddressList().get(numOfMachines-1).getText();
         osDistributionImgName = topPage.getOSDistributionImgNameList().get(numOfMachines-1).getAttribute("src");
-        Assert.assertTrue(addedHostName.equals(TEST_HOSTNAME), addedHostName);
-        Assert.assertTrue(addedIpAddress.equals(testContainerIP), addedIpAddress);
+        Assert.assertEquals(addedHostName, TEST_HOSTNAME, addedHostName);
+        Assert.assertEquals(addedIpAddress, testContainerIP, addedIpAddress);
         Assert.assertTrue(osDistributionImgName.contains(TEST_OS_DIST));
         
         // Clean the test container
@@ -160,7 +160,7 @@ public class TopPageTest extends BaseTest {
                 currentModal = topPage.getCurrentModalInstance();
                 modalContents = currentModal.getModalContents();
                 Assert.assertTrue(modalContents.get("STATUS").contains("Unreachable"));
-                Assert.assertTrue(modalContents.get("STATUS_IMG_NAME").equals("status_unreachable.png"));
+                Assert.assertEquals(modalContents.get("STATUS_IMG_NAME"), "status_unreachable.png");
                 currentModal.clickCloseButton();
                 break;
             }

@@ -67,38 +67,38 @@ public class ModalTest extends BaseTest{
             }
             
             if (hostName.equals("#Unknown")){
-                Assert.assertTrue(hostNameList.get(i).getText().equals(hostName));
-                Assert.assertTrue(ipAddressList.get(i).getText().equals(ipAddress));
+                Assert.assertEquals(hostNameList.get(i).getText(), hostName);
+                Assert.assertEquals(ipAddressList.get(i).getText(), ipAddress);
                 if (status.contains("Unreachable")){
-                    Assert.assertTrue(statusImgName.equals("status_unreachable.png"));
+                    Assert.assertEquals(statusImgName, "status_unreachable.png");
                 }
                 else if (modalContents.get("STATUS").contains("Unknown")){
-                    Assert.assertTrue(statusImgName.equals("status_unknown.png"));
+                    Assert.assertEquals(statusImgName, "status_unknown.png");
                 }
-                Assert.assertTrue(osDistribution.equals("N.A"));
+                Assert.assertEquals(osDistribution, "N.A");
                 Assert.assertTrue(osDistributionImgNameList.get(i).getAttribute("src").contains("other"));
-                Assert.assertTrue(release.equals("N.A"));
-                Assert.assertTrue(macAddress.equals("N.A"));
-                Assert.assertTrue(uptime.equals("N.A"));
-                Assert.assertTrue(cpuLoadAvg.equals("N.A"));
-                Assert.assertTrue(memoryUsage.equals("N.A"));
-                Assert.assertTrue(diskUsage.equals("N.A"));
+                Assert.assertEquals(release, "N.A");
+                Assert.assertEquals(macAddress, "N.A");
+                Assert.assertEquals(uptime, "N.A");
+                Assert.assertEquals(cpuLoadAvg, "N.A");
+                Assert.assertEquals(memoryUsage, "N.A");
+                Assert.assertEquals(diskUsage, "N.A");
                 Assert.assertTrue(Integer.parseInt(lastUpdated) >= 0);
             }
             
             else {
                 Assert.assertTrue(Integer.parseInt(lastUpdated) < 90);
-                Assert.assertTrue(hostNameList.get(i).getText().equals(hostName));
-                Assert.assertTrue(ipAddressList.get(i).getText().equals(ipAddress));
+                Assert.assertEquals(hostNameList.get(i).getText(), hostName);
+                Assert.assertEquals(ipAddressList.get(i).getText(), ipAddress);
                 Assert.assertTrue(status.contains("OK"));
-                Assert.assertTrue(statusImgName.equals("status_ok.png"));
+                Assert.assertEquals(statusImgName, "status_ok.png");
                 Assert.assertTrue(osDistributionImgNameList.get(i).getAttribute("src").contains(osDistribution.toLowerCase()));
-                Assert.assertTrue(! release.equals("N.A"));
-                Assert.assertTrue(! macAddress.equals("N.A"));
-                Assert.assertTrue(! uptime.equals("N.A"));
-                Assert.assertTrue(! cpuLoadAvg.equals("N.A"));
-                Assert.assertTrue(! memoryUsage.equals("N.A"));
-                Assert.assertTrue(! diskUsage.equals("N.A"));
+                Assert.assertNotEquals(release, "N.A");
+                Assert.assertNotEquals(macAddress, "N.A");
+                Assert.assertNotEquals(uptime, "N.A");
+                Assert.assertNotEquals(cpuLoadAvg, "N.A");
+                Assert.assertNotEquals(memoryUsage, "N.A");
+                Assert.assertNotEquals(diskUsage, "N.A");
             }
             
             // Close modal

@@ -43,8 +43,8 @@ public class DeleteMachinesPageTest extends BaseTest {
         
         ipAddressList = topPage.getIpAddressList();
         for (WebElement ip: ipAddressList){
-            Assert.assertTrue(! ip.getText().equals(TEST_IP1));
-            Assert.assertTrue(! ip.getText().equals(TEST_IP2));
+            Assert.assertNotEquals(ip.getText(), TEST_IP1);
+            Assert.assertNotEquals(ip.getText(), TEST_IP2);
         }
     }
         
