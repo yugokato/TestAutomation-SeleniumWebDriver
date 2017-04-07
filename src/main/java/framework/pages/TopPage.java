@@ -97,4 +97,24 @@ public class TopPage extends BasePage {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(selector)));
     }
 
+    public WebElement getMachineElementByHostname(String hostname){
+        WebElement machineElement = getHostnameField(hostname).findElement(By.xpath("../.."));
+        return machineElement;
+    }
+
+    public WebElement getHostnameField(String hostname){
+        WebElement hostnameField = driver.findElement(By.linkText(hostname));
+        return hostnameField;
+    }
+
+    public WebElement getIpAddressField(String ipAddr){
+        WebElement ipAddressField = driver.findElement(By.linkText(ipAddr));
+        return ipAddressField;
+    }
+
+    public WebElement getOsDistImgFieldByHostname(String hostname){
+        WebElement parentElement = getMachineElementByHostname(hostname);
+        WebElement distImgField = parentElement.findElement(By.cssSelector("img"));
+        return distImgField;
+    }
 }
