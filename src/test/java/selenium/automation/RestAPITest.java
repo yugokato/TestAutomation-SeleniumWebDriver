@@ -48,6 +48,7 @@ public class RestAPITest extends BaseTest {
             response = restAPI.getMachineData(TEST_HOSTNAME);
             response.then().assertThat()
                 .statusCode(200)
+                .contentType(ContentType.JSON)
                 .body("data.Hostname", equalTo(TEST_HOSTNAME));
             
             // test-2 (All machines except Unknown)
