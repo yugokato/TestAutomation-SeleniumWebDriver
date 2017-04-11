@@ -76,14 +76,14 @@ public class RestAPITest extends BaseTest {
             // test-1
             response = restAPI.registerMachine(VALID_IP_1, VALID_USERNAME, VALID_PASSWORD);
             response.then().assertThat()
-                .statusCode(200)
+                .statusCode(201)
                 .contentType(ContentType.JSON)
                 .body("result.success", equalTo(true));
             
             // test-2(no password)
             response = restAPI.registerMachine(VALID_IP_2, VALID_USERNAME);
             response.then().assertThat()
-                .statusCode(200)
+                .statusCode(201)
                 .contentType(ContentType.JSON)
                 .body("result.success", equalTo(true));    
         }
@@ -112,7 +112,7 @@ public class RestAPITest extends BaseTest {
             
             response = restAPI.registerMachines(credentialsMapList);
             response.then().assertThat()
-                .statusCode(200)
+                .statusCode(201)
                 .contentType(ContentType.JSON)
                 .body("result.success", equalTo(true));    
         }
