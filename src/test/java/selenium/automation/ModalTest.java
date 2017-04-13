@@ -46,9 +46,13 @@ public class ModalTest extends BaseTest{
         for (int i=0; i<machineList.size(); i++){
             topPage.openModal(machineList.get(i));
             currentModal = topPage.getCurrentModalInstance();
-            
+
             driver.switchTo().activeElement();
             modalContents = currentModal.getModalContents();
+            
+            // Close modal
+            currentModal.clickCloseButton();
+            topPage.waitForModalToBeClosed();
             
             lastUpdated = modalContents.get("LAST_UPDATED");
             hostName = modalContents.get("HOST_NAME");
@@ -102,10 +106,6 @@ public class ModalTest extends BaseTest{
                 Assert.assertNotEquals(memoryUsage, "N.A");
                 Assert.assertNotEquals(diskUsage, "N.A");
             }
-            
-            // Close modal
-            currentModal.clickCloseButton();
-            topPage.waitForModalToBeClosed();
         }
         
     }
