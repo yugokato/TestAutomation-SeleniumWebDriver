@@ -4,6 +4,8 @@
   <test name="Test">
     <classes>
       <class name="selenium.automation.RestAPITest"/>
+      <class name="selenium.automation.SignupPageTest"/>
+      <class name="selenium.automation.LoginPageTest"/>
       <class name="selenium.automation.TopPageTest"/>
       <class name="selenium.automation.ModalTest"/>
       <class name="selenium.automation.RegisterMachinesPageTest"/>

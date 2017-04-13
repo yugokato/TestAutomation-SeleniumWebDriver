@@ -21,6 +21,7 @@ public class RestAPI extends RestClient {
     private WebDriver driver;
     private static final Logger logger = Logger.getLogger(RestAPI.class);
     private static final String BASE_URL = "http://localhost:5000/api/machines";
+    private static final String BASE_URL_USERS = "http://localhost:5000/api/users";
     
     public RestAPI(){
         this.driver = DriverInit.getDriver();
@@ -97,6 +98,27 @@ public class RestAPI extends RestClient {
         return response;
     }
     
+    public Response addUser(String username, String password){
+        String url = BASE_URL_USERS + "/add";
+        HashMap<String, String> jsonData = new HashMap<>();
+        jsonData.put("Username", username);
+        jsonData.put("Password", password);
+        JSONObject obj = new JSONObject(jsonData);
+        
+        Response response = requestPOST(url, obj.toString());
+        logger.info(String.format("Added user(%s) via RESUful API", username));
+   
+        return response;
+    }
+    
+    public Response deleteUser(String username){
+        String url = BASE_URL_USERS + "/delete/" + username;
+        Response response = requestDELETE(url, null);
+        logger.info(String.format("Deleted user(%s) via RESUful API", username));
+   
+        return response;
+    }
+    
     public void deleteAllUnknownMachines(){
         // Delete all machines whose hostname is #Unknown
         TopPage topPage = new TopPage();
@@ -116,6 +138,5 @@ public class RestAPI extends RestClient {
             deleteMachine(deleteIPs.substring(0, deleteIPs.length()-1));
         }
     }
-    
 
 }
