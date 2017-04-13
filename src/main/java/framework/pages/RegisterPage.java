@@ -89,7 +89,7 @@ public class RegisterPage extends BasePage {
         }catch(NoSuchElementException e){}
         
         List<WebElement> errorFields = getErrorFieldList();
-        ArrayList<String> errorsList= new ArrayList();
+        ArrayList<String> errorsList= new ArrayList<>();
         
         errorsList.add(flashMessage);
         for (WebElement element: errorFields){

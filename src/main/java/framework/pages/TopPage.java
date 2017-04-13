@@ -2,6 +2,7 @@ package framework.pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -116,5 +117,15 @@ public class TopPage extends BasePage {
         WebElement parentElement = getMachineElementByHostname(hostname);
         WebElement distImgField = parentElement.findElement(By.cssSelector("img"));
         return distImgField;
+    }
+    
+    public String getFlashMessages(){
+        String flashMessages = "";
+        try{
+            flashMessages = getFlashMessageField().getText();
+            return flashMessages;
+        }catch(NoSuchElementException e){
+            return flashMessages;
+        }
     }
 }
