@@ -11,6 +11,9 @@ public class SignupPage extends BasePage {
     @FindBy(css="input[name='password']")
     private WebElement passwordField;
     
+    @FindBy(css="input[name='confirm']")
+    private WebElement confirmPasswordField;
+    
     @FindBy(css="form > button[type='submit']")
     private WebElement createButton;
     
@@ -25,6 +28,10 @@ public class SignupPage extends BasePage {
         return passwordField;
     }
     
+    private WebElement getConfirmPasswordField(){
+        return confirmPasswordField;
+    }
+    
     private WebElement getCreateButton(){
         return createButton;
     }
@@ -33,9 +40,13 @@ public class SignupPage extends BasePage {
         return flashMessageField;
     }
     
-    public void createNewAccount(String username, String password){
+    public void createNewAccount(String username, String password, String confirmPassword){
+        getUsernameField().clear();
         getUsernameField().sendKeys(username);
+        getPasswordField().clear();
         getPasswordField().sendKeys(password);
+        getConfirmPasswordField().clear();
+        getConfirmPasswordField().sendKeys(confirmPassword);
         getCreateButton().click();
     }
     

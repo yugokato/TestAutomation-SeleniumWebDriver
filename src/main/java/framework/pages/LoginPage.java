@@ -57,7 +57,9 @@ public class LoginPage extends BasePage {
     }
     
     public void doLogin(String username, String password){
+        getUsernameField().clear();
         getUsernameField().sendKeys(username);
+        getPasswordField().clear();
         getPasswordField().sendKeys(password);
         getLoginButton().click();
     }

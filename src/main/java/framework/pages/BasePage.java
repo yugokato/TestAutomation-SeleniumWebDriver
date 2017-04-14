@@ -30,6 +30,18 @@ public class BasePage {
     @FindBy(id="page-heading")
     private WebElement pageHeadingField;
     
+    @FindBy(id="username-error")
+    private WebElement usernameErrorField;
+    
+    @FindBy(id="password-error")
+    private WebElement passwordErrorField;
+    
+    @FindBy(id="confirm-error")
+    private WebElement confirmPasswordErrorField;
+    
+    @FindBy(id="ipaddress-error")
+    private WebElement ipaddressErrorField;
+    
     public WebElement getHomeIcon(){
         return homeIcon;
     }
@@ -44,6 +56,22 @@ public class BasePage {
     
     public WebElement getPageHeadingField(){
         return pageHeadingField;
+    }
+    
+    public WebElement getUsernameErrorField(){
+        return usernameErrorField;
+    }
+    
+    public WebElement getPasswordErrorField(){
+        return passwordErrorField;
+    }
+    
+    public WebElement getConfirmPasswordErrorField(){
+        return confirmPasswordErrorField;
+    }
+    
+    public WebElement getIpaddressErrorField(){
+        return ipaddressErrorField;
     }
     
     public String getLoginUsername(){

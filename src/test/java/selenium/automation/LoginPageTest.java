@@ -56,7 +56,7 @@ public class LoginPageTest extends BaseTest {
         Assert.assertEquals(flashMessages, String.format("Logged out from a user \"%s\"", TEST_USERNAME));
     }
     
-    @Test(description="Verify login - invalid username/password", priority=1)
+    @Test(description="Verify login - invalid username/password")
     public void verifyLoginWithInvalidCredentials() throws Exception {
         String flashMessages;
         
@@ -70,7 +70,7 @@ public class LoginPageTest extends BaseTest {
         
     }
     
-    @Test(description="Verify accessing pages before logged in is not allowed", priority=2)
+    @Test(description="Verify accessing pages before logged in is not allowed")
     public void verifyAccessUnquthorizedPages() throws Exception {
         String flashMessages;
         
@@ -93,7 +93,7 @@ public class LoginPageTest extends BaseTest {
         Assert.assertEquals(flashMessages, "Please log in to access this page.");
     }
     
-    @Test(description="Verify accessing pages after logged in is allowed", priority=3)
+    @Test(description="Verify accessing pages after logged in is allowed")
     public void verifyAccessAuthorizedPagesAfterLogin() throws Exception {
         loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD);
         
@@ -111,5 +111,21 @@ public class LoginPageTest extends BaseTest {
         DeletePage deletePage = new DeletePage();
         Assert.assertEquals(deletePage.getPageHeadingField().getText(), "Delete Machines");
 
+    }
+    
+    @Test(description="Verify login - missing parameters")
+    public void verifyLoginWithMissingParameters() throws Exception {
+        // test-1 (no username, no password)
+        loginPage.doLogin("", "");
+        Assert.assertEquals(loginPage.getUsernameErrorField().getText(), "This field is required.");
+        Assert.assertEquals(loginPage.getPasswordErrorField().getText(), "This field is required.");
+        
+        //test-2 (no username)
+        loginPage.doLogin("", TEST_PASSWORD);
+        Assert.assertEquals(loginPage.getUsernameErrorField().getText(), "This field is required.");
+        
+        //test-3 (no password)
+        loginPage.doLogin(TEST_USERNAME, "");
+        Assert.assertEquals(loginPage.getPasswordErrorField().getText(), "This field is required.");
     }
 }
