@@ -3,7 +3,6 @@ package framework.pages;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
     @FindBy(css="input[name='username']")

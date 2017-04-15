@@ -2,7 +2,6 @@ package selenium.automation;
 
 import java.lang.reflect.Method;
 
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -41,7 +40,7 @@ public class LoginPageTest extends BaseTest {
         restAPI.deleteUser(TEST_USERNAME);
     }
     
-    @Test(description="Verify login/logout - succeed", priority=0)
+    @Test(description="Verify login/logout - succeed")
     public void verifyLoginLogout() throws Exception {
         String flashMessages;
         
@@ -60,14 +59,15 @@ public class LoginPageTest extends BaseTest {
     public void verifyLoginWithInvalidCredentials() throws Exception {
         String flashMessages;
         
+        // invalid username
         loginPage.doLogin(TEST_INVALID_USERNAME, TEST_PASSWORD);
         flashMessages = topPage.getFlashMessages();
         Assert.assertEquals(flashMessages, "Username or password is not correct");
         
+        // invalid password
         loginPage.doLogin(TEST_USERNAME, TEST_INVALID_PASSWORD);
         flashMessages = topPage.getFlashMessages();
         Assert.assertEquals(flashMessages, "Username or password is not correct");
-        
     }
     
     @Test(description="Verify accessing pages before logged in is not allowed")

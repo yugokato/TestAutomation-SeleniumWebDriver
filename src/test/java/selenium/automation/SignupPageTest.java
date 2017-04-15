@@ -64,21 +64,21 @@ public class SignupPageTest extends BaseTest {
         
         //test-2 (no username)
         signupPage.createNewAccount("", TEST_PASSWORD, TEST_PASSWORD);
-        Assert.assertEquals(loginPage.getUsernameErrorField().getText(), "This field is required.");
+        Assert.assertEquals(signupPage.getUsernameErrorField().getText(), "This field is required.");
 
         //test-3 (no username, no password)
         signupPage.createNewAccount("", "", TEST_PASSWORD);
-        Assert.assertEquals(loginPage.getUsernameErrorField().getText(), "This field is required.");
-        Assert.assertEquals(loginPage.getPasswordErrorField().getText(), "This field is required.");
+        Assert.assertEquals(signupPage.getUsernameErrorField().getText(), "This field is required.");
+        Assert.assertEquals(signupPage.getPasswordErrorField().getText(), "This field is required.");
         
         //test-4 (no username, no confirm)
         signupPage.createNewAccount("", TEST_PASSWORD, "");
-        Assert.assertEquals(loginPage.getUsernameErrorField().getText(), "This field is required.");
+        Assert.assertEquals(signupPage.getUsernameErrorField().getText(), "This field is required.");
         Assert.assertEquals(signupPage.getConfirmPasswordErrorField().getText(), "This field is required.");
 
         //test-5 (no password, no confirm)
         signupPage.createNewAccount(TEST_USERNAME, "", "");
-        Assert.assertEquals(loginPage.getPasswordErrorField().getText(), "This field is required.");
+        Assert.assertEquals(signupPage.getPasswordErrorField().getText(), "This field is required.");
         Assert.assertEquals(signupPage.getConfirmPasswordErrorField().getText(), "This field is required.");
         
     }
