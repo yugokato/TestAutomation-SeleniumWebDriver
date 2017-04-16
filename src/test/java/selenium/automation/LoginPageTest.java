@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -27,11 +26,6 @@ public class LoginPageTest extends BaseTest {
     @BeforeMethod
     public void beforeMethod(Method method) {
         System.out.println(method.getName());
-        driver.get("http://localhost:5000/logout");
-    }
-    
-    @AfterMethod
-    public void afterMethod() {
         driver.get("http://localhost:5000/logout");
     }
     

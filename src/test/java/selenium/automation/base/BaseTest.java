@@ -4,6 +4,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
@@ -54,12 +55,16 @@ public class BaseTest {
         driver.navigate().refresh();
         loginPage.doLogin(TEST_ADMIN_USER, TEST_ADMIN_PASSWORD);
     }
+    
+    @AfterMethod(alwaysRun=true)
+    public void afterMethodBase() throws Exception{
+        driver.get("http://localhost:5000/logout");
+    }
 
     @AfterClass(alwaysRun=true)
     public void afterClassBase() {
         restAPI.deleteAllUnknownMachines();
         restAPI.deleteUser(TEST_ADMIN_USER);
-        driver.get("http://localhost:5000/logout");
         driver.quit();
     }
 }
