@@ -25,7 +25,7 @@ public class RegisterPage extends BasePage {
     @FindBy(css="form > button[type='submit']")
     private WebElement registerButton;
     
-    @FindBy(css=".col-md-12-flash2 p.flashes")
+    @FindBy(css=".col-md-12-flash2")
     private WebElement flashMessageField;
     
     @FindBy(css=".has-error")

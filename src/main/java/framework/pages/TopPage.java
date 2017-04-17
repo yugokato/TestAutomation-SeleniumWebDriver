@@ -24,7 +24,7 @@ public class TopPage extends BasePage {
     @FindBy(css=".col-xs-4.col-sm-3.col-md-2 > img")
     private List<WebElement> osDistributionImgNameList;
     
-    @FindBy(css=".col-md-12-flash p.flashes")
+    @FindBy(css=".col-md-12-flash")
     private WebElement flashMessageField;
     
     @FindBy(css=".col-md-12 > a[class='btn btn-info']")
