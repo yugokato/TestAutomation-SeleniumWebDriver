@@ -38,7 +38,7 @@ public class LoginPageTest extends BaseTest {
     public void verifyLoginLogout() throws Exception {
         String flashMessages;
         
-        loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD);
+        loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD, false);
         flashMessages = topPage.getFlashMessages();
         String loginUsername = topPage.getLoginUsername();
         Assert.assertEquals(flashMessages, String.format("Logged in successfully as a user \"%s\"", TEST_USERNAME));
@@ -54,12 +54,12 @@ public class LoginPageTest extends BaseTest {
         String flashMessages;
         
         // invalid username
-        loginPage.doLogin(TEST_INVALID_USERNAME, TEST_PASSWORD);
+        loginPage.doLogin(TEST_INVALID_USERNAME, TEST_PASSWORD, false);
         flashMessages = topPage.getFlashMessages();
         Assert.assertEquals(flashMessages, "Username or password is not correct");
         
         // invalid password
-        loginPage.doLogin(TEST_USERNAME, TEST_INVALID_PASSWORD);
+        loginPage.doLogin(TEST_USERNAME, TEST_INVALID_PASSWORD, false);
         flashMessages = topPage.getFlashMessages();
         Assert.assertEquals(flashMessages, "Username or password is not correct");
     }
@@ -89,7 +89,7 @@ public class LoginPageTest extends BaseTest {
     
     @Test(description="Verify accessing pages after logged in is allowed")
     public void verifyAccessAuthorizedPagesAfterLogin() throws Exception {
-        loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD);
+        loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD, false);
         
         // test-1 (top page)
         driver.get("http://localhost:5000/top");
@@ -110,16 +110,16 @@ public class LoginPageTest extends BaseTest {
     @Test(description="Verify login - missing parameters")
     public void verifyLoginWithMissingParameters() throws Exception {
         // test-1 (no username, no password)
-        loginPage.doLogin("", "");
+        loginPage.doLogin("", "", false);
         Assert.assertEquals(loginPage.getUsernameErrorField().getText(), "This field is required.");
         Assert.assertEquals(loginPage.getPasswordErrorField().getText(), "This field is required.");
         
         //test-2 (no username)
-        loginPage.doLogin("", TEST_PASSWORD);
+        loginPage.doLogin("", TEST_PASSWORD, false);
         Assert.assertEquals(loginPage.getUsernameErrorField().getText(), "This field is required.");
         
         //test-3 (no password)
-        loginPage.doLogin(TEST_USERNAME, "");
+        loginPage.doLogin(TEST_USERNAME, "", false);
         Assert.assertEquals(loginPage.getPasswordErrorField().getText(), "This field is required.");
     }
 }

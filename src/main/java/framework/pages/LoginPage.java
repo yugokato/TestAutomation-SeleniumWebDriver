@@ -11,6 +11,9 @@ public class LoginPage extends BasePage {
     @FindBy(css="input[name='password']")
     private WebElement passwordField;
     
+    @FindBy(id="remember_me")
+    private WebElement rememberMeCheckbox;
+    
     @FindBy(css="form > button[type='submit']")
     private WebElement loginButton;
     
@@ -26,6 +29,10 @@ public class LoginPage extends BasePage {
     
     public WebElement getPasswordField(){
         return passwordField;
+    }
+    
+    public WebElement getRememberMeCheckbox(){
+        return rememberMeCheckbox;
     }
     
     public WebElement getLoginButton(){
@@ -55,11 +62,14 @@ public class LoginPage extends BasePage {
         }
     }
     
-    public void doLogin(String username, String password){
+    public void doLogin(String username, String password, boolean rememberMe){
         getUsernameField().clear();
         getUsernameField().sendKeys(username);
         getPasswordField().clear();
         getPasswordField().sendKeys(password);
+        if (rememberMe){
+            getRememberMeCheckbox().click();
+        }
         getLoginButton().click();
     }
 }

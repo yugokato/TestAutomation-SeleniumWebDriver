@@ -53,7 +53,7 @@ public class BaseTest {
         driver.get("http://localhost:5000");
         driver.manage().window().maximize();
         driver.navigate().refresh();
-        loginPage.doLogin(TEST_ADMIN_USER, TEST_ADMIN_PASSWORD);
+        loginPage.doLogin(TEST_ADMIN_USER, TEST_ADMIN_PASSWORD, false);
     }
     
     @AfterMethod(alwaysRun=true)
