@@ -156,6 +156,7 @@ public class TopPageTest extends BaseTest {
         modalContents = currentModal.getModalContents();
         Assert.assertTrue(modalContents.get("STATUS").contains("Unreachable"));
         Assert.assertEquals(modalContents.get("STATUS_IMG_NAME"), "status_unreachable.png");
+        Assert.assertFalse(currentModal.isOpenSSHButtonExists());
         currentModal.clickCloseButton();
         
         // re-start the container
