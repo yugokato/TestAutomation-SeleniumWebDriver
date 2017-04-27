@@ -11,7 +11,7 @@ public class DeletePage extends BasePage {
     @FindBy(css=".col-md-12 > h2")
     private WebElement pageHeading;
     
-    @FindBy(css=".form-group input")
+    @FindBy(css=".form-group label h5")
     private List<WebElement> currentMachineCheckBoxes;
     
     @FindBy(css="form button[type='submit']")
