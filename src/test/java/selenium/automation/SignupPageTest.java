@@ -31,11 +31,9 @@ public class SignupPageTest extends BaseTest {
     public void verifyCreateNewAccount() throws Exception {
         signupPage = loginPage.clickSignupButton();
         signupPage.createNewAccount(TEST_USERNAME, TEST_PASSWORD, TEST_PASSWORD);
-        String flashMessagesSignup = signupPage.getFlashMessages();
-        String flashMessagesLogin = loginPage.getFlashMessages();
-        Assert.assertTrue(flashMessagesSignup.isEmpty(), flashMessagesSignup);
-        Assert.assertTrue(flashMessagesLogin.contains("Created"));
-        Assert.assertTrue(flashMessagesLogin.contains(TEST_USERNAME));
+        String flashMessages = loginPage.getFlashMessages();
+        Assert.assertTrue(flashMessages.contains("Created"));
+        Assert.assertTrue(flashMessages.contains(TEST_USERNAME));
     }
     
     @Test(description="Verify create a new account - duplicate account")

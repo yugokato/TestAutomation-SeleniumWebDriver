@@ -17,7 +17,7 @@ public class DeletePage extends BasePage {
     @FindBy(css="form button[type='submit']")
     private WebElement deleteButton;
     
-    @FindBy(css=".col-md-12-flash2")
+    @FindBy(css=".alert")
     private WebElement flashMessageField;
     
     public WebElement getPageHeading(){

@@ -41,12 +41,12 @@ public class LoginPageTest extends BaseTest {
         loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD, false);
         flashMessages = topPage.getFlashMessages();
         String loginUsername = topPage.getLoginUsername();
-        Assert.assertEquals(flashMessages, String.format("Logged in successfully as a user \"%s\"", TEST_USERNAME));
+        Assert.assertTrue(flashMessages.contains(String.format("Logged in successfully as a user \"%s\"", TEST_USERNAME)));
         Assert.assertEquals(loginUsername, TEST_USERNAME);
         
         topPage.doLogout();
         flashMessages = loginPage.getFlashMessages();
-        Assert.assertEquals(flashMessages, String.format("Logged out from a user \"%s\"", TEST_USERNAME));
+        Assert.assertTrue(flashMessages.contains(String.format("Logged out from a user \"%s\"", TEST_USERNAME)));
     }
     
     @Test(description="Verify login - invalid username/password")
@@ -56,35 +56,35 @@ public class LoginPageTest extends BaseTest {
         // invalid username
         loginPage.doLogin(TEST_INVALID_USERNAME, TEST_PASSWORD, false);
         flashMessages = topPage.getFlashMessages();
-        Assert.assertEquals(flashMessages, "Username or password is not correct");
+        Assert.assertTrue(flashMessages.contains("Username or password is not correct"));
         
         // invalid password
         loginPage.doLogin(TEST_USERNAME, TEST_INVALID_PASSWORD, false);
         flashMessages = topPage.getFlashMessages();
-        Assert.assertEquals(flashMessages, "Username or password is not correct");
+        Assert.assertTrue(flashMessages.contains("Username or password is not correct"));
     }
     
     @Test(description="Verify accessing pages before logged in is not allowed")
-    public void verifyAccessUnquthorizedPages() throws Exception {
+    public void verifyAccessUnauthorizedPages() throws Exception {
         String flashMessages;
         
         // test-1 (top page)
         driver.navigate().refresh();
         driver.get("http://localhost:5000/top");
         flashMessages = loginPage.getFlashMessages();
-        Assert.assertEquals(flashMessages, "Please log in to access this page.");
+        Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
         
         // test-2 (register page)
         driver.navigate().refresh();
         driver.get("http://localhost:5000/register");
         flashMessages = loginPage.getFlashMessages();
-        Assert.assertEquals(flashMessages, "Please log in to access this page.");
+        Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
         
         // test-3 (delete page)
         driver.navigate().refresh();
         driver.get("http://localhost:5000/delete");
         flashMessages = loginPage.getFlashMessages();
-        Assert.assertEquals(flashMessages, "Please log in to access this page.");
+        Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
     }
     
     @Test(description="Verify accessing pages after logged in is allowed")

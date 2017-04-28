@@ -25,7 +25,7 @@ public class RegisterPage extends BasePage {
     @FindBy(css="form > button[type='submit']")
     private WebElement registerButton;
     
-    @FindBy(css=".col-md-12-flash2")
+    @FindBy(css=".alert")
     private WebElement flashMessageField;
     
     @FindBy(css=".has-error")
@@ -83,15 +83,9 @@ public class RegisterPage extends BasePage {
     public ArrayList<String> clickRegisterButtonAndGetErrors(){
         getRegisterButton().click();
         
-        String flashMessage = "";
-        try{
-            flashMessage = getFlashMessageField().getText();
-        }catch(NoSuchElementException e){}
-        
         List<WebElement> errorFields = getErrorFieldList();
         ArrayList<String> errorsList= new ArrayList<>();
         
-        errorsList.add(flashMessage);
         for (WebElement element: errorFields){
             errorsList.add(element.getText());
         }

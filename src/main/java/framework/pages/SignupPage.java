@@ -17,7 +17,7 @@ public class SignupPage extends BasePage {
     @FindBy(css="form > button[type='submit']")
     private WebElement createButton;
     
-    @FindBy(css=".col-md-12-flash2")
+    @FindBy(css=".alert")
     private WebElement flashMessageField;
 
     private WebElement getUsernameField(){

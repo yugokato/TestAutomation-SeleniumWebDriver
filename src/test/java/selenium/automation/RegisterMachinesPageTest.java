@@ -26,7 +26,7 @@ public class RegisterMachinesPageTest extends BaseTest{
 
     @Test(description="Verify register a new machine page - success")
     public void verifyRegisterMachinesSuccess() throws Exception {
-        String topPageFlashMessage;
+        String flashMessage;
         
         registerPage = topPage.clickRegisterMachinesButton();
         registerPage.enterIpAddress(VALID_TEST_IP);
@@ -34,18 +34,18 @@ public class RegisterMachinesPageTest extends BaseTest{
         registerPage.enterPassword(VALID_TEST_PASSWORD);
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors();
-        topPageFlashMessage = topPage.getFlashMessageField().getText(); 
+        flashMessage = topPage.getFlashMessageField().getText(); 
         
         Assert.assertTrue(errorsList.get(0).isEmpty());
         Assert.assertTrue(errorsList.get(1).isEmpty());
         Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertTrue(errorsList.get(3).isEmpty());
-        Assert.assertTrue(topPageFlashMessage.contains(VALID_TEST_IP) && topPageFlashMessage.contains("Added"));
+        Assert.assertTrue(flashMessage.contains(VALID_TEST_IP) && flashMessage.contains("Added"));
         
     }
 
     @Test(description="Verify register a new machine page - No password")
     public void verifyRegisterMachinesNoPassword() throws Exception {
+        String flashMessage;
         registerPage = topPage.clickRegisterMachinesButton();
         
         // test-1
@@ -53,16 +53,18 @@ public class RegisterMachinesPageTest extends BaseTest{
         registerPage.enterUsername(VALID_TEST_USERNAME);
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
+        flashMessage = registerPage.getFlashMessageField().getText();
         
         Assert.assertTrue(errorsList.get(0).isEmpty());
         Assert.assertTrue(errorsList.get(1).isEmpty());
         Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertTrue(errorsList.get(3).isEmpty());
+        Assert.assertTrue(flashMessage.contains(VALID_TEST_IP) && flashMessage.contains("Added"));
 
     }
     
     @Test(description="Verify register a new machine page - IP duplication")
     public void verifyRegisterMachinesIPDuplicated() throws Exception {
+        String flashMessage;
         restAPI.registerMachine(VALID_TEST_IP, VALID_TEST_PASSWORD);
         
         registerPage = topPage.clickRegisterMachinesButton();
@@ -71,17 +73,19 @@ public class RegisterMachinesPageTest extends BaseTest{
         registerPage.enterPassword(VALID_TEST_PASSWORD);
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
+        flashMessage = registerPage.getFlashMessageField().getText();
         
-        Assert.assertTrue(errorsList.get(0).contains("already exists"));
+        Assert.assertTrue(errorsList.get(0).isEmpty());
         Assert.assertTrue(errorsList.get(1).isEmpty());
         Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertTrue(errorsList.get(3).isEmpty());
+        Assert.assertTrue(flashMessage.contains(VALID_TEST_IP) && flashMessage.contains("already exists"));
         
     }
 
     @Test(description="Verify register a new machine page - Invalid IP address")
     public void verifyRegisterMachinesInvalidIP() throws Exception {
         registerPage = topPage.clickRegisterMachinesButton();
+        
         // test-1
         registerPage.enterIpAddress("1.1.1.256");
         registerPage.enterUsername(VALID_TEST_USERNAME);
@@ -89,10 +93,9 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertEquals(errorsList.get(1), "Please enter a valid IP address");
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
+        Assert.assertTrue(errorsList.get(1).isEmpty());
         Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertTrue(errorsList.get(3).isEmpty());
         
         // test-2
         registerPage.enterIpAddress("1.1.1");
@@ -101,10 +104,9 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertEquals(errorsList.get(1), "Please enter a valid IP address");
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
+        Assert.assertTrue(errorsList.get(1).isEmpty());
         Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertTrue(errorsList.get(3).isEmpty());
         
         // test-3
         registerPage.enterIpAddress("aaaaa");
@@ -113,10 +115,9 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertEquals(errorsList.get(1), "Please enter a valid IP address");
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
+        Assert.assertTrue(errorsList.get(1).isEmpty());
         Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertTrue(errorsList.get(3).isEmpty());
 
         // test-4
         registerPage.enterIpAddress("");
@@ -125,10 +126,9 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertEquals(errorsList.get(1), "Please enter a valid IP address");
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
+        Assert.assertTrue(errorsList.get(1).isEmpty());
         Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertTrue(errorsList.get(3).isEmpty());
     }
     
     @Test(description="Verify register a new machine page - Invalid username")
@@ -143,9 +143,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
         Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertEquals(errorsList.get(2), "Please enter a valid username");
-        Assert.assertTrue(errorsList.get(3).isEmpty());
+        Assert.assertEquals(errorsList.get(1), "Please enter a valid username");
+        Assert.assertTrue(errorsList.get(2).isEmpty());
         
         // test-2
         registerPage.enterIpAddress(VALID_TEST_IP);
@@ -155,9 +154,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
         Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertEquals(errorsList.get(2), "Please enter a valid username");
-        Assert.assertTrue(errorsList.get(3).isEmpty());
+        Assert.assertEquals(errorsList.get(1), "Please enter a valid username");
+        Assert.assertTrue(errorsList.get(2).isEmpty());
     }
     
     @Test(description="Verify register a new machine page - Invalid password")
@@ -173,8 +171,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         Assert.assertTrue(errorsList.get(0).isEmpty());
         Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
-        Assert.assertEquals(errorsList.get(3), "Please enter a valid passowrd");
+        Assert.assertEquals(errorsList.get(2), "Please enter a valid passowrd");
 
     }
     
@@ -188,10 +185,9 @@ public class RegisterMachinesPageTest extends BaseTest{
         registerPage.enterPassword("asdf.asdf");
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertEquals(errorsList.get(1), "Please enter a valid IP address");
-        Assert.assertEquals(errorsList.get(2), "Please enter a valid username");
-        Assert.assertEquals(errorsList.get(3), "Please enter a valid passowrd");
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
+        Assert.assertEquals(errorsList.get(1), "Please enter a valid username");
+        Assert.assertEquals(errorsList.get(2), "Please enter a valid passowrd");
 
     }
 }

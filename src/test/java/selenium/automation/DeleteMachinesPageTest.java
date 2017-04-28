@@ -41,8 +41,8 @@ public class DeleteMachinesPageTest extends BaseTest {
         }
         
         deletePage.getDeleteButton().submit();
-        String topPageFlashMessage = topPage.getFlashMessageField().getText();
-        Assert.assertTrue(topPageFlashMessage.contains("Deleted") && topPageFlashMessage.contains(TEST_IP1) && topPageFlashMessage.contains(TEST_IP2), topPageFlashMessage);
+        String flashMessage = topPage.getFlashMessageField().getText();
+        Assert.assertTrue(flashMessage.contains("Deleted") && flashMessage.contains(TEST_IP1) && flashMessage.contains(TEST_IP2), flashMessage);
         
         ipAddressList = topPage.getIpAddressList();
         for (WebElement ip: ipAddressList){

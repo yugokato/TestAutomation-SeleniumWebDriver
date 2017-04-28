@@ -20,7 +20,7 @@ public class LoginPage extends BasePage {
     @FindBy(linkText="or create a new account?")
     private WebElement signupButton;
     
-    @FindBy(css=".col-md-12-flash")
+    @FindBy(css=".alert")
     private WebElement flashMessageField;
     
     public WebElement getUsernameField(){
