@@ -19,6 +19,7 @@ public class ModalTest extends BaseTest{
     private Modal currentModal;
     private final String TEST_IP = "1.1.1.1";
     private final String TEST_USERNAME = "test_user";
+    private final Pattern PATTERN_LAST_UPDATED = Pattern.compile("^(.+)\\s\\(([0-9]+)");
     List<WebElement> machineList;
     List<WebElement> hostNameList;
     List<WebElement> ipAddressList;
@@ -40,8 +41,6 @@ public class ModalTest extends BaseTest{
         String lastUpdated, hostName, ipAddress, status, statusImgName, osDistribution; 
         String release, macAddress, uptime, cpuLoadAvg, memoryUsage, diskUsage;
         Map<String, String> modalContents;
-        
-        Pattern p = Pattern.compile("^(.+)\\s\\(([0-9]+)");
         
         for (int i=0; i<machineList.size(); i++){
             topPage.openModal(machineList.get(i));
@@ -67,7 +66,7 @@ public class ModalTest extends BaseTest{
             memoryUsage = modalContents.get("MEMORY_USAGE");
             diskUsage = modalContents.get("DISK_USAGE");
 
-            Matcher m = p.matcher(lastUpdated);
+            Matcher m = PATTERN_LAST_UPDATED.matcher(lastUpdated);
             if(m.find()){
                 lastUpdated = m.group(2);
             }
@@ -89,7 +88,7 @@ public class ModalTest extends BaseTest{
                 Assert.assertEquals(cpuLoadAvg, "N.A");
                 Assert.assertEquals(memoryUsage, "N.A");
                 Assert.assertEquals(diskUsage, "N.A");
-                Assert.assertTrue(Integer.parseInt(lastUpdated) >= 0);
+                Assert.assertTrue(Integer.parseInt(lastUpdated) > 1);
             }
             
             else {
@@ -168,6 +167,48 @@ public class ModalTest extends BaseTest{
                 topPage.waitForModalToBeClosed();
             }
         }
+    }
+    
+    @Test(description="Verify Ajax automatically refreshes modal contents")
+    public void verifyAjaxForModalContents() throws Exception{
+        String lastUpdatedBeforeAjax, lastUpdatedAfterAjax;
+        int secsAgoBeforeAjax = 0;
+        int secsAgoAfterAjax = 0;
+        Matcher m;
+        
+        restAPI.deleteMachine(TEST_IP);
+        
+        // Open modal(vm05)
+        topPage.openModal(topPage.getMachineElementByHostname("vm05"));
+        driver.switchTo().activeElement();            
+        currentModal = topPage.getCurrentModalInstance();
+        lastUpdatedBeforeAjax = currentModal.getLastUpdated();
+        m = PATTERN_LAST_UPDATED.matcher(lastUpdatedBeforeAjax);
+        if(m.find()){
+            secsAgoBeforeAjax = Integer.parseInt(m.group(2));
+        }
+        
+        // Close modal
+        currentModal.clickCloseButton();
+        topPage.waitForModalToBeClosed();
+        
+        // Open modal(vm05)
+        topPage.openModal(topPage.getMachineElementByHostname("vm05"));
+        driver.switchTo().activeElement();            
+        currentModal = topPage.getCurrentModalInstance();
+        lastUpdatedAfterAjax = currentModal.getLastUpdated();
+        m = PATTERN_LAST_UPDATED.matcher(lastUpdatedAfterAjax);
+        if(m.find()){
+            secsAgoAfterAjax = Integer.parseInt(m.group(2));
+        }
+        
+        // Close modal
+        currentModal.clickCloseButton();
+        topPage.waitForModalToBeClosed();
+        
+        int deltaSeconds = (secsAgoAfterAjax - secsAgoBeforeAjax) > 0 ? secsAgoBeforeAjax - secsAgoAfterAjax : secsAgoAfterAjax;
+        Assert.assertTrue(deltaSeconds < 3, "difference between before/after was " + deltaSeconds + " seconds");
+        
     }
 
 }

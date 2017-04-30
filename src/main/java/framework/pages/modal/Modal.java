@@ -22,7 +22,7 @@ public class Modal extends BasePage {
         this.currentModal = currentModal;
     }
     
-    private String getLastUpdated(){
+    public String getLastUpdated(){
         String selector = "div.modal-body > div:nth-child(2)";
         String lastUpdated = currentModal.findElement(By.cssSelector(selector)).getText();
         return lastUpdated;
