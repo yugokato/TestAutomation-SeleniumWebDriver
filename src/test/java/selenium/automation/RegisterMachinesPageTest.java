@@ -36,9 +36,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         errorsList = registerPage.clickRegisterButtonAndGetErrors();
         flashMessage = topPage.getFlashMessageField().getText(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
+        Assert.assertEquals(errorsList.size(), 0);
         Assert.assertTrue(flashMessage.contains(VALID_TEST_IP) && flashMessage.contains("Added"));
         
     }
@@ -55,9 +53,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         flashMessage = registerPage.getFlashMessageField().getText();
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
+        Assert.assertEquals(errorsList.size(), 0);
         Assert.assertTrue(flashMessage.contains(VALID_TEST_IP) && flashMessage.contains("Added"));
 
     }

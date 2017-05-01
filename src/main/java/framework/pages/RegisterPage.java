@@ -28,7 +28,7 @@ public class RegisterPage extends BasePage {
     @FindBy(css=".alert")
     private WebElement flashMessageField;
     
-    @FindBy(css=".has-error")
+    @FindBy(css=".text-danger")
     private List<WebElement> errorFieldList;
     
     @FindBy(css=".col-md-6 a img")
