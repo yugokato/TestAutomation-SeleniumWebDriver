@@ -93,7 +93,7 @@ public class LoginPageTest extends BaseTest {
         
         // test-1 (top page)
         driver.get("http://localhost:5000/top");
-        Assert.assertEquals(topPage.getPageHeadingField().getText(), "Linux Machines");
+        Assert.assertTrue(topPage.getPageHeadingField().getText().contains("Linux Machines"));
         
         // test-2 (register page)
         driver.get("http://localhost:5000/register");
