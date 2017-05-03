@@ -39,7 +39,7 @@ public class RestAPI extends RestClient {
         String url = BASE_URL + "/add/" + ipaddr + ":" + username;
         Response response = requestPOST(url, null);
         logger.info(String.format("Added a machine(%s) via RESUful API", ipaddr));
-        driver.navigate().refresh();
+        //driver.navigate().refresh();
 
         return response;
     }
@@ -48,7 +48,7 @@ public class RestAPI extends RestClient {
         String url = BASE_URL + "/add/" + ipaddr + ":" + username + ":" + password;
         Response response = requestPOST(url, null);
         logger.info(String.format("Added a machine(%s) via RESUful API", ipaddr));
-        driver.navigate().refresh();
+        //driver.navigate().refresh();
 
         return response;
     }
@@ -69,7 +69,7 @@ public class RestAPI extends RestClient {
         String url = BASE_URL + "/add";
         Response response = requestPOST(url, jsonDataStr);
         logger.info(String.format("Added machines(%s) via RESUful API", addIPList.toString()));
-        driver.navigate().refresh();
+        //driver.navigate().refresh();
         
         return response;
     }
@@ -78,7 +78,7 @@ public class RestAPI extends RestClient {
         String url = BASE_URL + "/delete/" + ipaddr;
         Response response = requestDELETE(url, null);
         logger.info(String.format("Deleted machines(%s) via RESUful API", ipaddr));
-        driver.navigate().refresh();
+        //driver.navigate().refresh();
    
         return response;
     }
@@ -93,7 +93,7 @@ public class RestAPI extends RestClient {
         String url = BASE_URL + "/delete";
         Response response = requestDELETE(url, jsonDataStr);
         logger.info(String.format("Deleted a machine(%s) via RESUful API", deleteIPList.toString()));
-        driver.navigate().refresh();
+        //driver.navigate().refresh();
 
         return response;
     }

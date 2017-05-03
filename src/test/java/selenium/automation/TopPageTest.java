@@ -39,6 +39,7 @@ public class TopPageTest extends BaseTest {
         System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
         restAPI.deleteMachine(TEST_IP);
+        topPage.waitForAjaxToLoad();
     }
     
     @AfterMethod
@@ -50,6 +51,7 @@ public class TopPageTest extends BaseTest {
     public void verifyTopPageBasic() throws Exception {
         // register a new machine whose status is #Unknown
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
         
         // hard-coded test data
         Map<String, String[]> testData = new HashMap<String, String[]>();
@@ -100,6 +102,7 @@ public class TopPageTest extends BaseTest {
     
         // Register the new container for test
         restAPI.registerMachine(testContainerIP, TEST_USERNAME, TEST_PASSWORD);
+        topPage.waitForAjaxToLoad();
         
         // Check the initial #Unknown status after registration
         osDistImgName = topPage.getOsDistImgFieldByHostname("#Unknown").getAttribute("src");
@@ -109,7 +112,7 @@ public class TopPageTest extends BaseTest {
         
         // Wait for up to 60 seconds until SSH access starts and status changes reachable
         for (int i=0; i<60; i+=10){
-            driver.navigate().refresh();
+            //driver.navigate().refresh();
             try{
                 topPage.getMachineElementByHostname("#Unknown");
                 Thread.sleep(10000);
@@ -137,7 +140,7 @@ public class TopPageTest extends BaseTest {
         
         // Wait for up to 90 seconds until the machine icon changes
         for (int i=0; i<90; i+=10){
-            driver.navigate().refresh();
+            //driver.navigate().refresh();
             osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
             if (osDistImgName.contains("ubuntu.png")){
                 Thread.sleep(10000);
@@ -164,7 +167,7 @@ public class TopPageTest extends BaseTest {
         
         // Wait for up to 40 seconds
         for (int i=0; i<40; i+=10){
-            driver.navigate().refresh();
+            //driver.navigate().refresh();
             osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
             if (osDistImgName.contains("unreachable")){
                 Thread.sleep(10000);

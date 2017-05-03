@@ -30,6 +30,7 @@ public class ModalTest extends BaseTest{
         System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
     }
     
     @Test(description="Verify modal contents in the top page are valid based on machine's status")
@@ -88,11 +89,11 @@ public class ModalTest extends BaseTest{
                 Assert.assertEquals(cpuLoadAvg, "N.A");
                 Assert.assertEquals(memoryUsage, "N.A");
                 Assert.assertEquals(diskUsage, "N.A");
-                Assert.assertTrue(Integer.parseInt(lastUpdated) > 1);
+                Assert.assertTrue(Integer.parseInt(lastUpdated) > 0, lastUpdated);
             }
             
             else {
-                Assert.assertTrue(Integer.parseInt(lastUpdated) < 90);
+                Assert.assertTrue(Integer.parseInt(lastUpdated) < 90, lastUpdated);
                 Assert.assertEquals(hostNameList.get(i).getText(), hostName);
                 Assert.assertEquals(ipAddressList.get(i).getText(), ipAddress);
                 Assert.assertTrue(status.contains("OK"));
@@ -177,6 +178,7 @@ public class ModalTest extends BaseTest{
         Matcher m;
         
         restAPI.deleteMachine(TEST_IP);
+        topPage.waitForAjaxToLoad();
         
         // Open modal(vm05)
         topPage.openModal(topPage.getMachineElementByHostname("vm05"));
