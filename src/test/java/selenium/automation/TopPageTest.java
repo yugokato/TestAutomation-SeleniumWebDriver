@@ -22,6 +22,7 @@ import selenium.automation.base.BaseTest;
 public class TopPageTest extends BaseTest {
     private Modal currentModal;
     private final String TEST_IP = "172.30.0.11";
+    private final String TEST_IP_AWS = "54.218.89.43";
     private final String TEST_USERNAME = "ubuntu";
     private final String TEST_PASSWORD = "ubuntu";
     private final String TEST_OS_DIST = "ubuntu";
@@ -45,6 +46,7 @@ public class TopPageTest extends BaseTest {
     @AfterMethod
     public void afterMethod() {
         restAPI.deleteMachine(TEST_IP);
+        restAPI.deleteMachine(TEST_IP_AWS);
     }
     
     @Test(description="Verify initial state of the top page", priority=0)
@@ -84,7 +86,18 @@ public class TopPageTest extends BaseTest {
         }
     }
     
-    @Test(description="Verify top page icon changes after new machine becomes reachable", priority=1)
+    @Test(description="Verify a tag 'AWS' is added if the ip address belongs to AWS")
+    public void verifyTopPageAWS() throws Exception {
+        // register a new machine whose ip address is AWS
+        restAPI.registerMachine(TEST_IP_AWS, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
+        
+        ipAddressList = topPage.getIpAddressList();
+        Assert.assertTrue(ipAddressList.get(0).getText().contains("AWS"));
+    }
+    
+    
+    @Test(description="Verify top page icon changes after new machine becomes reachable")
     public void verifyTopPageUnknownBecomesReachable() throws Exception {
         String osDistImgName, testContainerID, testContainerIP;
         
@@ -131,7 +144,7 @@ public class TopPageTest extends BaseTest {
         docker.removeContainer(testContainerID);       
     }
 
-    @Test(description="Verify top page icon changes when the existing machine becomes unreachable", priority=2)
+    @Test(description="Verify top page icon changes when the existing machine becomes unreachable")
     public void verifyTopPageOkBecomesUnreahable() throws Exception{
         String osDistImgName = "";
         
