@@ -2,6 +2,7 @@ package selenium.automation.base;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -37,8 +38,8 @@ public class BaseTest {
     @BeforeClass(alwaysRun=true)
     public void beforeClassBase() {
         PropertyConfigurator.configure(System.getProperty("user.dir") + "/" + "lib/log4j.property");
-        System.setProperty("webdriver.firefox.marionette","lib");
-        DriverInit.setDriver(new FirefoxDriver());
+        System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "/Resources/chromedriver");
+        DriverInit.setDriver(new ChromeDriver());
         driver = DriverInit.getDriver();
         restAPI = new RestAPI();
         loginPage = new LoginPage();
@@ -52,7 +53,6 @@ public class BaseTest {
         DockerManager.startTestContainers(INITIAL_CONTAINERS);
         driver.get("http://localhost:5000");
         driver.manage().window().maximize();
-        driver.navigate().refresh();
         loginPage.doLogin(TEST_ADMIN_USER, TEST_ADMIN_PASSWORD, false);
     }
     
