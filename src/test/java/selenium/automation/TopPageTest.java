@@ -1,6 +1,7 @@
 package selenium.automation;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import selenium.automation.base.BaseTest;
 public class TopPageTest extends BaseTest {
     private Modal currentModal;
     private final String TEST_IP = "172.30.0.11";
+    private final String TEST_IP2 = "172.30.0.12";
+    private final String TEST_IP3 = "172.30.0.13";
     private final String TEST_IP_AWS = "54.218.89.43";
     private final String TEST_USERNAME = "ubuntu";
     private final String TEST_PASSWORD = "ubuntu";
@@ -39,13 +42,14 @@ public class TopPageTest extends BaseTest {
     public void beforeMethod(Method method) {
         System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
-        restAPI.deleteMachine(TEST_IP);
         topPage.waitForAjaxToLoad();
     }
     
     @AfterMethod
     public void afterMethod() {
         restAPI.deleteMachine(TEST_IP);
+        restAPI.deleteMachine(TEST_IP2);
+        restAPI.deleteMachine(TEST_IP3);
         restAPI.deleteMachine(TEST_IP_AWS);
     }
     
@@ -194,4 +198,22 @@ public class TopPageTest extends BaseTest {
         Assert.assertTrue(osDistImgName.contains("ubuntu.png"));
     }
 
+    @Test(description="Verify top page is dinamically updated by Ajax")
+    public void verifyTopPageAjax() throws Exception{
+        restAPI.registerMachine(TEST_IP, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
+        
+        restAPI.registerMachine(TEST_IP2, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
+        
+        restAPI.registerMachine(TEST_IP3, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
+        
+        ArrayList<String> ipAddressList = topPage.getIpAddressListStr();
+        Assert.assertTrue(ipAddressList.contains(TEST_IP));
+        Assert.assertTrue(ipAddressList.contains(TEST_IP2));
+        Assert.assertTrue(ipAddressList.contains(TEST_IP3));
+        
+        
+    }
 }

@@ -1,4 +1,5 @@
 package framework.pages;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -127,5 +128,13 @@ public class TopPage extends BasePage {
         }catch(NoSuchElementException e){
             return flashMessages;
         }
+    }
+    
+    public ArrayList<String> getIpAddressListStr(){
+        ArrayList<String> ipAddressListStr = new ArrayList<>();
+        for (WebElement ipAddress: getIpAddressList()){
+            ipAddressListStr.add(ipAddress.getText());
+        }
+        return ipAddressListStr;
     }
 }
