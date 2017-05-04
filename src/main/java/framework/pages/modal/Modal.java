@@ -221,6 +221,7 @@ public class Modal extends BasePage {
         String line;
         try{
             Process proc = Runtime.getRuntime().exec(cmd);
+            Thread.sleep(500);
             BufferedReader is = new BufferedReader(new InputStreamReader(proc.getInputStream()));
             while ((line = is.readLine()) != null) {
                 if (line.contains("butterfly.server.py")){
@@ -231,7 +232,8 @@ public class Modal extends BasePage {
         }
         catch(IOException e){
             System.out.println(e);
-            return false;
         }
+        catch (InterruptedException e){}
+        return false;
     }
 }
