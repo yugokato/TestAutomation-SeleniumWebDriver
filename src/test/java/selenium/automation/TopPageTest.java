@@ -23,8 +23,8 @@ import selenium.automation.base.BaseTest;
 public class TopPageTest extends BaseTest {
     private Modal currentModal;
     private final String TEST_IP = "172.30.0.11";
-    private final String TEST_IP2 = "172.30.0.12";
-    private final String TEST_IP3 = "172.30.0.13";
+    private final String TEST_IP2 = "172.30.0.21";
+    private final String TEST_IP3 = "172.30.0.111";
     private final String TEST_IP_AWS = "54.218.89.43";
     private final String TEST_USERNAME = "ubuntu";
     private final String TEST_PASSWORD = "ubuntu";
@@ -198,8 +198,22 @@ public class TopPageTest extends BaseTest {
         Assert.assertTrue(osDistImgName.contains("ubuntu.png"));
     }
 
-    @Test(description="Verify top page is dinamically updated by Ajax")
+    @Test(description="Verify top page elements are dinamically updated by Ajax")
     public void verifyTopPageAjax() throws Exception{
+        restAPI.registerMachine(TEST_IP, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
+        
+        restAPI.registerMachine(TEST_IP2, TEST_USERNAME);
+        topPage.waitForAjaxToLoad();
+        
+        ArrayList<String> ipAddressList = topPage.getIpAddressListStr();
+        Assert.assertTrue(ipAddressList.contains(TEST_IP));
+        Assert.assertTrue(ipAddressList.contains(TEST_IP2));
+        
+    }
+    
+    @Test(description="Verify elements are sorted by hostname and ip address correctly")
+    public void verifyTopPageSorting() throws Exception{
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
         topPage.waitForAjaxToLoad();
         
@@ -209,11 +223,18 @@ public class TopPageTest extends BaseTest {
         restAPI.registerMachine(TEST_IP3, TEST_USERNAME);
         topPage.waitForAjaxToLoad();
         
+        // Check Ajax side's sorting mechanism
         ArrayList<String> ipAddressList = topPage.getIpAddressListStr();
-        Assert.assertTrue(ipAddressList.contains(TEST_IP));
-        Assert.assertTrue(ipAddressList.contains(TEST_IP2));
-        Assert.assertTrue(ipAddressList.contains(TEST_IP3));
+        Assert.assertEquals(ipAddressList.get(0), TEST_IP);
+        Assert.assertEquals(ipAddressList.get(1), TEST_IP2);
+        Assert.assertEquals(ipAddressList.get(2), TEST_IP3);
         
+        // Check application side's sorting mechanism
+        driver.navigate().refresh();
+        ipAddressList = topPage.getIpAddressListStr();
+        Assert.assertEquals(ipAddressList.get(0), TEST_IP);
+        Assert.assertEquals(ipAddressList.get(1), TEST_IP2);
+        Assert.assertEquals(ipAddressList.get(2), TEST_IP3);
         
     }
 }
