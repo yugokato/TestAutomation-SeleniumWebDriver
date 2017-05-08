@@ -49,7 +49,7 @@ public class RestAPITest extends BaseTest {
             response.then().assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("data.Hostname", equalTo(TEST_HOSTNAME));
+                .body("data.hostname", equalTo(TEST_HOSTNAME));
             
             // test-2 (All machines except Unknown)
             restAPI.registerMachine(VALID_IP_1, VALID_USERNAME);
@@ -57,16 +57,16 @@ public class RestAPITest extends BaseTest {
             response.then().assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("data[0].Hostname", equalTo("vm01"))
-                .body("data[1].Hostname", equalTo("vm02"))
-                .body("data[2].Hostname", equalTo("vm03"))
-                .body("data[3].Hostname", equalTo("vm04"))
-                .body("data[4].Hostname", equalTo("vm05"))
-                .body("data[5].Hostname", equalTo("vm06"))
-                .body("data[6].Hostname", equalTo("vm07"))
-                .body("data[7].Hostname", equalTo("vm08"))
-                .body("data[8].Hostname", equalTo("vm09"))
-                .body("data[9].Hostname", equalTo("vm10"));
+                .body("data[0].hostname", equalTo("vm01"))
+                .body("data[1].hostname", equalTo("vm02"))
+                .body("data[2].hostname", equalTo("vm03"))
+                .body("data[3].hostname", equalTo("vm04"))
+                .body("data[4].hostname", equalTo("vm05"))
+                .body("data[5].hostname", equalTo("vm06"))
+                .body("data[6].hostname", equalTo("vm07"))
+                .body("data[7].hostname", equalTo("vm08"))
+                .body("data[8].hostname", equalTo("vm09"))
+                .body("data[9].hostname", equalTo("vm10"));
         }
         
         @Test(description = "Verify register machines feature via RestfulAPI - succeed")
