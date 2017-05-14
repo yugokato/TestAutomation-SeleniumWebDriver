@@ -81,14 +81,14 @@ public class ModalTest extends BaseTest{
                 else if (modalContents.get("STATUS").contains("Unknown")){
                     Assert.assertEquals(statusImgName, "status_unknown.png");
                 }
-                Assert.assertEquals(osDistribution, "N.A");
+                Assert.assertEquals(osDistribution, "None");
                 Assert.assertTrue(osDistributionImgNameList.get(i).getAttribute("src").contains("other"));
-                Assert.assertEquals(release, "N.A");
-                Assert.assertEquals(macAddress, "N.A");
-                Assert.assertEquals(uptime, "N.A");
-                Assert.assertEquals(cpuLoadAvg, "N.A");
-                Assert.assertEquals(memoryUsage, "N.A");
-                Assert.assertEquals(diskUsage, "N.A");
+                Assert.assertEquals(release, "None");
+                Assert.assertEquals(macAddress, "None");
+                Assert.assertEquals(uptime, "None");
+                Assert.assertEquals(cpuLoadAvg, "None");
+                Assert.assertEquals(memoryUsage, "None");
+                Assert.assertEquals(diskUsage, "None");
                 Assert.assertTrue(Integer.parseInt(lastUpdated) > 0, lastUpdated);
             }
             
@@ -99,12 +99,12 @@ public class ModalTest extends BaseTest{
                 Assert.assertTrue(status.contains("OK"));
                 Assert.assertEquals(statusImgName, "status_ok.png");
                 Assert.assertTrue(osDistributionImgNameList.get(i).getAttribute("src").contains(osDistribution.toLowerCase()));
-                Assert.assertNotEquals(release, "N.A");
-                Assert.assertNotEquals(macAddress, "N.A");
-                Assert.assertNotEquals(uptime, "N.A");
-                Assert.assertNotEquals(cpuLoadAvg, "N.A");
-                Assert.assertNotEquals(memoryUsage, "N.A");
-                Assert.assertNotEquals(diskUsage, "N.A");
+                Assert.assertNotEquals(release, "None");
+                Assert.assertNotEquals(macAddress, "None");
+                Assert.assertNotEquals(uptime, "None");
+                Assert.assertNotEquals(cpuLoadAvg, "None");
+                Assert.assertNotEquals(memoryUsage, "None");
+                Assert.assertNotEquals(diskUsage, "None");
             }
         }
         
