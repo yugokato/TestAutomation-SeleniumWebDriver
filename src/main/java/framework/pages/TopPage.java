@@ -74,7 +74,7 @@ public class TopPage extends BasePage {
     }
     
     public void openModal(WebElement element){
-        element.click();
+        element.findElement(By.className("img-responsive")).click();
         WebElement currentModal = getCurrentModalElement();
         wait.until(ExpectedConditions.visibilityOf(currentModal));
     }
@@ -98,9 +98,63 @@ public class TopPage extends BasePage {
         String selector = ".modal-open";
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(selector)));
     }
+    
+    public void waitForEC2StateChangeToStart(String ipAddress){
+        String xpathExpression = "//*[@id=\"machine-grid-" + ipAddress + "\"]/span";
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpression)));
+    }
+    
+    public void waitForEC2StateChangeToStop(String ipAddress){
+        String xpathExpression = "//*[@id=\"machine-grid-" + ipAddress + "\"]/span";
+        for (int i=0; i<120; i+=5){
+            try{
+                driver.findElement(By.xpath(xpathExpression));
+                try{
+                    Thread.sleep(5000);
+                }catch(InterruptedException ee){}
+            }
+            catch(NoSuchElementException e){
+                break;
+            }
+        }
+       
+    }
+    
+    public void waitForMachineStatusToBeOK(String ipAddress){
+        String osDistImgName;
+        for (int i=0; i<60; i+=5){
+            osDistImgName = getOsDistImgFieldByIpAddress(ipAddress).getAttribute("src");
+            if (osDistImgName.contains("unreachable") || osDistImgName.contains("other") ){
+                try{
+                    Thread.sleep(5000);
+                }catch(InterruptedException e){}
+            }
+            else
+                break;
+        }
+    }
+    
+    public void waitForMachineStatusToBeUnreachable(String ipAddress){
+        String osDistImgName;
+        for (int i=0; i<90; i+=5){
+            osDistImgName = getOsDistImgFieldByIpAddress(ipAddress).getAttribute("src");
+            if (! osDistImgName.contains("unreachable")){
+                try{
+                    Thread.sleep(5000);
+                }catch(InterruptedException e){}
+            }
+            else
+                break;
+        }
+    }
 
     public WebElement getMachineElementByHostname(String hostname){
         WebElement machineElement = getHostnameField(hostname).findElement(By.xpath("../.."));
+        return machineElement;
+    }
+    
+    public WebElement getMachineElementByIpAddress(String ipAddress){
+        WebElement machineElement = getIpAddressField(ipAddress).findElement(By.xpath("../.."));
         return machineElement;
     }
 
@@ -109,13 +163,19 @@ public class TopPage extends BasePage {
         return hostnameField;
     }
 
-    public WebElement getIpAddressField(String ipAddr){
-        WebElement ipAddressField = driver.findElement(By.linkText(ipAddr));
+    public WebElement getIpAddressField(String ipAddress){
+        WebElement ipAddressField = driver.findElement(By.linkText(ipAddress));
         return ipAddressField;
     }
 
     public WebElement getOsDistImgFieldByHostname(String hostname){
         WebElement parentElement = getMachineElementByHostname(hostname);
+        WebElement distImgField = parentElement.findElement(By.cssSelector("img"));
+        return distImgField;
+    }
+    
+    public WebElement getOsDistImgFieldByIpAddress(String ipAddress){
+        WebElement parentElement = getMachineElementByIpAddress(ipAddress);
         WebElement distImgField = parentElement.findElement(By.cssSelector("img"));
         return distImgField;
     }
