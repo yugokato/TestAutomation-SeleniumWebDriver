@@ -25,7 +25,6 @@ public class TopPageTest extends BaseTest {
     private final String TEST_IP = "172.30.0.11";
     private final String TEST_IP2 = "172.30.0.21";
     private final String TEST_IP3 = "172.30.0.111";
-    private final String TEST_IP_AWS = "54.218.89.43";
     private final String TEST_USERNAME = "ubuntu";
     private final String TEST_PASSWORD = "ubuntu";
     private final String TEST_OS_DIST = "ubuntu";
@@ -50,7 +49,6 @@ public class TopPageTest extends BaseTest {
         restAPI.deleteMachine(TEST_IP);
         restAPI.deleteMachine(TEST_IP2);
         restAPI.deleteMachine(TEST_IP3);
-        restAPI.deleteMachine(TEST_IP_AWS);
     }
     
     @Test(description="Verify initial state of the top page", priority=0)
@@ -88,18 +86,7 @@ public class TopPageTest extends BaseTest {
             Assert.assertEquals(ipAddr, testData.get(hostName)[0]);
             Assert.assertTrue(osDistImgName.contains(testData.get(hostName)[1]));
         }
-    }
-    
-    @Test(description="Verify a tag 'AWS' is added if the ip address belongs to AWS")
-    public void verifyTopPageAWS() throws Exception {
-        // register a new machine whose ip address is AWS
-        restAPI.registerMachine(TEST_IP_AWS, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
-        
-        ipAddressList = topPage.getIpAddressList();
-        Assert.assertTrue(ipAddressList.get(0).getText().contains("AWS"));
-    }
-    
+    }   
     
     @Test(description="Verify top page icon changes after new machine becomes reachable")
     public void verifyTopPageUnknownBecomesReachable() throws Exception {
@@ -150,23 +137,16 @@ public class TopPageTest extends BaseTest {
 
     @Test(description="Verify top page icon changes when the existing machine becomes unreachable")
     public void verifyTopPageOkBecomesUnreahable() throws Exception{
-        String osDistImgName = "";
+        String osDistImgName;
         
         // stop one of the existing containers to emulate an incident
         docker.killContainer(TEST_CONTAINER_TO_DELETE);  // vm01
         
         // Wait for up to 90 seconds until the machine icon changes
-        for (int i=0; i<90; i+=10){
-            //driver.navigate().refresh();
-            osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
-            if (osDistImgName.contains("ubuntu.png")){
-                Thread.sleep(10000);
-            }
-            else
-                break;
-        }
+        topPage.waitForMachineStatusToBeUnreachable("172.30.0.1");
         
-        // check the icon reflects an alarm
+        // check the machine status = unreachable and the icon reflects an alarm
+        osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
         Assert.assertTrue(osDistImgName.contains("unreachable"));
                 
         // check machine status and icon in modal = unreachable
@@ -182,16 +162,8 @@ public class TopPageTest extends BaseTest {
         // re-start the container
         docker.startContainer(TEST_CONTAINER_TO_DELETE);
         
-        // Wait for up to 40 seconds
-        for (int i=0; i<40; i+=10){
-            //driver.navigate().refresh();
-            osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
-            if (osDistImgName.contains("unreachable")){
-                Thread.sleep(10000);
-            }
-            else
-                break;
-        }
+        // Wait until the machine status becomes OK
+        topPage.waitForMachineStatusToBeOK("172.30.0.1");
         
         // Check the machine status = ok
         osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
