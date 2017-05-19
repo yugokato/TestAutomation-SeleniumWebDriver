@@ -3,7 +3,7 @@ package selenium.automation.base;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -39,7 +39,8 @@ public class BaseTest {
     public void beforeClassBase() {
         PropertyConfigurator.configure(System.getProperty("user.dir") + "/" + "lib/log4j.property");
         System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "/Resources/chromedriver");
-        DriverInit.setDriver(new ChromeDriver());
+        DesiredCapabilities chromeCapabilities = DriverInit.setChromeCapabilities();
+        DriverInit.setDriver(new ChromeDriver(chromeCapabilities));
         driver = DriverInit.getDriver();
         restAPI = new RestAPI();
         loginPage = new LoginPage();
