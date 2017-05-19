@@ -148,6 +148,12 @@ public class Modal extends BasePage {
         return jsonFileNameField;
     }
     
+    public WebElement getEC2ControlButton(){
+        String selector = "a[id^=aws-ec2-button]";
+        WebElement EC2ControlButton = currentModal.findElement(By.cssSelector(selector));
+        return EC2ControlButton;
+    }
+    
     public void clickCloseButton(){
         String selector = "div.modal-footer > button";
         WebElement closeButton = currentModal.findElement(By.cssSelector(selector));
@@ -235,5 +241,14 @@ public class Modal extends BasePage {
         }
         catch (InterruptedException e){}
         return false;
+    }
+    
+    public boolean isEC2ControlButtonExists(){
+        try{
+            getEC2ControlButton();
+            return true;
+        }catch(NoSuchElementException e){
+            return false;
+        }
     }
 }

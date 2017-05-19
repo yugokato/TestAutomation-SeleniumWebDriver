@@ -10,6 +10,7 @@
       <class name="selenium.automation.ModalTest"/>
       <class name="selenium.automation.RegisterMachinesPageTest"/>
       <class name="selenium.automation.DeleteMachinesPageTest"/>
+      <class name="selenium.automation.AWSTest"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
