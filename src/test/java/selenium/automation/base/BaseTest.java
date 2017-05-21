@@ -14,7 +14,7 @@ import com.spotify.docker.client.DockerClient;
 import framework.api.RestAPI;
 import framework.driver.DriverInit;
 import framework.pages.LoginPage;
-import framework.pages.TopPage;
+import framework.pages.HomePage;
 import framework.docker.DockerManager;
 
 import org.apache.log4j.Logger;
@@ -25,7 +25,7 @@ public class BaseTest {
     protected WebDriver driver;
     protected RestAPI restAPI;
     protected LoginPage loginPage;
-    protected TopPage topPage;
+    protected HomePage homePage;
     protected DockerManager containerManager;
     protected DockerClient docker;
     private static final String TEST_ADMIN_USER = "ADMIN_USER";
@@ -44,7 +44,7 @@ public class BaseTest {
         driver = DriverInit.getDriver();
         restAPI = new RestAPI();
         loginPage = new LoginPage();
-        topPage = new TopPage();
+        homePage = new HomePage();
         docker = DockerManager.getDockerClient();
         restAPI.addUser(TEST_ADMIN_USER, TEST_ADMIN_PASSWORD);
     }

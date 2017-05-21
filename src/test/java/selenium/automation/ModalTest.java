@@ -30,29 +30,29 @@ public class ModalTest extends BaseTest{
         System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
     }
     
-    @Test(description="Verify modal contents in the top page are valid based on machine's status")
+    @Test(description="Verify modal contents in the home page are valid based on machine's status")
     public void verifyModalContents() throws Exception {
-        machineList = topPage.getMachineList();
-        hostNameList = topPage.getHostNameList();
-        ipAddressList = topPage.getIpAddressList();
-        osDistributionImgNameList = topPage.getOSDistributionImgNameList();
+        machineList = homePage.getMachineList();
+        hostNameList = homePage.getHostNameList();
+        ipAddressList = homePage.getIpAddressList();
+        osDistributionImgNameList = homePage.getOSDistributionImgNameList();
         String lastUpdated, hostName, ipAddress, status, statusImgName, osDistribution; 
         String release, macAddress, uptime, cpuLoadAvg, memoryUsage, diskUsage;
         Map<String, String> modalContents;
         
         for (int i=0; i<machineList.size(); i++){
-            topPage.openModal(machineList.get(i));
-            currentModal = topPage.getCurrentModalInstance();
+            homePage.openModal(machineList.get(i));
+            currentModal = homePage.getCurrentModalInstance();
 
             driver.switchTo().activeElement();
             modalContents = currentModal.getModalContents();
             
             // Close modal
             currentModal.clickCloseButton();
-            topPage.waitForModalToBeClosed();
+            homePage.waitForModalToBeClosed();
             
             lastUpdated = modalContents.get("LAST_UPDATED");
             hostName = modalContents.get("HOST_NAME");
@@ -112,50 +112,50 @@ public class ModalTest extends BaseTest{
     
     @Test(description="Verify export JSON file feature")
     public void verifyExportJsonFile() throws Exception {
-        machineList = topPage.getMachineList();
-        hostNameList = topPage.getHostNameList();
+        machineList = homePage.getMachineList();
+        hostNameList = homePage.getHostNameList();
         String hostName, jsonFileName;
         
         for (int i=0; i<machineList.size(); i++){
             hostName = hostNameList.get(i).getText();
             jsonFileName = hostName + "_test.json";
-            topPage.openModal(machineList.get(i));
+            homePage.openModal(machineList.get(i));
             driver.switchTo().activeElement();            
-            currentModal = topPage.getCurrentModalInstance();
+            currentModal = homePage.getCurrentModalInstance();
         
             if (! hostName.equals("#Unknown")){    
                 Assert.assertTrue(currentModal.isExportJsonFileButtonExists());
                 currentModal.clickExportJsonFileButton();
-                topPage.waitForModalToBeClosed();
+                homePage.waitForModalToBeClosed();
                 driver.switchTo().activeElement();
-                currentModal = topPage.getCurrentModalInstance();
+                currentModal = homePage.getCurrentModalInstance();
                 currentModal.enterJsonFileName(jsonFileName);
                 currentModal.clickExportButton();
-                topPage.waitForModalToBeClosed();
+                homePage.waitForModalToBeClosed();
                 
-                String flashMessage = topPage.getFlashMessageField().getText();
+                String flashMessage = homePage.getFlashMessageField().getText();
                 Assert.assertTrue(flashMessage.contains(jsonFileName));
                 Assert.assertTrue(flashMessage.contains("successfully saved"));
             }
             else{
                 Assert.assertTrue(! currentModal.isExportJsonFileButtonExists());
                 currentModal.clickCloseButton();
-                topPage.waitForModalToBeClosed();
+                homePage.waitForModalToBeClosed();
             }
         }
     }
     
     @Test(description="Verify SSH access via Butterfly module")
     public void verifyOpenSSHButterfly() throws Exception {
-        machineList = topPage.getMachineList();
-        hostNameList = topPage.getHostNameList();
+        machineList = homePage.getMachineList();
+        hostNameList = homePage.getHostNameList();
         String hostName;
         
         for (int i=0; i<machineList.size(); i++){
             hostName = hostNameList.get(i).getText();
-            topPage.openModal(machineList.get(i));
+            homePage.openModal(machineList.get(i));
             driver.switchTo().activeElement();            
-            currentModal = topPage.getCurrentModalInstance();
+            currentModal = homePage.getCurrentModalInstance();
         
             if (! hostName.equals("#Unknown")){    
                 Assert.assertTrue(currentModal.isOpenSSHButtonExists());
@@ -165,7 +165,7 @@ public class ModalTest extends BaseTest{
             else{
                 Assert.assertTrue(! currentModal.isOpenSSHButtonExists());
                 currentModal.clickCloseButton();
-                topPage.waitForModalToBeClosed();
+                homePage.waitForModalToBeClosed();
             }
         }
     }
@@ -178,12 +178,12 @@ public class ModalTest extends BaseTest{
         Matcher m;
         
         restAPI.deleteMachine(TEST_IP);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         // Open modal(vm05)
-        topPage.openModal(topPage.getMachineElementByHostname("vm05"));
+        homePage.openModal(homePage.getMachineElementByHostname("vm05"));
         driver.switchTo().activeElement();            
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         lastUpdatedBeforeAjax = currentModal.getLastUpdated();
         m = PATTERN_LAST_UPDATED.matcher(lastUpdatedBeforeAjax);
         if(m.find()){
@@ -192,12 +192,12 @@ public class ModalTest extends BaseTest{
         
         // Close modal
         currentModal.clickCloseButton();
-        topPage.waitForModalToBeClosed();
+        homePage.waitForModalToBeClosed();
         
         // Open modal(vm05)
-        topPage.openModal(topPage.getMachineElementByHostname("vm05"));
+        homePage.openModal(homePage.getMachineElementByHostname("vm05"));
         driver.switchTo().activeElement();            
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         lastUpdatedAfterAjax = currentModal.getLastUpdated();
         m = PATTERN_LAST_UPDATED.matcher(lastUpdatedAfterAjax);
         if(m.find()){
@@ -206,7 +206,7 @@ public class ModalTest extends BaseTest{
         
         // Close modal
         currentModal.clickCloseButton();
-        topPage.waitForModalToBeClosed();
+        homePage.waitForModalToBeClosed();
         
         int deltaSeconds = (secsAgoAfterAjax - secsAgoBeforeAjax) > 0 ? secsAgoBeforeAjax - secsAgoAfterAjax : secsAgoAfterAjax;
         Assert.assertTrue(deltaSeconds < 3, "difference between before/after was " + deltaSeconds + " seconds");

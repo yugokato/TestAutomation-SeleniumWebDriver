@@ -39,12 +39,12 @@ public class LoginPageTest extends BaseTest {
         String flashMessages;
         
         loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD, false);
-        flashMessages = topPage.getFlashMessages();
-        String loginUsername = topPage.getLoginUsername();
+        flashMessages = homePage.getFlashMessages();
+        String loginUsername = homePage.getLoginUsername();
         Assert.assertTrue(flashMessages.contains(String.format("Logged in successfully as a user \"%s\"", TEST_USERNAME)));
         Assert.assertEquals(loginUsername, TEST_USERNAME);
         
-        topPage.doLogout();
+        homePage.doLogout();
         flashMessages = loginPage.getFlashMessages();
         Assert.assertTrue(flashMessages.contains(String.format("Logged out from a user \"%s\"", TEST_USERNAME)));
     }
@@ -55,12 +55,12 @@ public class LoginPageTest extends BaseTest {
         
         // invalid username
         loginPage.doLogin(TEST_INVALID_USERNAME, TEST_PASSWORD, false);
-        flashMessages = topPage.getFlashMessages();
+        flashMessages = homePage.getFlashMessages();
         Assert.assertTrue(flashMessages.contains("Username or password is not correct"));
         
         // invalid password
         loginPage.doLogin(TEST_USERNAME, TEST_INVALID_PASSWORD, false);
-        flashMessages = topPage.getFlashMessages();
+        flashMessages = homePage.getFlashMessages();
         Assert.assertTrue(flashMessages.contains("Username or password is not correct"));
     }
     
@@ -70,7 +70,7 @@ public class LoginPageTest extends BaseTest {
         
         // test-1 (top page)
         driver.navigate().refresh();
-        driver.get("http://localhost:5000/top");
+        driver.get("http://localhost:5000/home");
         flashMessages = loginPage.getFlashMessages();
         Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
         
@@ -92,8 +92,8 @@ public class LoginPageTest extends BaseTest {
         loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD, false);
         
         // test-1 (top page)
-        driver.get("http://localhost:5000/top");
-        Assert.assertTrue(topPage.getPageHeadingField().getText().contains("Linux Machines"));
+        driver.get("http://localhost:5000/home");
+        Assert.assertTrue(homePage.getPageHeadingField().getText().contains("Linux Machines"));
         
         // test-2 (register page)
         driver.get("http://localhost:5000/register");

@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import framework.driver.DriverInit;
-import framework.pages.TopPage;
+import framework.pages.HomePage;
 import io.restassured.response.Response;
 
 import org.apache.log4j.Level;
@@ -121,7 +121,7 @@ public class RestAPI extends RestClient {
     
     public void deleteAllUnknownMachines(){
         // Delete all machines whose hostname is #Unknown
-        TopPage topPage = new TopPage();
+        HomePage topPage = new HomePage();
         String deleteIPs = "";
         List<WebElement> hostNameList = topPage.getHostNameList();
         List<WebElement> ipAddrList = topPage.getIpAddressList();

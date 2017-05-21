@@ -28,13 +28,13 @@ public class RegisterMachinesPageTest extends BaseTest{
     public void verifyRegisterMachinesSuccess() throws Exception {
         String flashMessage;
         
-        registerPage = topPage.clickRegisterMachinesButton();
+        registerPage = homePage.clickRegisterMachinesButton();
         registerPage.enterIpAddress(VALID_TEST_IP);
         registerPage.enterUsername(VALID_TEST_USERNAME);
         registerPage.enterPassword(VALID_TEST_PASSWORD);
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors();
-        flashMessage = topPage.getFlashMessageField().getText(); 
+        flashMessage = homePage.getFlashMessageField().getText(); 
         
         Assert.assertEquals(errorsList.size(), 0);
         Assert.assertTrue(flashMessage.contains(VALID_TEST_IP) && flashMessage.contains("Added"));
@@ -44,7 +44,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     @Test(description="Verify register a new machine page - No password")
     public void verifyRegisterMachinesNoPassword() throws Exception {
         String flashMessage;
-        registerPage = topPage.clickRegisterMachinesButton();
+        registerPage = homePage.clickRegisterMachinesButton();
         
         // test-1
         registerPage.enterIpAddress(VALID_TEST_IP);
@@ -63,7 +63,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         String flashMessage;
         restAPI.registerMachine(VALID_TEST_IP, VALID_TEST_PASSWORD);
         
-        registerPage = topPage.clickRegisterMachinesButton();
+        registerPage = homePage.clickRegisterMachinesButton();
         registerPage.enterIpAddress(VALID_TEST_IP);
         registerPage.enterUsername(VALID_TEST_USERNAME);
         registerPage.enterPassword(VALID_TEST_PASSWORD);
@@ -80,7 +80,7 @@ public class RegisterMachinesPageTest extends BaseTest{
 
     @Test(description="Verify register a new machine page - Invalid IP address")
     public void verifyRegisterMachinesInvalidIP() throws Exception {
-        registerPage = topPage.clickRegisterMachinesButton();
+        registerPage = homePage.clickRegisterMachinesButton();
         
         // test-1
         registerPage.enterIpAddress("1.1.1.256");
@@ -129,7 +129,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     
     @Test(description="Verify register a new machine page - Invalid username")
     public void verifyRegisterMachinesInvalidUsername() throws Exception {
-        registerPage = topPage.clickRegisterMachinesButton();
+        registerPage = homePage.clickRegisterMachinesButton();
         
         // test-1
         registerPage.enterIpAddress(VALID_TEST_IP);
@@ -156,7 +156,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     
     @Test(description="Verify register a new machine page - Invalid password")
     public void verifyRegisterMachinesInvalidPassword() throws Exception {
-        registerPage = topPage.clickRegisterMachinesButton();
+        registerPage = homePage.clickRegisterMachinesButton();
         
         // test-1
         registerPage.enterIpAddress(VALID_TEST_IP);
@@ -173,7 +173,7 @@ public class RegisterMachinesPageTest extends BaseTest{
     
     @Test(description="Verify register a new machine page - Multiple invalid fields")
     public void verifyRegisterMachinesMultiInvalidFields() throws Exception {
-        registerPage = topPage.clickRegisterMachinesButton();
+        registerPage = homePage.clickRegisterMachinesButton();
         
         // test-1
         registerPage.enterIpAddress("1.1.1");

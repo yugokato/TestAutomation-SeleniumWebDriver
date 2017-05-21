@@ -20,7 +20,7 @@ import org.testng.Assert;
 import selenium.automation.base.BaseTest;
 
 
-public class TopPageTest extends BaseTest {
+public class HomePageTest extends BaseTest {
     private Modal currentModal;
     private final String TEST_IP = "172.30.0.11";
     private final String TEST_IP2 = "172.30.0.21";
@@ -41,7 +41,7 @@ public class TopPageTest extends BaseTest {
     public void beforeMethod(Method method) {
         System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
     }
     
     @AfterMethod
@@ -51,11 +51,11 @@ public class TopPageTest extends BaseTest {
         restAPI.deleteMachine(TEST_IP3);
     }
     
-    @Test(description="Verify initial state of the top page", priority=0)
-    public void verifyTopPageBasic() throws Exception {
+    @Test(description="Verify initial state of the home page", priority=0)
+    public void verifyHomePageBasic() throws Exception {
         // register a new machine whose status is #Unknown
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         // hard-coded test data
         Map<String, String[]> testData = new HashMap<String, String[]>();
@@ -71,10 +71,10 @@ public class TopPageTest extends BaseTest {
         testData.put("vm10", new String[] {"172.30.0.10", "centos"});
         testData.put("#Unknown", new String[] {TEST_IP, "other"});
  
-        machineList = topPage.getMachineList();
-        hostNameList = topPage.getHostNameList();
-        ipAddressList = topPage.getIpAddressList();
-        osDistributionImgNameList = topPage.getOSDistributionImgNameList();
+        machineList = homePage.getMachineList();
+        hostNameList = homePage.getHostNameList();
+        ipAddressList = homePage.getIpAddressList();
+        osDistributionImgNameList = homePage.getOSDistributionImgNameList();
 
         Assert.assertEquals(machineList.size(), testData.size());
         
@@ -88,8 +88,8 @@ public class TopPageTest extends BaseTest {
         }
     }   
     
-    @Test(description="Verify top page icon changes after new machine becomes reachable")
-    public void verifyTopPageUnknownBecomesReachable() throws Exception {
+    @Test(description="Verify home page icon changes after new machine becomes reachable")
+    public void verifyHomePageUnknownBecomesReachable() throws Exception {
         String osDistImgName, testContainerID, testContainerIP;
         
         // Create a new container for test
@@ -106,19 +106,19 @@ public class TopPageTest extends BaseTest {
     
         // Register the new container for test
         restAPI.registerMachine(testContainerIP, TEST_USERNAME, TEST_PASSWORD);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         // Check the initial #Unknown status after registration
-        osDistImgName = topPage.getOsDistImgFieldByHostname("#Unknown").getAttribute("src");
-        Assert.assertTrue(topPage.getMachineElementByHostname("#Unknown").isDisplayed());
-        Assert.assertTrue(topPage.getIpAddressField(testContainerIP).isDisplayed());
+        osDistImgName = homePage.getOsDistImgFieldByHostname("#Unknown").getAttribute("src");
+        Assert.assertTrue(homePage.getMachineElementByHostname("#Unknown").isDisplayed());
+        Assert.assertTrue(homePage.getIpAddressField(testContainerIP).isDisplayed());
         Assert.assertTrue(osDistImgName.contains("other"));
         
         // Wait for up to 60 seconds until SSH access starts and status changes reachable
         for (int i=0; i<60; i+=10){
             //driver.navigate().refresh();
             try{
-                topPage.getMachineElementByHostname("#Unknown");
+                homePage.getMachineElementByHostname("#Unknown");
                 Thread.sleep(10000);
             }catch(NoSuchElementException e){
                 break;
@@ -126,8 +126,8 @@ public class TopPageTest extends BaseTest {
         }
         
         // Check the new status after reachable 
-        osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_HOSTNAME).getAttribute("src");
-        Assert.assertTrue(topPage.getMachineElementByHostname(TEST_HOSTNAME).isDisplayed());
+        osDistImgName = homePage.getOsDistImgFieldByHostname(TEST_HOSTNAME).getAttribute("src");
+        Assert.assertTrue(homePage.getMachineElementByHostname(TEST_HOSTNAME).isDisplayed());
         Assert.assertTrue(osDistImgName.contains(TEST_OS_DIST));
         
         // Clean the test container
@@ -135,24 +135,24 @@ public class TopPageTest extends BaseTest {
         docker.removeContainer(testContainerID);       
     }
 
-    @Test(description="Verify top page icon changes when the existing machine becomes unreachable")
-    public void verifyTopPageOkBecomesUnreahable() throws Exception{
+    @Test(description="Verify home page icon changes when the existing machine becomes unreachable")
+    public void verifyHomePageOkBecomesUnreahable() throws Exception{
         String osDistImgName;
         
         // stop one of the existing containers to emulate an incident
         docker.killContainer(TEST_CONTAINER_TO_DELETE);  // vm01
         
         // Wait for up to 90 seconds until the machine icon changes
-        topPage.waitForMachineStatusToBeUnreachable("172.30.0.1");
+        homePage.waitForMachineStatusToBeUnreachable("172.30.0.1");
         
         // check the machine status = unreachable and the icon reflects an alarm
-        osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
+        osDistImgName = homePage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
         Assert.assertTrue(osDistImgName.contains("unreachable"));
                 
         // check machine status and icon in modal = unreachable
         Map<String, String> modalContents;
-        topPage.openModal(topPage.getMachineElementByHostname(TEST_CONTAINER_TO_DELETE));
-        currentModal = topPage.getCurrentModalInstance();
+        homePage.openModal(homePage.getMachineElementByHostname(TEST_CONTAINER_TO_DELETE));
+        currentModal = homePage.getCurrentModalInstance();
         modalContents = currentModal.getModalContents();
         Assert.assertTrue(modalContents.get("STATUS").contains("Unreachable"));
         Assert.assertEquals(modalContents.get("STATUS_IMG_NAME"), "status_unreachable.png");
@@ -163,47 +163,47 @@ public class TopPageTest extends BaseTest {
         docker.startContainer(TEST_CONTAINER_TO_DELETE);
         
         // Wait until the machine status becomes OK
-        topPage.waitForMachineStatusToBeOK("172.30.0.1");
+        homePage.waitForMachineStatusToBeOK("172.30.0.1");
         
         // Check the machine status = ok
-        osDistImgName = topPage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
+        osDistImgName = homePage.getOsDistImgFieldByHostname(TEST_CONTAINER_TO_DELETE).getAttribute("src");
         Assert.assertTrue(osDistImgName.contains("ubuntu.png"));
     }
 
-    @Test(description="Verify top page elements are dinamically updated by Ajax")
-    public void verifyTopPageAjax() throws Exception{
+    @Test(description="Verify home page elements are dinamically updated by Ajax")
+    public void verifyHomePageAjax() throws Exception{
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         restAPI.registerMachine(TEST_IP2, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
-        ArrayList<String> ipAddressList = topPage.getIpAddressListStr();
+        ArrayList<String> ipAddressList = homePage.getIpAddressListStr();
         Assert.assertTrue(ipAddressList.contains(TEST_IP));
         Assert.assertTrue(ipAddressList.contains(TEST_IP2));
         
     }
     
     @Test(description="Verify elements are sorted by hostname and ip address correctly")
-    public void verifyTopPageSorting() throws Exception{
+    public void verifyHomePageSorting() throws Exception{
         restAPI.registerMachine(TEST_IP, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         restAPI.registerMachine(TEST_IP2, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         restAPI.registerMachine(TEST_IP3, TEST_USERNAME);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         // Check Ajax side's sorting mechanism
-        ArrayList<String> ipAddressList = topPage.getIpAddressListStr();
+        ArrayList<String> ipAddressList = homePage.getIpAddressListStr();
         Assert.assertEquals(ipAddressList.get(0), TEST_IP);
         Assert.assertEquals(ipAddressList.get(1), TEST_IP2);
         Assert.assertEquals(ipAddressList.get(2), TEST_IP3);
         
         // Check application side's sorting mechanism
         driver.navigate().refresh();
-        ipAddressList = topPage.getIpAddressListStr();
+        ipAddressList = homePage.getIpAddressListStr();
         Assert.assertEquals(ipAddressList.get(0), TEST_IP);
         Assert.assertEquals(ipAddressList.get(1), TEST_IP2);
         Assert.assertEquals(ipAddressList.get(2), TEST_IP3);

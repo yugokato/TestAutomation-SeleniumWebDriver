@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import framework.pages.modal.Modal;
 
 
-public class TopPage extends BasePage {
+public class HomePage extends BasePage {
 
     @FindBy(css=".col-xs-4.col-sm-3.col-md-2")
     private List<WebElement> machineList;

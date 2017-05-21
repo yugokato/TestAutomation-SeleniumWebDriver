@@ -24,11 +24,11 @@ public class AWSTest extends BaseTest {
         System.out.println(method.getName());
         restAPI.deleteAllUnknownMachines();
         restAPI.deleteMachine(TEST_IP_AWS);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
         // register a new machine whose ip address is AWS
         restAPI.registerMachine(TEST_IP_AWS, TEST_USERNAME_AWS);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
     }
     
     @AfterMethod
@@ -38,21 +38,21 @@ public class AWSTest extends BaseTest {
     
     @Test(description="Verify a tag 'AWS' is added if the ip address belongs to AWS", priority=0)
     public void verifyTopPageAWS() throws Exception {
-        ipAddressList = topPage.getIpAddressList();
+        ipAddressList = homePage.getIpAddressList();
         Assert.assertTrue(ipAddressList.get(0).getText().contains("AWS"));
     }
     
     @Test(description="Verify modal shows start/stop instance button for AWS", priority=1)
     public void verifyModalAWS() throws Exception {
         restAPI.registerMachine(TEST_IP_AWS, TEST_USERNAME_AWS);
-        topPage.waitForAjaxToLoad();
+        homePage.waitForAjaxToLoad();
         
-        machineList = topPage.getMachineList();
+        machineList = homePage.getMachineList();
         for (int i=0; i<machineList.size(); i++){
             // Open modal dialog
-            topPage.openModal(machineList.get(i));
+            homePage.openModal(machineList.get(i));
             driver.switchTo().activeElement();
-            currentModal = topPage.getCurrentModalInstance();
+            currentModal = homePage.getCurrentModalInstance();
             
             // Check if it has "Start instance" button and it is displayed
             if (i == 0){
@@ -66,45 +66,45 @@ public class AWSTest extends BaseTest {
             
             // Close modal
             currentModal.clickCloseButton();
-            topPage.waitForModalToBeClosed();
+            homePage.waitForModalToBeClosed();
         }           
     }
     
     @Test(description="Verify start EC2 instance", priority=2)
     public void verifyStartEC2InstanceAndAjax() throws Exception {
         // Open modal
-        topPage.openModal(topPage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
+        homePage.openModal(homePage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
         driver.switchTo().activeElement();
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         
         // Start EC2 Instance and wait until Ajax processes EC2 Instance's state change (stopped -> pending)
         currentModal.getEC2ControlButton().click();
-        topPage.waitForEC2StateChangeToStart(TEST_IP_AWS);
+        homePage.waitForEC2StateChangeToStart(TEST_IP_AWS);
         
         // Check EC2 button is disabled with updated text by Ajax
-        topPage.openModal(topPage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
+        homePage.openModal(homePage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
         driver.switchTo().activeElement();
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         Assert.assertTrue(currentModal.getEC2ControlButton().getAttribute("class").contains("disabled"));
         Assert.assertEquals(currentModal.getEC2ControlButton().getText(), "Starting Instance");
         // Close modal
         currentModal.clickCloseButton();
-        topPage.waitForModalToBeClosed();
+        homePage.waitForModalToBeClosed();
      
         // Wait until Ajax processes EC2 Instance's state change (pending -> running)
-        topPage.waitForEC2StateChangeToStop(TEST_IP_AWS);
+        homePage.waitForEC2StateChangeToStop(TEST_IP_AWS);
         
-        topPage.openModal(topPage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
+        homePage.openModal(homePage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
         driver.switchTo().activeElement();
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         Assert.assertFalse(currentModal.getEC2ControlButton().getAttribute("class").contains("disabled"));
         Assert.assertEquals(currentModal.getEC2ControlButton().getText(), "Stop Instance");
         // Close modal
         currentModal.clickCloseButton();
-        topPage.waitForModalToBeClosed();
+        homePage.waitForModalToBeClosed();
         
-        topPage.waitForMachineStatusToBeOK(TEST_IP_AWS + " (AWS)");
-        String osDistImg = topPage.getOsDistImgFieldByIpAddress(TEST_IP_AWS + " (AWS)").getAttribute("src");
+        homePage.waitForMachineStatusToBeOK(TEST_IP_AWS + " (AWS)");
+        String osDistImg = homePage.getOsDistImgFieldByIpAddress(TEST_IP_AWS + " (AWS)").getAttribute("src");
         Assert.assertFalse(osDistImg.contains("unreachable"));
         Assert.assertFalse(osDistImg.contains("other"));
     }
@@ -112,41 +112,41 @@ public class AWSTest extends BaseTest {
     @Test(description="Verify stop EC2 instance", priority=3)
     public void verifyStopEC2InstanceAndAjax() throws Exception {
         // Wait until the machine state becomes OK
-        topPage.waitForMachineStatusToBeOK(TEST_IP_AWS + " (AWS)");
+        homePage.waitForMachineStatusToBeOK(TEST_IP_AWS + " (AWS)");
         
         // Open modal
-        topPage.openModal(topPage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
+        homePage.openModal(homePage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
         driver.switchTo().activeElement();
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         
         // Stop EC2 Instance and wait until Ajax processes EC2 Instance's state change (running -> stopping)
         currentModal.getEC2ControlButton().click();
-        topPage.waitForEC2StateChangeToStart(TEST_IP_AWS);
+        homePage.waitForEC2StateChangeToStart(TEST_IP_AWS);
         
         // Check EC2 button is disabled with updated text by Ajax
-        topPage.openModal(topPage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
+        homePage.openModal(homePage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
         driver.switchTo().activeElement();
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         Assert.assertTrue(currentModal.getEC2ControlButton().getAttribute("class").contains("disabled"));
         Assert.assertEquals(currentModal.getEC2ControlButton().getText(), "Stopping Instance");
         // Close modal
         currentModal.clickCloseButton();
-        topPage.waitForModalToBeClosed();
+        homePage.waitForModalToBeClosed();
         
         // Wait until EC2 Instance's state changes stopping -> stopped
-        topPage.waitForEC2StateChangeToStop(TEST_IP_AWS);
+        homePage.waitForEC2StateChangeToStop(TEST_IP_AWS);
         
-        topPage.openModal(topPage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
+        homePage.openModal(homePage.getMachineElementByIpAddress(TEST_IP_AWS + " (AWS)"));
         driver.switchTo().activeElement();
-        currentModal = topPage.getCurrentModalInstance();
+        currentModal = homePage.getCurrentModalInstance();
         Assert.assertFalse(currentModal.getEC2ControlButton().getAttribute("class").contains("disabled"));
         Assert.assertEquals(currentModal.getEC2ControlButton().getText(), "Start Instance");
         // Close modal
         currentModal.clickCloseButton();
-        topPage.waitForModalToBeClosed();
+        homePage.waitForModalToBeClosed();
         
-        topPage.waitForMachineStatusToBeUnreachable(TEST_IP_AWS + " (AWS)");
-        String osDistImg = topPage.getOsDistImgFieldByIpAddress(TEST_IP_AWS + " (AWS)").getAttribute("src");
+        homePage.waitForMachineStatusToBeUnreachable(TEST_IP_AWS + " (AWS)");
+        String osDistImg = homePage.getOsDistImgFieldByIpAddress(TEST_IP_AWS + " (AWS)").getAttribute("src");
         Assert.assertTrue(osDistImg.contains("unreachable"));
     }
     
