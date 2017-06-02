@@ -9,6 +9,7 @@ import java.util.Map;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -31,11 +32,17 @@ public class HomePageTest extends BaseTest {
     private final String TEST_HOSTNAME = "vm99_test";
     private final String TEST_CONTAINER_NAME = "vm99_test";
     private final String TEST_CONTAINER_TO_DELETE = "vm01";
-    private final String TEST_DOCKER_NETWORK = "mgmtappforlinuxmachines_mynetwork";
+    private String TEST_DOCKER_NETWORK;
     private List<WebElement> machineList;
     private List<WebElement> hostNameList;
     private List<WebElement> ipAddressList;
     private List<WebElement> osDistributionImgNameList;
+    
+    @BeforeClass
+    public void beforeClass(){
+        String APP = System.getProperty("APP");
+        TEST_DOCKER_NETWORK = APP.toLowerCase() + "_mynetwork";
+    }
     
     @BeforeMethod
     public void beforeMethod(Method method) {

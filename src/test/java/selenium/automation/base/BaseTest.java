@@ -17,27 +17,33 @@ import framework.pages.LoginPage;
 import framework.pages.HomePage;
 import framework.docker.DockerManager;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 public class BaseTest {
-    protected final static Logger logger = Logger.getLogger(BaseTest.class);;
+    protected final static Logger logger = Logger.getLogger(BaseTest.class);
     protected WebDriver driver;
     protected RestAPI restAPI;
     protected LoginPage loginPage;
     protected HomePage homePage;
     protected DockerManager containerManager;
     protected DockerClient docker;
+    private static String APP_URL;
     private static final String TEST_ADMIN_USER = "ADMIN_USER";
     private static final String TEST_ADMIN_PASSWORD = "ADMIN_PASSWORD";
     private static final String[] INITIAL_CONTAINERS = 
         {"/vm01", "/vm02", "/vm03", "/vm04", "/vm05", "/vm06", 
                 "/vm07", "/vm08", "/vm09", "/vm10", "/mongo"};
-
     
     @BeforeClass(alwaysRun=true)
     public void beforeClassBase() {
-        PropertyConfigurator.configure(System.getProperty("user.dir") + "/" + "lib/log4j.property");
+        setTestProperty();
+        PropertyConfigurator.configure(System.getProperty("user.dir") + "/" + "Resources/log4j.property");
         System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "/Resources/chromedriver");
         DesiredCapabilities chromeCapabilities = DriverInit.setChromeCapabilities();
         DriverInit.setDriver(new ChromeDriver(chromeCapabilities));
@@ -52,14 +58,15 @@ public class BaseTest {
     @BeforeMethod(alwaysRun=true)
     public void beforeMethodBase() throws Exception{
         DockerManager.startTestContainers(INITIAL_CONTAINERS);
-        driver.get("http://localhost:5000");
+        APP_URL = System.getProperty("APP_URL");
+        driver.get(APP_URL);
         driver.manage().window().maximize();
         loginPage.doLogin(TEST_ADMIN_USER, TEST_ADMIN_PASSWORD, false);
     }
     
     @AfterMethod(alwaysRun=true)
     public void afterMethodBase() throws Exception{
-        driver.get("http://localhost:5000/logout");
+        driver.get(APP_URL + "logout");
     }
 
     @AfterClass(alwaysRun=true)
@@ -68,4 +75,34 @@ public class BaseTest {
         restAPI.deleteUser(TEST_ADMIN_USER);
         driver.quit();
     }
+    
+    public void setTestProperty(){
+        Properties prop = new Properties();
+        InputStream input = null;
+
+        try {
+
+            input = new FileInputStream("Resources/config.property");
+
+            // load a properties file
+            prop.load(input);
+
+            // set the property value
+            System.setProperty("APP", prop.getProperty("APP"));
+            System.setProperty("APP_URL", prop.getProperty("APP_URL"));
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+      }
 }
