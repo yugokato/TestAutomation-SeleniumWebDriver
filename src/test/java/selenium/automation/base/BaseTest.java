@@ -88,7 +88,7 @@ public class BaseTest {
             prop.load(input);
 
             // set the property value
-            System.setProperty("APP", prop.getProperty("APP"));
+            System.setProperty("APP_FRAMEWORK", prop.getProperty("APP_FRAMEWORK"));
             System.setProperty("APP_URL", prop.getProperty("APP_URL"));
 
 

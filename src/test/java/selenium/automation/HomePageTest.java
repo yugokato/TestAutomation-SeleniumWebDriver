@@ -40,8 +40,8 @@ public class HomePageTest extends BaseTest {
     
     @BeforeClass
     public void beforeClass(){
-        String APP = System.getProperty("APP");
-        TEST_DOCKER_NETWORK = APP.toLowerCase() + "_mynetwork";
+        String APP_FRAMEWORK = System.getProperty("APP_FRAMEWORK");
+        TEST_DOCKER_NETWORK = APP_FRAMEWORK.toLowerCase() + "_mynetwork";
     }
     
     @BeforeMethod
