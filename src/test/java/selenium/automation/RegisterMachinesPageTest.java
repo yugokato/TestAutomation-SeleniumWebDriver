@@ -71,9 +71,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         flashMessage = registerPage.getFlashMessageField().getText();
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
+        Assert.assertEquals(errorsList.size(), 0);
         Assert.assertTrue(flashMessage.contains(VALID_TEST_IP) && flashMessage.contains("already exists"));
         
     }
@@ -89,9 +87,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
+        Assert.assertEquals(errorsList.size(), 1);
         Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
         
         // test-2
         registerPage.enterIpAddress("1.1.1");
@@ -100,9 +97,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
+        Assert.assertEquals(errorsList.size(), 1);
         Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
         
         // test-3
         registerPage.enterIpAddress("aaaaa");
@@ -111,9 +107,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
+        Assert.assertEquals(errorsList.size(), 1);
         Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
 
         // test-4
         registerPage.enterIpAddress("");
@@ -122,9 +117,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
+        Assert.assertEquals(errorsList.size(), 1);
         Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertTrue(errorsList.get(2).isEmpty());
     }
     
     @Test(description="Verify register a new machine page - Invalid username")
@@ -138,9 +132,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertEquals(errorsList.get(1), "Please enter a valid username");
-        Assert.assertTrue(errorsList.get(2).isEmpty());
+        Assert.assertEquals(errorsList.size(), 1);
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid username");
         
         // test-2
         registerPage.enterIpAddress(VALID_TEST_IP);
@@ -149,9 +142,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertEquals(errorsList.get(1), "Please enter a valid username");
-        Assert.assertTrue(errorsList.get(2).isEmpty());
+        Assert.assertEquals(errorsList.size(), 1);
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid username");
     }
     
     @Test(description="Verify register a new machine page - Invalid password")
@@ -165,9 +157,8 @@ public class RegisterMachinesPageTest extends BaseTest{
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
-        Assert.assertTrue(errorsList.get(0).isEmpty());
-        Assert.assertTrue(errorsList.get(1).isEmpty());
-        Assert.assertEquals(errorsList.get(2), "Please enter a valid passowrd");
+        Assert.assertEquals(errorsList.size(), 1);
+        Assert.assertEquals(errorsList.get(0), "Please enter a valid password");
 
     }
     
@@ -183,7 +174,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
         Assert.assertEquals(errorsList.get(1), "Please enter a valid username");
-        Assert.assertEquals(errorsList.get(2), "Please enter a valid passowrd");
+        Assert.assertEquals(errorsList.get(2), "Please enter a valid password");
 
     }
 }

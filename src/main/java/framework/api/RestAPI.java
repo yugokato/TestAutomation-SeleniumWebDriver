@@ -20,8 +20,11 @@ import org.json.JSONObject;
 public class RestAPI extends RestClient {
     private WebDriver driver;
     private static final Logger logger = Logger.getLogger(RestAPI.class);
-    private static final String BASE_URL = "http://localhost:5000/api/machines";
-    private static final String BASE_URL_USERS = "http://localhost:5000/api/users";
+    private static String APP_BASE_URL = System.getProperty("APP_BASE_URL");
+    private static String API_PATH_MACHINES = System.getProperty("API_PATH_MACHINES");
+    private static String API_PATH_USERS = System.getProperty("API_PATH_USERS");
+    private static final String BASE_URL_MACHINE = APP_BASE_URL + API_PATH_MACHINES;
+    private static final String BASE_URL_USERS = APP_BASE_URL + API_PATH_USERS;
     
     public RestAPI(){
         this.driver = DriverInit.getDriver();
@@ -29,14 +32,14 @@ public class RestAPI extends RestClient {
     }
     
     public Response getMachineData(String hostname){
-        String url = BASE_URL + "/" + hostname;
+        String url = BASE_URL_MACHINE + "/" + hostname;
         Response response = requestGET(url);
         
         return response;
     }
     
     public Response registerMachine(String ipaddr, String username){
-        String url = BASE_URL + "/add/" + ipaddr + ":" + username;
+        String url = BASE_URL_MACHINE + "/add/" + ipaddr + ":" + username;
         Response response = requestPOST(url, null);
         logger.info(String.format("Added a machine(%s) via RESUful API", ipaddr));
         //driver.navigate().refresh();
@@ -45,7 +48,7 @@ public class RestAPI extends RestClient {
     }
     
     public Response registerMachine(String ipaddr, String username, String password){
-        String url = BASE_URL + "/add/" + ipaddr + ":" + username + ":" + password;
+        String url = BASE_URL_MACHINE + "/add/" + ipaddr + ":" + username + ":" + password;
         Response response = requestPOST(url, null);
         logger.info(String.format("Added a machine(%s) via RESUful API", ipaddr));
         //driver.navigate().refresh();
@@ -66,7 +69,7 @@ public class RestAPI extends RestClient {
         JSONArray jsonData = new JSONArray(jsonObjList);
         String jsonDataStr = jsonData.toString();
         
-        String url = BASE_URL + "/add";
+        String url = BASE_URL_MACHINE + "/add";
         Response response = requestPOST(url, jsonDataStr);
         logger.info(String.format("Added machines(%s) via RESUful API", addIPList.toString()));
         //driver.navigate().refresh();
@@ -75,7 +78,7 @@ public class RestAPI extends RestClient {
     }
     
     public Response deleteMachine(String ipaddr){
-        String url = BASE_URL + "/delete/" + ipaddr;
+        String url = BASE_URL_MACHINE + "/delete/" + ipaddr;
         Response response = requestDELETE(url, null);
         logger.info(String.format("Deleted machines(%s) via RESUful API", ipaddr));
         //driver.navigate().refresh();
@@ -90,7 +93,7 @@ public class RestAPI extends RestClient {
         JSONObject jsonData = new JSONObject(data);
         String jsonDataStr = jsonData.toString();
         
-        String url = BASE_URL + "/delete";
+        String url = BASE_URL_MACHINE + "/delete";
         Response response = requestDELETE(url, jsonDataStr);
         logger.info(String.format("Deleted a machine(%s) via RESUful API", deleteIPList.toString()));
         //driver.navigate().refresh();
@@ -130,7 +133,7 @@ public class RestAPI extends RestClient {
         for (int i=0; i<hostNameList.size(); i++){
             if (hostNameList.get(i).getText().contains("#Unknown")){
                 hasUnknown = true;
-                deleteIPs += ipAddrList.get(i).getText() + ",";
+                deleteIPs += ipAddrList.get(i).getText().replace(" (AWS)", "") + ",";
             }
         }
         

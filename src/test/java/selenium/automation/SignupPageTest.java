@@ -19,7 +19,7 @@ public class SignupPageTest extends BaseTest {
     @BeforeMethod
     public void beforeMethod(Method method) {
         System.out.println(method.getName());
-        driver.get("http://localhost:5000/logout");
+        driver.get(APP_BASE_URL + "/portal/logout");
     }
     
     @AfterClass
@@ -48,7 +48,10 @@ public class SignupPageTest extends BaseTest {
     public void verifyCreateNewAccountPasswordMismatch() throws Exception {
         signupPage = loginPage.clickSignupButton();
         signupPage.createNewAccount(TEST_USERNAME, TEST_PASSWORD, TEST_PASSWORD + "_");
-        Assert.assertEquals(signupPage.getPasswordErrorField().getText(), "Password does not match.");
+        if (APP_FRAMEWORK.equals("FLASK"))
+            Assert.assertEquals(signupPage.getPasswordErrorField().getText(), "Password does not match.");
+        else if (APP_FRAMEWORK.equals("DJANGO"))
+            Assert.assertEquals(signupPage.getConfirmPasswordErrorField().getText(), "Password does not match.");
     }
     
     @Test(description="Verify create a new account - missing parameters")

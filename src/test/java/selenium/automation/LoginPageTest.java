@@ -26,7 +26,7 @@ public class LoginPageTest extends BaseTest {
     @BeforeMethod
     public void beforeMethod(Method method) {
         System.out.println(method.getName());
-        driver.get("http://localhost:5000/logout");
+        driver.get(APP_BASE_URL + "/portal/logout");
     }
     
     @AfterClass
@@ -67,24 +67,40 @@ public class LoginPageTest extends BaseTest {
     @Test(description="Verify accessing pages before logged in is not allowed")
     public void verifyAccessUnauthorizedPages() throws Exception {
         String flashMessages;
+        String loginURL = APP_BASE_URL + "/portal/login";
         
         // test-1 (top page)
         driver.navigate().refresh();
-        driver.get("http://localhost:5000/home");
-        flashMessages = loginPage.getFlashMessages();
-        Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
+        driver.get(APP_BASE_URL + "/portal/home");
+        if (APP_FRAMEWORK.equals("FLASK")){
+            flashMessages = loginPage.getFlashMessages();
+            Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
+            Assert.assertEquals(driver.getCurrentUrl(), loginURL + "?next=%2Fportal%2Fhome");
+        }
+        else
+            Assert.assertEquals(driver.getCurrentUrl(), loginURL + "/?next=/portal/home");
         
         // test-2 (register page)
         driver.navigate().refresh();
-        driver.get("http://localhost:5000/register");
-        flashMessages = loginPage.getFlashMessages();
-        Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
+        driver.get(APP_BASE_URL + "/portal/register");
+        if (APP_FRAMEWORK.equals("FLASK")){
+            flashMessages = loginPage.getFlashMessages();
+            Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
+            Assert.assertEquals(driver.getCurrentUrl(), loginURL + "?next=%2Fportal%2Fregister");
+        }
+        else
+            Assert.assertEquals(driver.getCurrentUrl(), loginURL + "/?next=/portal/register");
         
         // test-3 (delete page)
         driver.navigate().refresh();
-        driver.get("http://localhost:5000/delete");
-        flashMessages = loginPage.getFlashMessages();
-        Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
+        driver.get(APP_BASE_URL + "/portal/delete");
+        if (APP_FRAMEWORK.equals("FLASK")){
+            flashMessages = loginPage.getFlashMessages();
+            Assert.assertTrue(flashMessages.contains("Please log in to access this page."));
+            Assert.assertEquals(driver.getCurrentUrl(), loginURL + "?next=%2Fportal%2Fdelete");
+        }
+        else
+            Assert.assertEquals(driver.getCurrentUrl(), loginURL + "/?next=/portal/delete");
     }
     
     @Test(description="Verify accessing pages after logged in is allowed")
@@ -92,16 +108,16 @@ public class LoginPageTest extends BaseTest {
         loginPage.doLogin(TEST_USERNAME, TEST_PASSWORD, false);
         
         // test-1 (top page)
-        driver.get("http://localhost:5000/home");
+        driver.get(APP_BASE_URL + "/portal/home");
         Assert.assertTrue(homePage.getPageHeadingField().getText().contains("Linux Machines"));
         
         // test-2 (register page)
-        driver.get("http://localhost:5000/register");
+        driver.get(APP_BASE_URL + "/portal/register");
         RegisterPage registerPage = new RegisterPage();
         Assert.assertEquals(registerPage.getPageHeadingField().getText(), "Register A New Machine");
         
         // test-3 (delete page)
-        driver.get("http://localhost:5000/delete");
+        driver.get(APP_BASE_URL + "/portal/delete");
         DeletePage deletePage = new DeletePage();
         Assert.assertEquals(deletePage.getPageHeadingField().getText(), "Delete Machines");
 

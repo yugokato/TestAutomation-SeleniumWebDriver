@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jnr.ffi.Struct.id_t;
 import selenium.automation.base.BaseTest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
@@ -30,8 +31,8 @@ public class RestAPITest extends BaseTest {
 
         @BeforeClass
         public void beforeClass() {
-            RestAssured.baseURI = "http://localhost:5000";
-            RestAssured.basePath = "/api/machines";
+            RestAssured.baseURI = System.getProperty("APP_BASE_URL");
+            RestAssured.basePath = System.getProperty("API_PATH_MACHINES"); // /api/machines
         }
         
         @BeforeMethod
@@ -369,20 +370,33 @@ public class RestAPITest extends BaseTest {
         @Test(description = "Verify POST/DELETE to unknown URL returns status code 405(Method Not Allowed)")
         public void verifyRequestUnallowedURLViaAPI() throws Exception{
             Response response;
+            String key = "";
+            String value1 = "";
+            String value2 = "";
+            if (APP_FRAMEWORK.equals("FLASK")){
+                key = "result.error";
+                value1 = "The method is not allowed for the requested URL.";
+                value2 = "The method is not allowed for the requested URL.";
+            }
+            else if (APP_FRAMEWORK.equals("DJANGO")){
+                key = "detail";
+                value1 = "Method \"POST\" not allowed.";
+                value2 = "Method \"DELETE\" not allowed.";
+            }
             
             // test-1 (POST)
             response = given().contentType(ContentType.JSON).when().post("/non_exist");
             response.then().assertThat()
                     .statusCode(405)
                     .contentType(ContentType.JSON)
-                    .body("result.error", equalTo("The method is not allowed for the requested URL."));
+                    .body(key, equalTo(value1));
             
             // test-2 (DELETE)
             response = given().contentType(ContentType.JSON).when().delete("/non_exist");
             response.then().assertThat()
                     .statusCode(405)
                     .contentType(ContentType.JSON)
-                    .body("result.error", equalTo("The method is not allowed for the requested URL."));
+                    .body(key, equalTo(value2));
         }
         
         public void clearTestData(ArrayList<HashMap<String, String>> credentialsMapList){

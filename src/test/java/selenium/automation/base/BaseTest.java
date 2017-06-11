@@ -33,7 +33,8 @@ public class BaseTest {
     protected HomePage homePage;
     protected DockerManager containerManager;
     protected DockerClient docker;
-    private static String APP_URL;
+    protected String APP_FRAMEWORK;
+    protected String APP_BASE_URL;
     private static final String TEST_ADMIN_USER = "ADMIN_USER";
     private static final String TEST_ADMIN_PASSWORD = "ADMIN_PASSWORD";
     private static final String[] INITIAL_CONTAINERS = 
@@ -58,15 +59,14 @@ public class BaseTest {
     @BeforeMethod(alwaysRun=true)
     public void beforeMethodBase() throws Exception{
         DockerManager.startTestContainers(INITIAL_CONTAINERS);
-        APP_URL = System.getProperty("APP_URL");
-        driver.get(APP_URL);
+        driver.get(APP_BASE_URL);
         driver.manage().window().maximize();
         loginPage.doLogin(TEST_ADMIN_USER, TEST_ADMIN_PASSWORD, false);
     }
     
     @AfterMethod(alwaysRun=true)
     public void afterMethodBase() throws Exception{
-        driver.get(APP_URL + "logout");
+        driver.get(APP_BASE_URL + "/portal/logout");
     }
 
     @AfterClass(alwaysRun=true)
@@ -89,8 +89,12 @@ public class BaseTest {
 
             // set the property value
             System.setProperty("APP_FRAMEWORK", prop.getProperty("APP_FRAMEWORK"));
-            System.setProperty("APP_URL", prop.getProperty("APP_URL"));
+            System.setProperty("APP_BASE_URL", prop.getProperty("APP_BASE_URL"));
+            System.setProperty("API_PATH_MACHINES", prop.getProperty("API_PATH_MACHINES"));
+            System.setProperty("API_PATH_USERS", prop.getProperty("API_PATH_USERS"));
 
+            APP_FRAMEWORK = System.getProperty("APP_FRAMEWORK");
+            APP_BASE_URL = System.getProperty("APP_BASE_URL");
 
         } catch (IOException ex) {
             ex.printStackTrace();

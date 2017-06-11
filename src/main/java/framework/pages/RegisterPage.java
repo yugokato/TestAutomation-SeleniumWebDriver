@@ -13,13 +13,13 @@ public class RegisterPage extends BasePage {
     @FindBy(css=".col-md-12 > h2")
     private WebElement pageHeading;
     
-    @FindBy(css="input[name='InputIPAddress']")
+    @FindBy(css="input[name='ip_address']")
     private WebElement ipAddressField;
     
-    @FindBy(css="input[name='InputUsername']")
+    @FindBy(css="input[name='username']")
     private WebElement usernameField;
     
-    @FindBy(css="input[name='InputPassword']")
+    @FindBy(css="input[name='password']")
     private WebElement passwordField;
     
     @FindBy(css="form > button[type='submit']")

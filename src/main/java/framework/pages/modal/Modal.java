@@ -44,7 +44,7 @@ public class Modal extends BasePage {
         clickBasicTab();
         String selector = "div.modal-body div.table-responsive > table > tbody > tr:nth-child(2) > td:nth-child(2) > img";
         String statusImgName = currentModal.findElement(By.cssSelector(selector)).getAttribute("src");
-        Pattern p = Pattern.compile("^(http://localhost:5000/static/images/)(.*)");
+        Pattern p = Pattern.compile("^(.*/images/)(.*)");
         Matcher m = p.matcher(statusImgName);
         if (m.find()){
             return m.group(2);
