@@ -44,8 +44,8 @@ public class BaseTest {
     @BeforeClass(alwaysRun=true)
     public void beforeClassBase() {
         setTestProperty();
-        PropertyConfigurator.configure(System.getProperty("user.dir") + "/" + "Resources/log4j.property");
-        System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "/Resources/chromedriver");
+        PropertyConfigurator.configure(System.getProperty("user.dir") + "/" + "resources/log4j.property");
+        System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "/resources/chromedriver");
         DesiredCapabilities chromeCapabilities = DriverInit.setChromeCapabilities();
         DriverInit.setDriver(new ChromeDriver(chromeCapabilities));
         driver = DriverInit.getDriver();
@@ -82,7 +82,7 @@ public class BaseTest {
 
         try {
 
-            input = new FileInputStream("Resources/config.property");
+            input = new FileInputStream("resources/config.property");
 
             // load a properties file
             prop.load(input);
