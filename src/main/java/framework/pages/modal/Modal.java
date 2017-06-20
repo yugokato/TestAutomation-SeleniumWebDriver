@@ -87,10 +87,17 @@ public class Modal extends BasePage {
         return uptime;
     }
     
+    private String getCPUInfo(){
+        clickCpuTab();
+        String selector = "div.tab-content div:nth-child(2) .table-responsive";
+        String cpuInfo = currentModal.findElements(By.cssSelector(selector)).get(0).getText();
+        return cpuInfo;
+    }
+    
     private String getCPULoadAvg(){
         clickCpuTab();
         String selector = "div.tab-content div:nth-child(2) .table-responsive";
-        String cpuLoadAvg = currentModal.findElement(By.cssSelector(selector)).getText();
+        String cpuLoadAvg = currentModal.findElements(By.cssSelector(selector)).get(1).getText();
         return cpuLoadAvg;
     }
     
@@ -133,6 +140,7 @@ public class Modal extends BasePage {
         modalContents.put("MAC_ADDRESS", getMacAddress());
         modalContents.put("UPTIME", getUptime());
         clickCpuTab();
+        modalContents.put("CPU_INFO", getCPUInfo());
         modalContents.put("CPU_LOAD_AVG", getCPULoadAvg());
         clickMemoryTab();
         modalContents.put("MEMORY_USAGE", getMemoryUsage());

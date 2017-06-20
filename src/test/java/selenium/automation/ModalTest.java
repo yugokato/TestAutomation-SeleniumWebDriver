@@ -40,7 +40,7 @@ public class ModalTest extends BaseTest{
         ipAddressList = homePage.getIpAddressList();
         osDistributionImgNameList = homePage.getOSDistributionImgNameList();
         String lastUpdated, hostName, ipAddress, status, statusImgName, osDistribution; 
-        String release, macAddress, uptime, cpuLoadAvg, memoryUsage, diskUsage;
+        String release, macAddress, uptime, cpuInfo, cpuLoadAvg, memoryUsage, diskUsage;
         Map<String, String> modalContents;
         
         for (int i=0; i<machineList.size(); i++){
@@ -63,6 +63,7 @@ public class ModalTest extends BaseTest{
             release = modalContents.get("RELEASE");
             macAddress = modalContents.get("MAC_ADDRESS");
             uptime = modalContents.get("UPTIME");
+            cpuInfo = modalContents.get("CPU_INFO");
             cpuLoadAvg = modalContents.get("CPU_LOAD_AVG");
             memoryUsage = modalContents.get("MEMORY_USAGE");
             diskUsage = modalContents.get("DISK_USAGE");
@@ -86,6 +87,7 @@ public class ModalTest extends BaseTest{
                 Assert.assertEquals(release, "None");
                 Assert.assertEquals(macAddress, "None");
                 Assert.assertEquals(uptime, "None");
+                Assert.assertEquals(cpuInfo, "None");
                 Assert.assertEquals(cpuLoadAvg, "None");
                 Assert.assertEquals(memoryUsage, "None");
                 Assert.assertEquals(diskUsage, "None");
@@ -102,6 +104,7 @@ public class ModalTest extends BaseTest{
                 Assert.assertNotEquals(release, "None");
                 Assert.assertNotEquals(macAddress, "None");
                 Assert.assertNotEquals(uptime, "None");
+                Assert.assertNotEquals(cpuInfo, "None");
                 Assert.assertNotEquals(cpuLoadAvg, "None");
                 Assert.assertNotEquals(memoryUsage, "None");
                 Assert.assertNotEquals(diskUsage, "None");
