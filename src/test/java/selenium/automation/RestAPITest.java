@@ -26,7 +26,7 @@ public class RestAPITest extends BaseTest {
         private final String VALID_PASSWORD = "ubuntu";
         private final String INVALID_IP = "1.1.1";
         private final String INVALID_USERNAME = "%@*!";
-        private final String INVALID_PASSWORD = "asdf.asdf";
+        private final String INVALID_PASSWORD = "asdf asdf";
         private final String TEST_HOSTNAME = "vm05";
 
         @BeforeClass
