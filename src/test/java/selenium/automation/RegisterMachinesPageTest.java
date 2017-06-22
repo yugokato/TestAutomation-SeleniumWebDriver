@@ -153,7 +153,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         // test-1
         registerPage.enterIpAddress(VALID_TEST_IP);
         registerPage.enterUsername(VALID_TEST_USERNAME);
-        registerPage.enterPassword("asdf.asdf");
+        registerPage.enterPassword("asdf asdf");
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         
@@ -169,7 +169,7 @@ public class RegisterMachinesPageTest extends BaseTest{
         // test-1
         registerPage.enterIpAddress("1.1.1");
         registerPage.enterUsername("!@#$%");
-        registerPage.enterPassword("asdf.asdf");
+        registerPage.enterPassword("asdf asdf");
         
         errorsList = registerPage.clickRegisterButtonAndGetErrors(); 
         Assert.assertEquals(errorsList.get(0), "Please enter a valid IP address");
